@@ -47,6 +47,7 @@
         "deque": "cpp",
         "sstream": "cpp",
         "stack": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "climits": "cpp"
     }
 }

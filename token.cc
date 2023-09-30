@@ -9,6 +9,7 @@ Tokenizer::Tokenizer(std::string input){
     int k = 0;
     int open_count = 0;
     int close_count = 0;
+    input_copy = input;
     for (int i = 0; i < input.size(); i++){
         // cout << input[i] << endl;
         if (input[i] == '(' ){
@@ -29,7 +30,7 @@ Tokenizer::Tokenizer(std::string input){
             // cout << "space" << endl;
             tokenarray[k].x = WHITESPACE;
         }
-        else if ((input[i] > 64 && input[i] < 91) || (input[i] > 47 && input[i] < 58) || (input[i] > 96 && input[i] < 123)){
+        else if ((input[i] > 64 && input[i] < 91) || (input[i] > 96 && input[i] < 123)){
             // cout << "var" << endl;
             tokenarray[k].x = VARIABLE;
             tokenarray[k].y = input[i];
@@ -79,6 +80,11 @@ void Tokenizer::consume(){//en hier ook spaties gelijk consumen?
     //     j++;
     // }
     j++;
+}
+
+void Tokenizer::create_output(std::string &output){
+    output += input_copy;
+    output += "\n";
 }
 
 // void arraycheck(Tokenizer token){

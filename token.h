@@ -29,8 +29,10 @@ class Tokenizer{
 
     void consume();
 
+    void create_output(std::string &output);
+
     Token tokenarray[max_size];
     int array_size;
     int j = 0;
-
+    std::string input_copy;
 };
