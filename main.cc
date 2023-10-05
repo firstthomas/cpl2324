@@ -28,7 +28,7 @@ void Parser::pexpr(Tokenizer &token){
         expr(token);
     }
     else{
-        cout << token.peek() << endl;
+        // cout << token.peek() << endl;
         cout << "missing expression after opening parenthesis" << endl; //geen idee of dit de goede error is
         exit(1);
     }
@@ -59,7 +59,7 @@ void Parser::lexpr(Tokenizer &token){
 
 void Parser::exprprime(Tokenizer &token){
     if(token.peek() == END){
-        cout << "End of string" << endl;
+        // cout << "End of string" << endl;
         return;
     }
     // cout << "lexpr" << endl;
@@ -94,7 +94,7 @@ int main(){
             break;
         }
         Tokenizer token(input);
-        arraycheck(token);
+        // arraycheck(token);
         Parser pars;
         pars.expr(token);
         token.create_output(output);
@@ -108,7 +108,7 @@ int main(){
             break;
         }
         Tokenizer token(input);
-        arraycheck(token);
+        // arraycheck(token);
         Parser pars;
         pars.expr(token);
         token.create_output(output2);
@@ -152,5 +152,6 @@ int main(){
 //Doen we dit nu goed?
 //A line is considered terminated by a newline character (\n),
 //or a carriage return and newline character (\r\n).
+//file als input
 
-//should be whitespace incentive? //denk dat we dit hebben
+//should use least amount of std library code overal std neerzetten

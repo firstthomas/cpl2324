@@ -1,6 +1,3 @@
-#include <iostream>
-#include <climits>
-#include <string>
 #include "token.h"
 using namespace std;
 
@@ -27,8 +24,13 @@ Tokenizer::Tokenizer(std::string input){
             tokenarray[k].x = SLASH;
         }
         else if (input[i] == ' '){
-            // cout << "space" << endl;
-            tokenarray[k].x = WHITESPACE;
+            //If there is a space after another space it is not stored
+            if (tokenarray[k-1].x != WHITESPACE){
+                tokenarray[k].x = WHITESPACE;
+            }
+            else {
+                k--;
+            }
         }
         else if ((input[i] > 64 && input[i] < 91) || (input[i] > 96 && input[i] < 123)){
             // cout << "var" << endl;
@@ -49,8 +51,8 @@ Tokenizer::Tokenizer(std::string input){
             }
         }
         else {
-        cout << "Incorrect character input" << endl;
-        exit(1);
+            cout << "Incorrect character input" << endl;
+            exit(1);
         }
         k++;
     }
@@ -82,10 +84,96 @@ void Tokenizer::consume(){//en hier ook spaties gelijk consumen?
     j++;
 }
 
-void Tokenizer::create_output(std::string &output){
-    output += input_copy;
+void Tokenizer::insert_bracket(int bracket_pos, int pos){
+    // cout << array_size << endl;
+    for (int i = array_size; i > bracket_pos; i--){
+        // cout << i << endl;
+        tokenarray[i] = tokenarray[i - 1];
+    }
+    tokenarray[bracket_pos].x = BRACKET_OPEN;
+    array_size++;
+    for (int i = array_size; i >= pos; i--){
+        tokenarray[i] = tokenarray[i - 1];
+    }
+    tokenarray[pos].x = BRACKET_CLOSE;
+    array_size++;
+}
+
+void Tokenizer::arrToString(std::string &output){
+    std::string previous = " ";
+    for (int i = 0; i < array_size; i++){
+        if (tokenarray[i].x == WHITESPACE){
+            //hierdoor wordt er geen spatie geprint na ( en voor )
+            //en geen spatie tussen )(
+            if (previous != "(" && tokenarray[i+1].x != BRACKET_CLOSE && 
+                previous != ")" && tokenarray[i+1].x != BRACKET_OPEN){
+                output += " ";
+            }
+        }
+        previous = " ";
+        if (tokenarray[i].x == BRACKET_OPEN){
+            output += "(";
+            previous = "(";
+        }
+        else if (tokenarray[i].x == BRACKET_CLOSE){
+            output += ")";
+            previous = ")";
+        }
+        else if (tokenarray[i].x == VARIABLE){
+            output += tokenarray[i].y;
+        }
+        else if (tokenarray[i].x == SLASH){
+            output += "\\";
+            //hierdoor wordt de evt spatie na een \ niet geprint
+            if (tokenarray[i+1].x == WHITESPACE){
+                i++;
+            }
+        }
+        else if (tokenarray[i].x == END){
+            break;
+        }
+    }
     output += "\n";
 }
+
+void Tokenizer::create_output(std::string &output){
+    //brackets verwijderen nog
+    //\x a \x b wordt ((\x a )\x) b moet dit niet (\x a)(\x b) worden?
+    //application gaat goed
+    //abstractoin totaal niet ^^
+    //(a) (b) spatie weghalen
+    int var_counter = 0;
+    int bracket_pos = 0;
+    for (int i = 0; i < array_size; i++){
+        if (var_counter > 2){
+            var_counter = 2;
+            insert_bracket(bracket_pos, i-1);
+            i++;
+        }
+        else if (tokenarray[i].x == WHITESPACE){
+            continue;
+        }
+        else if (tokenarray[i].x == BRACKET_OPEN){
+            var_counter = 0;
+            bracket_pos = i;
+        }
+        else if (tokenarray[i].x == BRACKET_CLOSE){
+            var_counter = 0;
+            bracket_pos  = i+1;
+        }
+        else if (tokenarray[i].x == VARIABLE){
+            var_counter++;
+        }
+        else if (tokenarray[i].x == SLASH){
+            continue;
+        }
+        else if (tokenarray[i].x == END){
+            break;
+        }
+    }
+    arrToString(output);
+}
+
 
 // void arraycheck(Tokenizer token){
 //     for (int i = 0; i < token.array_size; i++){

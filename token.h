@@ -1,3 +1,5 @@
+#ifndef TOKEN_H
+#define TOKEN_H
 #include <iostream>
 #include <climits>
 #include <string>
@@ -29,6 +31,10 @@ class Tokenizer{
 
     void consume();
 
+    void insert_bracket(int bracket_pos, int pos);
+
+    void arrToString(std::string &output);
+
     void create_output(std::string &output);
 
     Token tokenarray[max_size];
@@ -36,3 +42,4 @@ class Tokenizer{
     int j = 0;
     std::string input_copy;
 };
+#endif
