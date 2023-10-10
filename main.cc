@@ -150,6 +150,7 @@ int main(){
 //Vragen:
 
 //Doen we dit nu goed?
+// file als input
 //A line is considered terminated by a newline character (\n),
 //or a carriage return and newline character (\r\n).
 //file als input

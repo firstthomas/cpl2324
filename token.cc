@@ -140,10 +140,11 @@ void Tokenizer::create_output(std::string &output){
     //brackets verwijderen nog
     //\x a \x b wordt ((\x a )\x) b moet dit niet (\x a)(\x b) worden?
     //application gaat goed
-    //abstractoin totaal niet ^^
+    //abstraction totaal niet ^^
     //(a) (b) spatie weghalen
     int var_counter = 0;
     int bracket_pos = 0;
+    int j;
     for (int i = 0; i < array_size; i++){
         if (var_counter > 2){
             var_counter = 2;
@@ -165,7 +166,19 @@ void Tokenizer::create_output(std::string &output){
             var_counter++;
         }
         else if (tokenarray[i].x == SLASH){
-            continue;
+            j = i;
+            do{
+                i++;
+            }
+            while(tokenarray[i].x != VARIABLE);
+            do{
+                i++;
+            }
+            while(tokenarray[i].x != VARIABLE);
+            i++;
+            insert_bracket(j,i+1);
+            var_counter = 0;
+            // continue;
         }
         else if (tokenarray[i].x == END){
             break;
@@ -173,45 +186,3 @@ void Tokenizer::create_output(std::string &output){
     }
     arrToString(output);
 }
-
-
-// void arraycheck(Tokenizer token){
-//     for (int i = 0; i < token.array_size; i++){
-//         cout << "token_type" << token.tokenarray[i].x << endl;
-//         cout << "y" <<token.tokenarray[i].y << endl;
-//     }
-// }
-
-
-// int main(){
-//     std::string input;
-//     // int array_size;
-// 	getline(cin, input);
-//     // Token tokenArray[max_size];
-//     Tokenizer token(input);
-//     // token.consume();
-//     // token.consume();
-//     // cout << "hier" << endl;
-//     // cout << token.peek() << endl;
-//     // tokenizer(input, tokenArray, array_size); 
-//     // arraycheck(token);
-// }
-// // zijn er nog meer dingen die wel al kunnen controleren in de tokenizer zoals de brackets
-// // we kunnen hiervoor bij negative examples kijken // negative?
-// // denk dat dit grotendeels voor de parser is // denk het ook ja
-// // 1.3.2 Negative examples
-// // The following examples are not acceptable:
-// // • \ (missing variable after lambda)
-// // • \x (missing expression after lambda abstraction)
-// // • ((x (missing closing parenthesis)
-// // • () (missing expression after opening parenthesis)
-// // • a (b (missing closing parenthesis)
-// // • a (b c)) (input string not fully parsed)
-
-
-// // Java/C++ pseudocode
-// // void expr(){mexpr();expr1();}
-// // void expr1(){if(peek().tok == PLUS){consume();expr();}}
-// // void mexpr(){pexpr();mexpr1();}
-// // void mexpr1(){if(peek().tok == TIMES){consume();mexpr();}}
-// // void pexpr(){if(peek().tok == PAREN){...}else{...}}
