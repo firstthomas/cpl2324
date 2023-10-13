@@ -136,53 +136,83 @@ void Tokenizer::arrToString(std::string &output){
     output += "\n";
 }
 
+void Tokenizer::hulpRecursie(int &i, int &var_counter){
+    int j = i;
+    do{
+        i++;
+    }
+    while(tokenarray[i].x != VARIABLE);
+    do{
+        if (tokenarray[i].x == SLASH){
+            hulpRecursie(i, var_counter);
+            // cout << "1:" << i << endl;
+            i--;
+        }
+        i++;
+    }
+    while(tokenarray[i].x != VARIABLE);
+    i++;
+    // cout << "2:" << i << endl;
+    insert_bracket(j,i+1);
+    // var_counter++;
+    // cout << "3:" << i << endl;
+}
+
 void Tokenizer::create_output(std::string &output){
     //brackets verwijderen nog
-    //\x a \x b wordt ((\x a )\x) b moet dit niet (\x a)(\x b) worden?
-    //application gaat goed
-    //abstraction totaal niet ^^
     //(a) (b) spatie weghalen
     int var_counter = 0;
     int bracket_pos = 0;
     int j;
     for (int i = 0; i < array_size; i++){
+        // cout << var_counter << "begin" << endl;
         if (var_counter > 2){
             var_counter = 2;
-            insert_bracket(bracket_pos, i-1);
+            if (tokenarray[i].x == BRACKET_CLOSE){
+                insert_bracket(bracket_pos, i+1);
+            }
+            else{
+                insert_bracket(bracket_pos, i-1); 
+            }
             i++;
         }
         else if (tokenarray[i].x == WHITESPACE){
             continue;
         }
-        else if (tokenarray[i].x == BRACKET_OPEN){
-            var_counter = 0;
-            bracket_pos = i;
-        }
+        // else if (tokenarray[i].x == BRACKET_OPEN && i == 0){
+        //     var_counter = 0;
+        //     bracket_pos = i;
+        // }
         else if (tokenarray[i].x == BRACKET_CLOSE){
-            var_counter = 0;
-            bracket_pos  = i+1;
+            var_counter--;
+            // bracket_pos  = i+1;
         }
         else if (tokenarray[i].x == VARIABLE){
             var_counter++;
+            // cout << "var " << var_counter << endl;
         }
         else if (tokenarray[i].x == SLASH){
-            j = i;
-            do{
-                i++;
-            }
-            while(tokenarray[i].x != VARIABLE);
-            do{
-                i++;
-            }
-            while(tokenarray[i].x != VARIABLE);
-            i++;
-            insert_bracket(j,i+1);
-            var_counter = 0;
+            hulpRecursie(i, var_counter);
+            // var_counter++;
+            // j = i;
+            // do{
+            //     i++;
+            // }
+            // while(tokenarray[i].x != VARIABLE);
+            // do{
+            //     i++;
+            // }
+            // while(tokenarray[i].x != VARIABLE);
+            // i++;
+            // insert_bracket(j,i+1);
+            // var_counter++;
             // continue;
         }
         else if (tokenarray[i].x == END){
             break;
         }
+        // cout << "brackpos" << bracket_pos << endl;
+        // cout << var_counter << endl;
     }
     arrToString(output);
 }

@@ -2,86 +2,16 @@
 #include <sstream>
 #include <climits>
 #include <string>
-#include "token.h"
+#include "parser.h"
 using namespace std;
 
 // (\x((a) (b)))
-
-
-class Parser{
-    public:
-
-    void expr(Tokenizer &token);
-    void lexpr(Tokenizer &token);
-    void pexpr(Tokenizer &token);
-    void exprprime(Tokenizer &token);
-
-};
-
-void Parser::pexpr(Tokenizer &token){
-    if (token.peek() == VARIABLE){
-        token.consume();
-    }
-    else if(token.peek() == BRACKET_OPEN){
-        token.consume();
-        // cout << "expr" << endl;
-        expr(token);
-    }
-    else{
-        // cout << token.peek() << endl;
-        cout << "missing expression after opening parenthesis" << endl; //geen idee of dit de goede error is
-        exit(1);
-    }
-}
-
-void Parser::lexpr(Tokenizer &token){
-    if (token.peek() == SLASH){
-        token.consume();
-        if (token.peek() == VARIABLE){
-            token.consume();
-            if (token.peek() == END){
-                cout << "missing expression after lambda abstraction" << endl;
-                exit(1);
-            }
-            // cout << "lexpr" << endl;
-            lexpr(token);
-        }
-        else{
-            cout << "missing variable after slash" << endl;
-            exit(1);
-        }
-    }
-    else{
-        // cout << "pexpr" << endl;
-        pexpr(token);
-    }
-}
-
-void Parser::exprprime(Tokenizer &token){
-    if(token.peek() == END){
-        // cout << "End of string" << endl;
-        return;
-    }
-    // cout << "lexpr" << endl;
-    lexpr(token);
-    // cout << "exprprime" << endl;
-    exprprime(token);
-}
-
-void Parser::expr(Tokenizer &token){
-    // cout << "lexpr" << endl;
-    lexpr(token);
-    // cout << "exprprime" << endl;
-    exprprime(token);
-}
-
 
 void arraycheck(Tokenizer token){
     for (int i = 0; i < token.array_size; i++){
         cout << "token_type" << token.tokenarray[i].x << endl;
     }
 }
-
 
 int main(){
     std::string input;
@@ -118,8 +48,6 @@ int main(){
     exit(0);
 }
 
-//.h file en .cc file voor parser
-
 //Geeft nu output alleen nog niet UNAMBIGUOUS
 //outputs a character string in a standard format to standard output
 //this format may be explained in the README
@@ -147,9 +75,7 @@ int main(){
 //dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
 
 
-//Vragen:
 
-//Doen we dit nu goed?
 // file als input
 //A line is considered terminated by a newline character (\n),
 //or a carriage return and newline character (\r\n).

@@ -35,6 +35,8 @@ class Tokenizer{
 
     void arrToString(std::string &output);
 
+    void hulpRecursie(int &i, int &var_counter);
+
     void create_output(std::string &output);
 
     Token tokenarray[max_size];
