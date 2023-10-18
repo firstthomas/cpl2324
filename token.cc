@@ -1,97 +1,102 @@
 #include "token.h"
 using namespace std;
 
-
-Tokenizer::Tokenizer(std::string input){
+// Reads the string input and checks for each character's type to store the type in tokenarray.
+// Also checks whether or not false input is given and if the amount of brackets-open are
+// equal to the amount of brackets-close.
+Tokenizer::Tokenizer(std::string input, bool file){
     int k = 0;
-    int open_count = 0;
-    int close_count = 0;
-    input_copy = input;
-    for (int i = 0; i < input.size(); i++){
-        // cout << input[i] << endl;
+    int open_count = 0; //To keep count of bracket_open.
+    int close_count = 0; // To keep count of bracket_close.
+    int hulp;
+    if (file){
+        hulp = input.size() -1;
+    }
+    else {
+        hulp = input.size();
+    }
+    for (int i = 0; i < hulp; i++){
         if (input[i] == '(' ){
-            // cout << "open bracket" << endl;
             tokenarray[k].x = BRACKET_OPEN;
             open_count++;
         }
         else if (input[i] == ')' ){
-            // cout << "close bracket" << endl;
             tokenarray[k].x = BRACKET_CLOSE;
             close_count++;
         }
         else if (input[i] == '\\'){
-            // cout << "slash" << endl;
             tokenarray[k].x = SLASH;
         }
         else if (input[i] == ' '){
-            //If there is a space after another space it is not stored
+            // If there is a space after another space it is not stored.
             if (tokenarray[k-1].x != WHITESPACE){
                 tokenarray[k].x = WHITESPACE;
             }
             else {
                 k--;
             }
-        }
+        } // The following if statement checks if the characters is equal
+          // to a-z or A-Z using ascii code. 
+          // Here the variables of unknown length are tokenized.
         else if ((input[i] > 64 && input[i] < 91) || (input[i] > 96 && input[i] < 123)){
-            // cout << "var" << endl;
             tokenarray[k].x = VARIABLE;
             tokenarray[k].y = input[i];
-            while (input[i+1] != '(' && input[i+1] != ')' && input[i+1] != '\\' && input[i+1] != ' ' && int(input[i+1]) != 0){
+            while (input[i+1] != '(' && input[i+1] != ')' && input[i+1] != '\\' && input[i+1] != ' ' && input[i+1] != '\n' && input[i+1] != '\r' && int(input[i+1] != 0)){
                 if ((input[i+1] > 64 && input[i+1] < 91) || (input[i+1] > 47 && input[i+1] < 58) || (input[i+1] > 96 && input[i+1] < 123)){
-                    // cout << "var2" << endl;
                     i++;
-                    // cout << input[i] << endl;
                     tokenarray[k].y += input[i];
                 }
-                else {
-                    // cout << input[i+1] << endl;
-                    cout << "Incorrect charachter input" << endl;
+                else { // False input.
+                    cout << "Incorrect character1 input" << endl;
                     exit(1);
                 }
             }
         }
-        else {
-            cout << "Incorrect character input" << endl;
+        else if(input[i] != '\n' && input[i] != '\r'){ // False input.
+            cout << "Incorrect character2 input" << endl;
             exit(1);
         }
         k++;
     }
-    if (open_count != close_count){
+    if (open_count != close_count){ // Bracket_open not equal to Bracket_close.
         cout << "Amount of open brackets not equal to amount of closed brackets " << endl;
         exit(1);
     }
+    //Mark the end of the array
     tokenarray[k].x = END;
     k++;
     array_size = k;
 }
 
+// This function is used to skip over elements equal to whitespaces and 
+// closing brackets, returns the first element which is neither.
 token_type Tokenizer::peek(){
     while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE){
-        // cout << "Peek iteratie: " << j << endl;
-        // cout << tokenarray[j].x << endl;
         j++;
     }
-    // cout << "type: " << tokenarray[j].x << endl;
     return tokenarray[j].x;
 }
 
-void Tokenizer::consume(){//en hier ook spaties gelijk consumen?
-    // while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE){
-    //     cout << "Peek iteratie: " << j << endl;
-    //     cout << tokenarray[j].x << endl;
-    //     j++;
-    // }
+// Consumes the next token by adding 1 to the index.
+void Tokenizer::consume(){
     j++;
 }
 
+// Inserts two brackets, one at bracket_pos and one at pos.
 void Tokenizer::insert_bracket(int bracket_pos, int pos){
     // cout << array_size << endl;
+
+    // This for-loop makes room for a bracket by placing all elements
+    // after bracket_pos one place to the right.
     for (int i = array_size; i > bracket_pos; i--){
         // cout << i << endl;
         tokenarray[i] = tokenarray[i - 1];
     }
     tokenarray[bracket_pos].x = BRACKET_OPEN;
     array_size++;
+
+    // Same purpose as for-loop before this but bracket_pos is replaced
+    // with pos.
     for (int i = array_size; i >= pos; i--){
         tokenarray[i] = tokenarray[i - 1];
     }
@@ -99,12 +104,12 @@ void Tokenizer::insert_bracket(int bracket_pos, int pos){
     array_size++;
 }
 
+// Converts the array back to a string.
 void Tokenizer::arrToString(std::string &output){
-    std::string previous = " ";
+    std::string previous = " "; // Used to remember the previous character.
     for (int i = 0; i < array_size; i++){
         if (tokenarray[i].x == WHITESPACE){
-            //hierdoor wordt er geen spatie geprint na ( en voor )
-            //en geen spatie tussen )(
+            // Don't print spaces when not necessary after brackets.
             if (previous != "(" && tokenarray[i+1].x != BRACKET_CLOSE && 
                 previous != ")" && tokenarray[i+1].x != BRACKET_OPEN){
                 output += " ";
@@ -124,7 +129,7 @@ void Tokenizer::arrToString(std::string &output){
         }
         else if (tokenarray[i].x == SLASH){
             output += "\\";
-            //hierdoor wordt de evt spatie na een \ niet geprint
+            // Space after \ not printed.
             if (tokenarray[i+1].x == WHITESPACE){
                 i++;
             }
@@ -136,6 +141,7 @@ void Tokenizer::arrToString(std::string &output){
     output += "\n";
 }
 
+// Inserts brackets at the correct positions for lambda expressions.
 void Tokenizer::hulpRecursie(int &i, int &var_counter){
     int j = i;
     do{
@@ -158,6 +164,7 @@ void Tokenizer::hulpRecursie(int &i, int &var_counter){
     // cout << "3:" << i << endl;
 }
 
+// Decides where brackets need to be inserted by looking in the tokenarray.
 void Tokenizer::create_output(std::string &output){
     //brackets verwijderen nog
     //(a) (b) spatie weghalen

@@ -1,68 +1,73 @@
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <climits>
 #include <string>
 #include "parser.h"
 using namespace std;
 
-// (\x((a) (b)))
-
-void arraycheck(Tokenizer token){
-    for (int i = 0; i < token.array_size; i++){
-        cout << "token_type" << token.tokenarray[i].x << endl;
-    }
-}
-
+// Asks the user for 1 or more input expressions and reads it into a
+// a string of tokens. Then parses the token string and returns output to 
+// the standard output. It then repeats these steps on its own output.
 int main(){
     std::string input;
     std::string output;
+    std::string filenaam;
     std::string output2; // For parsing own output
-    cout << "Enter input expression, one per line" << endl;
+    cout << "Enter file name." << endl;
     cout << "To stop the program enter 0" << endl;
-	while (getline(cin, input)){
+    cin >> filenaam;
+    ifstream myFile (filenaam);
+    while (getline(myFile, input)){
         if (input == "0"){
             break;
         }
-        Tokenizer token(input);
-        // arraycheck(token);
+        Tokenizer token(input, true);
         Parser pars;
         pars.expr(token);
         token.create_output(output);
     }
-    cout << output << endl;
+    myFile.close();
+
+	// while (getline(cin, input)){
+    //     if (input == "0"){
+    //         break;
+    //     }
+    //     Tokenizer token(input);
+    //     Parser pars;
+    //     pars.expr(token);
+    //     token.create_output(output);
+    // }
+    cout << output << endl;;
 
     cout << "Parsing own output: " << endl;
     std::stringstream ss(output);
-    while (getline(ss, input, '\n')){
+    while (getline(ss, input)){
         if (input == "0"){
             break;
         }
-        Tokenizer token(input);
-        // arraycheck(token);
+        Tokenizer token(input, false);
         Parser pars;
         pars.expr(token);
         token.create_output(output2);
     }
     cout << output;
-    // arraycheck(token);
     exit(0);
 }
 
-//Geeft nu output alleen nog niet UNAMBIGUOUS
-//outputs a character string in a standard format to standard output
-//this format may be explained in the README
-//should use least amount of std library code
+
 
 //README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
 //deviations from the assignment?
 //may include explanation of how the programs work
 
 //may include positive.zip and negative.zip file
-//program may accept multiple expressions one per line(simpele while loop??)
 
-//dit vindt ik teveel moeite:
-//may support inernational variable names(unicode with lambda instead of \)
+//should use least amount of std library code overal std neerzetten
 
+
+
+//tijd over:
 
 //eigen output parsen werkt alleen de output moet nog () teoevoegen als nodig
 //zoals hieronder staat uitgelegd
@@ -72,13 +77,17 @@ int main(){
 // expression, i.e. with sufficiently many parentheses inserted so the parser never
 // applies any of the precedence rules. The output may use the least amount of
 // whitespace and parentheses in its output.
-//dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
+// Geeft nu output alleen nog niet UNAMBIGUOUS
+// outputs a character string in a standard format to standard output
+// this format may be explained in the README
+// dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
+
+//dit vindt ik teveel moeite:
+//may support inernational variable names(unicode with lambda instead of \)
 
 
-
-// file als input
-//A line is considered terminated by a newline character (\n),
-//or a carriage return and newline character (\r\n).
-//file als input
-
-//should use least amount of std library code overal std neerzetten
+// void arraycheck(Tokenizer token){
+//     for (int i = 0; i < token.array_size; i++){
+//         cout << "token_type" << token.tokenarray[i].x << endl;
+//     }
+// }
