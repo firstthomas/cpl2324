@@ -1,0 +1,8 @@
+\x a \x b
+a b c
+\x a b
+\   x a
+(a b) c d
+a \x b
+a \x \x a
+a \x a bx

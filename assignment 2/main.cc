@@ -4,6 +4,7 @@
 #include <climits>
 #include <string>
 #include "parser.h"
+#include "tree.h"
 using namespace std;
 
 // Asks the user for 1 or more input expressions and reads it into a
@@ -25,6 +26,8 @@ int main(){
         Tokenizer token(input, true);
         Parser pars;
         pars.expr(token);
+        tree* tree1;
+        tree1 = new tree(token.tokenarray, token.array_size);
         token.create_output(output);
     }
     myFile.close();

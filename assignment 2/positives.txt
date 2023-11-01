@@ -5,4 +5,4 @@ a b c
 (a b) c d
 a \x b
 a \x \x a
-a \x a b
+a \x a bx

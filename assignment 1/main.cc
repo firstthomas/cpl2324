@@ -65,6 +65,7 @@ int main(){
 
 //should use least amount of std library code overal std neerzetten
 
+//const correctness public private ook opdracht 2
 
 
 //tijd over:
