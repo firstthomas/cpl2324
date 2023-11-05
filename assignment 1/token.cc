@@ -93,6 +93,7 @@ void Tokenizer::insert_bracket(int bracket_pos, int pos){
         tokenarray[i] = tokenarray[i - 1];
     }
     tokenarray[bracket_pos].x = BRACKET_OPEN;
+    tokenarray[pos].y = "-1";
     array_size++;
 
     // Same purpose as for-loop before this but bracket_pos is replaced
@@ -101,6 +102,7 @@ void Tokenizer::insert_bracket(int bracket_pos, int pos){
         tokenarray[i] = tokenarray[i - 1];
     }
     tokenarray[pos].x = BRACKET_CLOSE;
+    tokenarray[pos].y = "-1";
     array_size++;
 }
 

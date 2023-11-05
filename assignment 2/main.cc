@@ -4,8 +4,32 @@
 #include <climits>
 #include <string>
 #include "parser.h"
-#include "tree.h"
+// #include "tree.h"
 using namespace std;
+
+void arraycheck(Token tokenArray[], int array_size){
+    for (int i = 0; i < array_size; i++){
+        if(tokenArray[i].x == SLASH){
+            cout << "/";
+        }
+        else if(tokenArray[i].x == BRACKET_OPEN){
+            cout << "(";
+        }
+        else if(tokenArray[i].x == BRACKET_CLOSE){
+            cout << ")";
+        }
+        else if(tokenArray[i].x == VARIABLE){
+            cout << tokenArray[i].y;
+        }
+        else if(tokenArray[i].x == APP){
+            cout << "@";
+        }
+        else if(tokenArray[i].x == END){
+            cout << "   END" << endl;
+        }
+    }
+}
+
 
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
@@ -26,9 +50,12 @@ int main(){
         Tokenizer token(input, true);
         Parser pars;
         pars.expr(token);
-        tree* tree1;
-        tree1 = new tree(token.tokenarray, token.array_size);
         token.create_output(output);
+        // token.add_application();
+        // arraycheck(token.tokenarray, token.array_size);
+        // tree* tree1;
+        // tree1 = new tree(token.tokenarray, token.array_size);
+        // token.create_output(output);
     }
     myFile.close();
 
@@ -53,6 +80,8 @@ int main(){
         Parser pars;
         pars.expr(token);
         token.create_output(output2);
+        token.add_application();
+        arraycheck(token.tokenarray, token.array_size);
     }
     cout << output;
     exit(0);

@@ -28,13 +28,14 @@ Tokenizer::Tokenizer(std::string input, bool file){
             tokenarray[k].x = SLASH;
         }
         else if (input[i] == ' '){
+            k--;
             // If there is a space after another space it is not stored.
-            if (tokenarray[k-1].x != WHITESPACE){
-                tokenarray[k].x = WHITESPACE;
-            }
-            else {
-                k--;
-            }
+            // if (tokenarray[k-1].x != WHITESPACE){
+            //     tokenarray[k].x = WHITESPACE;
+            // }
+            // else {
+            //     k--;
+            // }
         } // The following if statement checks if the characters is equal
           // to a-z or A-Z using ascii code. 
           // Here the variables of unknown length are tokenized.
@@ -68,6 +69,47 @@ Tokenizer::Tokenizer(std::string input, bool file){
     array_size = k;
 }
 
+void Tokenizer::insert_application(int pos){
+    for (int i = array_size; i > pos; i--){
+        tokenarray[i] = tokenarray[i - 1];
+    }
+    tokenarray[pos].x = APP;
+    tokenarray[pos].y = "-1";
+    array_size++;
+}
+
+void Tokenizer::add_application(){
+    int varCounter = 0;
+    bool slash = false;
+    int i = 0;
+    // for (int i = 0 < array_size; i++;){
+    while(tokenarray[i].x != END){
+        if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){//&&niet einde bv a
+            if (tokenarray[i+1].x == BRACKET_CLOSE){
+                insert_application(i+2);
+            }
+            else{
+                insert_application(i+1);
+            }
+            // slash = false;
+        }
+        else if(tokenarray[i].x == SLASH){
+            varCounter = 0;
+            slash = true;
+        }
+        else if(varCounter == 1 && slash && tokenarray[i+1].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
+            varCounter = 0;
+            insert_application(i+1);
+            slash = false;
+        }
+        else if(tokenarray[i].x == VARIABLE){
+            varCounter++;
+        }
+        i++;
+    }
+}   
+
+
 // This function is used to skip over elements equal to whitespaces and 
 // closing brackets, returns the first element which is neither.
 token_type Tokenizer::peek(){
@@ -93,6 +135,7 @@ void Tokenizer::insert_bracket(int bracket_pos, int pos){
         tokenarray[i] = tokenarray[i - 1];
     }
     tokenarray[bracket_pos].x = BRACKET_OPEN;
+    tokenarray[pos].y = "-1";
     array_size++;
 
     // Same purpose as for-loop before this but bracket_pos is replaced
@@ -101,6 +144,7 @@ void Tokenizer::insert_bracket(int bracket_pos, int pos){
         tokenarray[i] = tokenarray[i - 1];
     }
     tokenarray[pos].x = BRACKET_CLOSE;
+    tokenarray[pos].y = "-1";
     array_size++;
 }
 

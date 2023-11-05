@@ -35,6 +35,10 @@ class Tokenizer{
     // Creates output by inserting brackets
     void create_output(std::string &output);
 
+    void insert_application(int pos);
+
+    void add_application();    
+
     // Array in which character are stored as tokens
     Token tokenarray[max_size];
     int array_size;// Stores the size of the token array
