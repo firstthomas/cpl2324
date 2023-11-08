@@ -91,7 +91,6 @@ void Tokenizer::add_application(){
             else{
                 insert_application(i+1);
             }
-            // slash = false;
         }
         else if(tokenarray[i].x == SLASH){
             varCounter = 0;
@@ -113,7 +112,8 @@ void Tokenizer::add_application(){
 // This function is used to skip over elements equal to whitespaces and 
 // closing brackets, returns the first element which is neither.
 token_type Tokenizer::peek(){
-    while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE){
+    while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE
+            || tokenarray[j].x == APP){
         j++;
     }
     return tokenarray[j].x;

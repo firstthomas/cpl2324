@@ -5,17 +5,21 @@
 class tree{
     public:
 
-    tree(Token tokenarray[], int array_size);
+    tree(){begin = new Node();}
+    
+    // tree(Token tokenarray[], int array_size);
 
     ~tree();
 
-    void createTree(Token tokenarray[], int &i, Node* child);
+    // void createTree(Token tokenarray[], int &i, Node* child);
+
+    // void makeNextNode(std::string str);
+
+    Node* begin;
 
     private:
 
     // Token tokenarray[max_size];
-
-    Node* begin;
 
 };
 

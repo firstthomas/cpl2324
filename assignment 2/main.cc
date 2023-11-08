@@ -30,6 +30,16 @@ void arraycheck(Token tokenArray[], int array_size){
     }
 }
 
+void printTree(Node* child){
+    std::cout << child->T << std::endl;
+    if (child->left != nullptr){
+        printTree(child->left);
+    }
+    if (child->right != nullptr){
+        printTree(child->right);
+    }
+}
+
 
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
@@ -48,10 +58,13 @@ int main(){
             break;
         }
         Tokenizer token(input, true);
+        token.add_application();
+        tree* Tree;
+        Tree = new tree();
         Parser pars;
-        pars.expr(token);
+        pars.expr(token, Tree->begin);
+        printTree(Tree->begin);
         token.create_output(output);
-        // token.add_application();
         // arraycheck(token.tokenarray, token.array_size);
         // tree* tree1;
         // tree1 = new tree(token.tokenarray, token.array_size);
@@ -70,20 +83,20 @@ int main(){
     // }
     cout << output << endl;;
 
-    cout << "Parsing own output: " << endl;
-    std::stringstream ss(output);
-    while (getline(ss, input)){
-        if (input == "0"){
-            break;
-        }
-        Tokenizer token(input, false);
-        Parser pars;
-        pars.expr(token);
-        token.create_output(output2);
-        token.add_application();
-        arraycheck(token.tokenarray, token.array_size);
-    }
-    cout << output;
+    // cout << "Parsing own output: " << endl;
+    // std::stringstream ss(output);
+    // while (getline(ss, input)){
+    //     if (input == "0"){
+    //         break;
+    //     }
+    //     Tokenizer token(input, false);
+    //     Parser pars;
+    //     pars.expr(token);
+    //     token.create_output(output2);
+    //     token.add_application();
+    //     arraycheck(token.tokenarray, token.array_size);
+    // }
+    // cout << output;
     exit(0);
 }
 

@@ -1,3 +1,2 @@
-a \x \x a
-a \x a bx
+\x (a b)
 0
