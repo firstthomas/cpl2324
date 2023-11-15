@@ -19,6 +19,11 @@ class Parser{
     // Function that simulates the exprprime part of the LL grammar
     void exprprime(Tokenizer &token, Node* child);
 
+    void copySubboom(Node* root, Node* temp);
+
+    void insApp(Node* root);
+
+    void helpDestructor(Node* temp) const;
 };
 
 #endif

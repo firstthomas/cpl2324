@@ -32,6 +32,7 @@ void arraycheck(Token tokenArray[], int array_size){
 
 void printTree(Node* child){
     std::cout << child->T << std::endl;
+    // std::cout << child->var << std::endl;
     if (child->left != nullptr){
         printTree(child->left);
     }

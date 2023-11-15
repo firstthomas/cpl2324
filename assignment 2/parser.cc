@@ -1,6 +1,55 @@
 #include <iostream>
 #include "parser.h"
 
+
+// Deletes the Node temp and its childeren
+void Parser::helpDestructor(Node* temp) const{
+    if (temp->left != nullptr){ 
+        Node* left = temp->left;
+        helpDestructor(left);
+    }
+    if (temp->right != nullptr){
+        Node* right = temp->right;
+        helpDestructor(right);
+    }
+    delete temp; // delete node
+}
+
+
+// Copies child to temp
+void Parser::copySubboom(Node* child, Node* temp){
+    temp->T = child->T;
+    temp->var = child->var;
+    if (child->left != nullptr){
+        temp->left = new Node();
+        copySubboom(child->left, temp->left);
+    }
+    else{
+        temp->left = nullptr;
+    }
+    if (child->right != nullptr){
+        temp->right = new Node();
+        copySubboom(child->right, temp->right);
+    }
+    else{
+        temp->right = nullptr;
+    }
+}
+
+// Inserts an appllication above the root
+void Parser::insApp(Node* root){
+    Node* temp = new Node();
+    temp->T = APP;
+    temp->left = new Node();
+    copySubboom(root, temp->left);
+    std::cout << "hier2" << std::endl;
+    helpDestructor(root->left);
+    helpDestructor(root->right);
+    copySubboom(temp, root);
+    // root = temp;
+    //nog destructor hier?
+}
+
 // Calls the lexpr function and exprprime function.
 void Parser::expr(Tokenizer &token, Node* child){
     // Tree->makeNextNode("APP");
@@ -9,11 +58,19 @@ void Parser::expr(Tokenizer &token, Node* child){
     lexpr(token, child->left);
     child->right = new Node();
     exprprime(token, child->right);
+    if(token.peek() != END){
+        insApp(child);
+        child->right = new Node();
+        exprprime(token, child->right);
+    }
     if (child->right->T == BRACKET_OPEN){
-        child->right = nullptr;
-        Node* temp = child;
-        child = child->left;
-        delete temp;
+        std::cout << "niet hier" << std::endl;
+        Node* temp = new Node();
+        copySubboom(child->left, temp);
+        //nog destructor maken
+        // helpDestructor(child->left);
+        // helpDestructor(child->right);
+        copySubboom(temp, child);
     }
 }
 
@@ -23,11 +80,9 @@ void Parser::expr(Tokenizer &token, Node* child){
 // If no SLASH is found, call pexpr.
 void Parser::lexpr(Tokenizer &token, Node* child){
     if (token.peek() == SLASH){
-        // Tree->makeNextNode("SLASH");
         child->T = SLASH;
         token.consume();
         if (token.peek() == VARIABLE){
-            // Tree->makeNextNode(token.tokenarray[token.j].y);
             child->left = new Node();
             child->left->T = VARIABLE;
             child->left->var = token.tokenarray[token.j].y;
@@ -77,16 +132,20 @@ void Parser::exprprime(Tokenizer &token, Node* child){
         return;
     }
     lexpr(token, child);
-    if (child->left != nullptr){
+    if (child->left == nullptr){
         child->left = new Node();
         exprprime(token, child->left);
     }
-    else if (child->right != nullptr){
+    else if (child->right == nullptr){
         child->right = new Node();
         exprprime(token, child->right);
         if (child->right->T == BRACKET_OPEN){
             child->right = nullptr;
         }
     }
+    // if(token.peek() != END){
+    //     std::cout << "not end" << std::endl;
+    //     return;
+    // }
     return;
 }

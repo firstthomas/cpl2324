@@ -29,6 +29,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
         }
         else if (input[i] == ' '){
             k--;
+            //spaces are not stored atm
             // If there is a space after another space it is not stored.
             // if (tokenarray[k-1].x != WHITESPACE){
             //     tokenarray[k].x = WHITESPACE;
