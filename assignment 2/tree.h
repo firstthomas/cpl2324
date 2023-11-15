@@ -6,21 +6,20 @@ class tree{
     public:
 
     tree(){begin = new Node();}
-    
-    // tree(Token tokenarray[], int array_size);
 
     ~tree();
 
-    // void createTree(Token tokenarray[], int &i, Node* child);
-
-    // void makeNextNode(std::string str);
+    void reduce();
 
     Node* begin;
-
+    
     private:
 
-    // Token tokenarray[max_size];
+    bool findAppLambda(Node* walker);
 
+    bool bound(Node* walker, std::string var);
+
+    bool alphaReduce(Node* walker);
 };
 
 

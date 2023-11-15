@@ -1,55 +1,48 @@
 #include "tree.h"
 
-// tree::tree(Token tokenarray[], int array_size){
+bool tree::findAppLambda(Node* walker){
+    if (walker->T == APP && walker->left->T == SLASH){
+        return true;
+    }
+    else if(walker->left != nullptr){
+        walker = walker->left;
+        return findAppLambda(walker);
+    }
+    else if(walker->right != nullptr){
+        walker = walker->right;
+        return findAppLambda(walker);
+    }
+    return false;
+}
 
-//     begin = new Node();
-//     int i = 0;
-//     createTree(tokenarray, i, begin);
-// }
 
-// void tree::createTree(Token tokenarray[], int &i, Node* child){
-    
-//     if (tokenarray[i].x == SLASH){
-//         child->T->x = tokenarray[i].x;
-//         // child->T->y = tokenarray[i].y;
-//         i++;
-//         if (tokenarray[i].x == WHITESPACE){
-//             i++;
-//         }
-//         child->left = new Node();
-//         child->left->T->x = tokenarray[i].x;
-//         child->left->T->y = tokenarray[i].y;
-//         if (tokenarray[i+1].x == WHITESPACE){
-//             i += 2;
-//         }
-//         child->right = new Node();
-//         createTree(tokenarray, i, child->right);
-//     }
-//     else if (tokenarray[i].x == VARIABLE){
-//         child->T->x = tokenarray[i].x;
-//         child->T->y = tokenarray[i].y;
-//     }
-//     else if (tokenarray[i].x == BRACKET_OPEN){
-//         i++;
-//         if (tokenarray[i].x == BRACKET_OPEN){
-//             child->left = new Node();
-//             i++;
-//             createTree(tokenarray, i, child->left);
-//         }
-//         else if (tokenarray[i].x == SLASH){
-//             child->T->x = SLASH;
-//         }
-//         else if (tokenarray[i].x == VARIABLE){
-//             child->T->x = APP;
-//         }
-//     }
-//     createTree(tokenarray, i, child);
-// }
+bool tree::bound(Node* walker, std::string var){
+    if (walker->T == SLASH && walker->left->var == var){
+        return true;
+    }
+    else if(walker->right != nullptr){
+        walker = walker->right;
+        return bound(walker, var);
+    }
+    return false;
+}
+//
+bool tree::alphaReduce(Node* walker){
 
-// // void tree::readIn(std::string input){
-    
-// // }
+}
 
-// void tree::makeNextNode(std::string str){
-    
-// }
+void tree::reduce(){
+    Node* walker = begin;
+    Node* walker2 = begin;
+    bool possibleB = findAppLambda(walker);
+    bool alphaReduced = true;
+    std::cout << "possibleB:" << possibleB << std::endl;
+    while(possibleB && alphaReduced){
+        walker2 = walker;
+        if (bound(walker2->left->right, walker2->right->var)){
+            alphaReduced = alphaReduce(walker);
+        }
+        walker = begin;
+        possibleB = findAppLambda(walker);
+    }
+}

@@ -42,7 +42,7 @@ void Parser::insApp(Node* root){
     temp->T = APP;
     temp->left = new Node();
     copySubboom(root, temp->left);
-    std::cout << "hier2" << std::endl;
+    // std::cout << "hier2" << std::endl;
     helpDestructor(root->left);
     helpDestructor(root->right);
     copySubboom(temp, root);
@@ -52,6 +52,7 @@ void Parser::insApp(Node* root){
 
 // Calls the lexpr function and exprprime function.
 void Parser::expr(Tokenizer &token, Node* child){
+    // std::cout << "expr" << std::endl;
     // Tree->makeNextNode("APP");
     child->T = APP;
     child->left = new Node();
@@ -61,10 +62,13 @@ void Parser::expr(Tokenizer &token, Node* child){
     if(token.peek() != END){
         insApp(child);
         child->right = new Node();
+        // std::cout << "voorexprprime" << std::endl;
         exprprime(token, child->right);
     }
-    if (child->right->T == BRACKET_OPEN){
-        std::cout << "niet hier" << std::endl;
+    if (child->right->T == BRACKET_OPEN && token.peek() != END){
+        // std::cout << "niet hier" << std::endl;
+        token_type temp1 = token.peek();
+        // std::cout << "x: " << temp1 << "y: " << temp1 <<std::endl;
         Node* temp = new Node();
         copySubboom(child->left, temp);
         //nog destructor maken
@@ -79,6 +83,7 @@ void Parser::expr(Tokenizer &token, Node* child){
 // otherwise call lexpr. Will also fail if theres no variable after the SLASH. 
 // If no SLASH is found, call pexpr.
 void Parser::lexpr(Tokenizer &token, Node* child){
+    // std::cout << "lexpr" << std::endl;
     if (token.peek() == SLASH){
         child->T = SLASH;
         token.consume();
@@ -108,6 +113,7 @@ void Parser::lexpr(Tokenizer &token, Node* child){
 // consume and call expr. If the next element is neither of those, send
 // error code.
 void Parser::pexpr(Tokenizer &token, Node* child){
+    // std::cout << "pexpr" << std::endl;
     if (token.peek() == VARIABLE){
         // Tree->makeNextNode(token.tokenarray[token.j].y);
         child->T = VARIABLE;
@@ -127,16 +133,20 @@ void Parser::pexpr(Tokenizer &token, Node* child){
 // If at the end of the string return
 // else call lexpr and expprime.
 void Parser::exprprime(Tokenizer &token, Node* child){
+    // std::cout << "exprprime" << std::endl;
     if(token.peek() == END){
+        std::cout << "end" << std::endl;
         delete child;
         return;
     }
     lexpr(token, child);
-    if (child->left == nullptr){
+    if (child->left == nullptr && child->T != VARIABLE){
+        // std::cout << "niet exprpime" << std::endl;
         child->left = new Node();
         exprprime(token, child->left);
     }
-    else if (child->right == nullptr){
+    else if (child->right == nullptr && child->T != VARIABLE){
+        // std::cout << "niet exprpime" << std::endl;
         child->right = new Node();
         exprprime(token, child->right);
         if (child->right->T == BRACKET_OPEN){
@@ -144,8 +154,10 @@ void Parser::exprprime(Tokenizer &token, Node* child){
         }
     }
     // if(token.peek() != END){
-    //     std::cout << "not end" << std::endl;
-    //     return;
+    //     insApp(child);
+    //     child->right = new Node();
+    //     std::cout << "inexpprime niet end" << std::endl;
+    //     exprprime(token, child->right);
     // }
     return;
 }
