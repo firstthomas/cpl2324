@@ -20,11 +20,12 @@ class Node {
     
     Node(std::string str){
             this->var = str;
+            if (str == "\\"){this->T = SLASH;}
+            else if (str == "@"){this->T = APP;}
+            else{this->T = VARIABLE;}
             this->left = NULL;
             this->right = NULL;
     };
-    
-    // Node(Token* t){T = t;}
 
 };
 

@@ -83,8 +83,8 @@ int main(){
         // std::cout << "voor print" <<std::endl;
         printTree(Tree->begin);
         // std::cout << "na print" <<std::endl;
-        // Tree->reduce();
-        // printTree(Tree->begin);
+        Tree->reduce();
+        printTree(Tree->begin);
         // std::cout << "na reduce" <<std::endl;
         // token.create_output(output);
         // arraycheck(token.tokenarray, token.array_size);

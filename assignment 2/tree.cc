@@ -13,94 +13,15 @@ void tree::readIn(std::string input){
 void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
-    // std::cout << str << std::endl;
-    // if (str.empty()){
-    //     std::cout << "empty" << std::endl;
-    //     return;
-    // }
     delete child;
     child = new Node(str);
     if ((str[0] > 64 && str[0] < 91) || (str[0] > 96 && str[0] < 123)){
-        // std::cout << "var" << std::endl;
         return;
     }
     child->left = new Node();
     createTree(child->left, iss);
-    // child->var = str;
-    // if (str.empty()){
-    //     return;
-    // }
     child->right = new Node();
     createTree(child->right, iss);
-    // Token* temp = nullptr;
-    // if (B){
-    //     delete begin;
-    //     begin = new Token(str);
-    //     temp = begin;
-    // }
-    // else{
-// Token* temp = new Token(str);
-    // }
-    // // if (str.empty()){
-    // //     std::cout << "Missend kind" << std::endl;
-    // //     return false;
-    // // }
-    // if (temp->T == WRONG){
-    //     std::cout << "Incorrecte input" << std::endl;
-    //     return false;
-    // }
-    // if (T && !B){
-    //     child->left = temp;
-    //     if (child->T == EXP && temp->T == EXP){
-    //         std::cout << "Exponent met expressie niet toegestaan";
-    //         std::cout << std::endl;
-    //         return false;
-    //     }
-    // }
-    // else if (!B){
-    //     child->right = temp;
-    //     if (child->T == EXP && temp->T != NUMBER){
-    //         std::cout << "Exponent met expressie niet toegestaan";
-    //         std::cout << std::endl;
-    //         return false;
-    //     }
-    // }
-    // if (temp->T == NUMBER){
-    //     if (str == "pi"){
-    //         temp->number = M_PI;
-    //     }
-    //     else {
-    //         for (long unsigned int i = 1; i < str.length(); i++){
-    //             if ((str[i] < 48 || str[i] > 57) && str[i] != 45 
-    //                 && str[i] != 46){
-    //                 std::cout << "Geen geldige input" << std::endl;
-    //                 return false;
-    //             } 
-    //         }
-    //         temp->number = std::atof(str.c_str());
-    //     }
-    // }
-    // else if (temp->T == VARIABLE){
-    //     temp->variable = str[0];
-    //     if (str.length() > 1){
-    //         std::cout << "Variable groter dan 1 karakter" << std::endl;
-    //         return false;
-    //     }
-    // }
-    // else if (temp->T == SIN || temp->T == COS){
-    //     if (!createTree(temp, iss, false, false)){
-    //         return false;
-    //     }
-    // }
-    // else {
-    //     if (!createTree(temp, iss, true, false)){
-    //         return false;
-    //     }
-    //     if (!createTree(temp, iss, false, false)){
-    //         return false;
-    //     }
-    // }
-    // return true;
 }
 
 
