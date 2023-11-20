@@ -24,6 +24,7 @@ class Tokenizer{
     Tokenizer(std::string input, bool file);
     // Peeks the next token
     token_type peek();
+
     // Consume the next token
     void consume();
     // Inserts two bracket, one at bracket_pos and one at pos
@@ -39,10 +40,27 @@ class Tokenizer{
 
     void add_application();    
 
+    void reverseArray(Token tokenArr[], int Size);
+
+    void infixToPostfix();
+
+    void swapSlashVar();
+
+    std::string arrToStringForTree();
+
     // Array in which character are stored as tokens
     Token tokenarray[max_size];
+
+    Token postfix[max_size];
+
     int array_size;// Stores the size of the token array
+    int postfixSize;
     // Interger used as index to store the current position in the array
     int j = 0; 
+
+    // bool inBrackets = false;
+    // int inBrackets = 0;
+    // int bracketOpensConsumed = 0;
+    // int bracketClosedConsumed = 0;
 };
 #endif

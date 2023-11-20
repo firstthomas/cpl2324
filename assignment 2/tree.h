@@ -5,9 +5,13 @@
 class tree{
     public:
 
-    tree(){begin = new Node();}
+    tree(){}
 
     ~tree();
+
+    void readIn(std::string input);
+
+    void createTree(Node* child, std::istringstream &iss);
 
     void reduce();
 
@@ -15,11 +19,16 @@ class tree{
     
     private:
 
-    bool findAppLambda(Node* walker);
+    Node* findAppLambda(Node* walker, bool &found);
 
-    bool bound(Node* walker, std::string var);
+    Node* Bound(Node* walker, std::string var, bool &bound);
 
-    bool alphaReduce(Node* walker);
+    Node* alphaConversion(Node* walker, bool &alphaConversed);
+
+    bool betaReduce(Node* walker);
+    // bool betaReduce(Node* walker);
+
+    void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree);
 };
 
 

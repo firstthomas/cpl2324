@@ -3,16 +3,27 @@
 #include "token.h"
 #include <iostream>
 
+
 class Node {
 
     public:
-    std::string var = "-1";
-    token_type T; // Type van de token
-    Node* left = nullptr; // Pointer naar de linker token in de tree.
-    Node* right = nullptr; // Pointer naar de rechter token in de tree.
+        std::string var;
+        token_type T; // Type van de token
+        Node* left = nullptr; // Pointer naar de linker token in de tree.
+        Node* right = nullptr; // Pointer naar de rechter token in de tree.
 
-    Node(){};
-
+    Node(){
+        this->var = "-1";
+        this->left = NULL;
+        this->right = NULL;
+    };
+    
+    Node(std::string str){
+            this->var = str;
+            this->left = NULL;
+            this->right = NULL;
+    };
+    
     // Node(Token* t){T = t;}
 
 };

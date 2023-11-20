@@ -4,8 +4,14 @@ a b c
 \   x a
 (a b) c d
 a \x b
+\x (x x) y
+\x ((x z) w) y
 a \x \x a
-a \x a bx
-(a b) c d
-a \x a bx
+\x \y z y
+(\x (\z (\y z))) y
+\x \z \y z y
+\x (x y)
 0
+a \x \y z y b lijkt fout te gaan is miss ook geen goede input?
+a \x a bx boom van deze vragen
+a (\x a (b c) \x d)

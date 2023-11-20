@@ -4,7 +4,8 @@
 #include <climits>
 #include <string>
 #include "parser.h"
-// #include "tree.h"
+#include "node.h"
+#include "tree.h"
 using namespace std;
 
 void arraycheck(Token tokenArray[], int array_size){
@@ -25,14 +26,14 @@ void arraycheck(Token tokenArray[], int array_size){
             cout << "@";
         }
         else if(tokenArray[i].x == END){
-            cout << "   END" << endl;
+            cout << "END";
         }
     }
+    std::cout << std::endl;
 }
 
 void printTree(Node* child){
-    std::cout << child->T << std::endl;
-    // std::cout << child->var << std::endl;
+    std::cout << child->var << std::endl;
     if (child->left != nullptr){
         printTree(child->left);
     }
@@ -63,9 +64,29 @@ int main(){
         tree* Tree;
         Tree = new tree();
         Parser pars;
-        pars.expr(token, Tree->begin);
+        pars.expr(token);
+        // arraycheck(token.tokenarray, token.array_size);
+        token.swapSlashVar();
+        // arraycheck(token.tokenarray, token.array_size);
+        token.reverseArray(token.tokenarray, token.array_size-1);
+        // arraycheck(token.tokenarray, token.array_size);
+        token.infixToPostfix();
+        // arraycheck(token.postfix, token.postfixSize);
+        token.reverseArray(token.postfix, token.postfixSize);
+        // std::cout << std::endl;
+        // arraycheck(token.postfix, token.postfixSize);
+        // std::string temp = token.arrToStringForTree();
+        // std::cout << temp << std::endl;
+        Tree->readIn(token.arrToStringForTree());
+        // pars.begin = Tree->begin;
+        // pars.expr(token, Tree->begin);
+        // std::cout << "voor print" <<std::endl;
         printTree(Tree->begin);
-        token.create_output(output);
+        // std::cout << "na print" <<std::endl;
+        // Tree->reduce();
+        // printTree(Tree->begin);
+        // std::cout << "na reduce" <<std::endl;
+        // token.create_output(output);
         // arraycheck(token.tokenarray, token.array_size);
         // tree* tree1;
         // tree1 = new tree(token.tokenarray, token.array_size);
@@ -82,7 +103,7 @@ int main(){
     //     pars.expr(token);
     //     token.create_output(output);
     // }
-    cout << output << endl;;
+    cout << output << endl;
 
     // cout << "Parsing own output: " << endl;
     // std::stringstream ss(output);

@@ -1,4 +1,5 @@
 #include "token.h"
+#include <stack>
 using namespace std;
 
 // Reads the string input and checks for each character's type to store the type in tokenarray.
@@ -71,37 +72,50 @@ Tokenizer::Tokenizer(std::string input, bool file){
 }
 
 void Tokenizer::insert_application(int pos){
-    for (int i = array_size; i > pos; i--){
-        tokenarray[i] = tokenarray[i - 1];
+    if (tokenarray[pos].x != END){
+        for (int i = array_size; i > pos; i--){
+            tokenarray[i] = tokenarray[i - 1];
+        }
+        tokenarray[pos].x = APP;
+        tokenarray[pos].y = "-1";
+        array_size++;
     }
-    tokenarray[pos].x = APP;
-    tokenarray[pos].y = "-1";
-    array_size++;
 }
 
 void Tokenizer::add_application(){
     int varCounter = 0;
     bool slash = false;
     int i = 0;
-    // for (int i = 0 < array_size; i++;){
     while(tokenarray[i].x != END){
+        while (tokenarray[i].x == BRACKET_OPEN){
+            i++;
+        }
         if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){//&&niet einde bv a
-            if (tokenarray[i+1].x == BRACKET_CLOSE){
-                insert_application(i+2);
+            while (tokenarray[i+1].x == BRACKET_CLOSE){
+                i++;
             }
-            else{
-                insert_application(i+1);
+            insert_application(i+1);
+        }
+        else if(varCounter == 1 && slash && tokenarray[i].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
+            varCounter = 0;
+            while (tokenarray[i+1].x == BRACKET_CLOSE){
+                i++;
             }
+            insert_application(i+1);
+            slash = false;
         }
         else if(tokenarray[i].x == SLASH){
             varCounter = 0;
             slash = true;
         }
-        else if(varCounter == 1 && slash && tokenarray[i+1].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
-            varCounter = 0;
-            insert_application(i+1);
-            slash = false;
-        }
+        // else if(varCounter == 1 && slash && tokenarray[i+1].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
+        //     varCounter = 0;
+        //     while (tokenarray[i+1].x == BRACKET_CLOSE){
+        //         i++;
+        //     }
+        //     insert_application(i+1);
+        //     slash = false;
+        // }
         else if(tokenarray[i].x == VARIABLE){
             varCounter++;
         }
@@ -113,8 +127,8 @@ void Tokenizer::add_application(){
 // This function is used to skip over elements equal to whitespaces and 
 // closing brackets, returns the first element which is neither.
 token_type Tokenizer::peek(){
-    while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE
-            || tokenarray[j].x == APP){
+    while (tokenarray[j].x == WHITESPACE || tokenarray[j].x == BRACKET_CLOSE 
+           || tokenarray[j].x == APP){
         j++;
     }
     return tokenarray[j].x;
@@ -267,4 +281,95 @@ void Tokenizer::create_output(std::string &output){
         // cout << var_counter << endl;
     }
     arrToString(output);
+}
+
+void Tokenizer::reverseArray(Token tokenArr[], int Size){
+    int start = 0;
+    int end = Size-1;
+    while (start < end){
+        Token temp = tokenArr[start];
+        tokenArr[start] = tokenArr[end];
+        tokenArr[end] = temp;
+        start++;
+        end--;
+    }
+    for (int i = 0; i < Size; i++){
+        if (tokenArr[i].x == BRACKET_OPEN){
+            tokenArr[i].x = BRACKET_CLOSE;
+        }
+        else if (tokenArr[i].x == BRACKET_CLOSE){
+            tokenArr[i].x = BRACKET_OPEN;
+        }
+    }
+}
+
+void Tokenizer::infixToPostfix(){
+    stack<Token> st;
+    string element;
+    int k = 0;
+    for(int i = 0; i < array_size; i++){
+        if(tokenarray[i].x == VARIABLE){
+            postfix[k] = tokenarray[i];
+            k++;
+        }
+        else if(tokenarray[i].x == BRACKET_OPEN){
+            st.push(tokenarray[i]);
+        }
+        else if(tokenarray[i].x == BRACKET_CLOSE){
+            while (st.top().x != BRACKET_OPEN){
+                postfix[k] = st.top();
+                k++;
+                st.pop();
+            }
+            st.pop();
+        }
+        else if(tokenarray[i].x == END){
+            continue;
+        }
+        else{
+            while(!st.empty() && st.top().x != BRACKET_OPEN && (
+            (st.top().x == SLASH && tokenarray[i].x == SLASH)
+            || (st.top().x == SLASH && tokenarray[i].x == APP))){
+                postfix[k] = st.top();
+                k++;
+                st.pop();
+            }
+            st.push(tokenarray[i]);
+        }
+    }
+    
+    while(!st.empty()){
+        postfix[k] = st.top();
+        k++;
+        st.pop();
+    }
+    postfixSize = k;
+}
+
+void Tokenizer::swapSlashVar(){
+    for (int i = 0; i < array_size; i++){
+        if (tokenarray[i].x == SLASH){
+            Token temp = tokenarray[i];
+            tokenarray[i] = tokenarray[i+1];
+            tokenarray[i+1] = temp;
+            i++;
+        }
+    }
+}
+// Converts the array back to a string.
+std::string Tokenizer::arrToStringForTree(){
+    std::string str = "";
+    for (int i = 0; i < postfixSize; i++){
+        if (postfix[i].x == VARIABLE){
+            str += postfix[i].y;
+        }
+        else if (postfix[i].x == SLASH){
+            str += "\\";
+        }
+        else if (postfix[i].x == APP){
+            str += "@";
+        }
+        str += " ";
+    }
+    return str;
 }
