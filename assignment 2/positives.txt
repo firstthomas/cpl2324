@@ -15,3 +15,7 @@ a \x \x a
 a \x \y z y b lijkt fout te gaan is miss ook geen goede input?
 a \x a bx boom van deze vragen
 a (\x a (b c) \x d)
+\x (\z x) \z (\x z)
+\x (\x (x x)) \x (\x (x x))
+(\x \y x)(\z y)
+0

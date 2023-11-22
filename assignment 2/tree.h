@@ -1,6 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 #include "node.h"
+#include <vector>
 
 class tree{
     public:
@@ -29,6 +30,10 @@ class tree{
     // bool betaReduce(Node* walker);
 
     void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree);
+
+    void zoekFreeVar(Node* walker, std::vector<std::string> &alleVar, bool left) const;
+
+    void zoekVar(Node* walker, std::vector<std::string> &freeVar) const;
 };
 
 

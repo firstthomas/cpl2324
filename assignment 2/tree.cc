@@ -126,6 +126,16 @@ void tree::reduce(){
     bool alphaConversed = true;
     bool bound = false;
     bool betaReduced = true;
+    if (possibleB){
+        std::vector<std::string> alleVar;
+        std::vector<std::string> freeVar;
+
+        zoekVar(walker->right, alleVar);
+
+        zoekFreeVar(walker->right, alleVar, false);
+        // zoekVar(walker->left, alleVar);
+        zoekFreeVar(walker->left, alleVar, true);
+    }
     // int i = 0;
     while(possibleB && (alphaConversed || betaReduced)){// && i < 5){
         // i++;
@@ -151,6 +161,51 @@ void tree::reduce(){
     std::cout << "waar3" <<std::endl;
 } 
 
+void tree::zoekFreeVar(Node* walker, std::vector<std::string> &alleVar, bool left) const{
+    if (walker->T == SLASH){
+        for (long long unsigned int i = 0; i < alleVar.size(); i++){
+            if (walker->left->var == alleVar[i]){
+                if (left){
+                    walker->left->var = "w";
+                    std::cout << "test" << std::endl;
+                }
+                else {
+                    alleVar[i] = "-1";
+                    std::cout << "test3" << std::endl;
+                }
+                break;
+            }
+        }
+    }
+    if (walker->left != nullptr && walker->left->T != VARIABLE){
+        zoekFreeVar(walker->left, alleVar, left);
+    }
+    if (walker->right != nullptr && walker->right->T != VARIABLE){
+        zoekFreeVar(walker->right, alleVar, left);
+    }
+    // return alleVar;
+}
+
+void tree::zoekVar(Node* walker, std::vector<std::string> &freeVar) const{
+    bool hulp = false;
+    std::cout << "test4" << std::endl;
+    if (walker->T == VARIABLE){
+        for (long long unsigned int i = 0; i < freeVar.size(); i++){
+            if (freeVar[i] == walker->var){
+                hulp = true;
+                break;
+            }
+        }
+        if (!hulp){
+        freeVar.push_back(walker->var);
+        std::cout << "test2" << std::endl;
+        }
+    }
+    else {
+        zoekVar(walker->left, freeVar);
+        zoekVar(walker->right, freeVar);
+    }
+}
 
 // Eerst rechts van de application kijken welke variabelen free zijn
 // Dan links kijken voor voor alle free variables dat ze niet links zijn van de lambda.
