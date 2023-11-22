@@ -2,14 +2,15 @@
 #include "node.h"
 #include <sstream>
 
-// gaan er vanuit dat input klopt
+// Gets the expression as input in prefix notation. Assumes the expression
+// is valid.
 void tree::readIn(std::string input){
     std::istringstream iss(input);
     begin = new Node();
     createTree(begin, iss);
 }
 
-// Bouwt de tree recusief op vanuit de root door
+// Builds the tree using recursion.
 void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
@@ -24,7 +25,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
     createTree(child->right, iss);
 }
 
-
+// Looks for an Application with Lambda as its left child.
 Node* tree::findAppLambda(Node* walker, bool &found){
     if (walker->T == APP && walker->left->T == SLASH){
         found = true;
@@ -42,7 +43,8 @@ Node* tree::findAppLambda(Node* walker, bool &found){
     return walker;
 }
 
-
+// Checks if there is a variable in the left side of the Application that
+// is bound to a lambda.
 Node* tree::Bound(Node* walker, std::string var, bool &bound){
     // std::cout << "bound walker type "<< walker->T << std::endl;
     if (walker->T == SLASH && walker->left->var == var){
