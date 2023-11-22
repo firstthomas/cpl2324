@@ -126,9 +126,9 @@ void tree::reduce(){
     bool alphaConversed = true;
     bool bound = false;
     bool betaReduced = true;
-    int i = 0;
-    while(possibleB && (alphaConversed || betaReduced) && i < 5){
-        i++;
+    // int i = 0;
+    while(possibleB && (alphaConversed || betaReduced)){// && i < 5){
+        // i++;
         walker2 = walker;
         std::cout << "walker2 var moet y zijn: " << walker2->right->var << std::endl;
         std::cout << "walker2 links rechts moet 3 zijn: " << walker2->left->right->T << std::endl;
@@ -150,3 +150,12 @@ void tree::reduce(){
     }
     std::cout << "waar3" <<std::endl;
 } 
+
+
+// Eerst rechts van de application kijken welke variabelen free zijn
+// Dan links kijken voor voor alle free variables dat ze niet links zijn van de lambda.
+// Als ze links zijn van een lambda dan moeten we ze vervangen.
+
+// Alle variabelen rechts zoeken en slaan we op in vector. 
+// Dan voor elk linkerkind van een lambda kijken of die voorkomt in de vector. 
+// Als het linkerkind voorkomt in de vector dan haal je m eruit. 
