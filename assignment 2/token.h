@@ -32,7 +32,7 @@ class Tokenizer{
     // Converts the array back to a string
     void arrToString(std::string &output);
     // Helps with inserting brackets at the correct position for lambda expressions
-    void hulpRecursie(int &i, int &var_counter);
+    void hulpRecursion(int &i, int &var_counter);
     // Creates output by inserting brackets
     void create_output(std::string &output);
 

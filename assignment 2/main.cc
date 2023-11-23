@@ -65,61 +65,20 @@ int main(){
         Tree = new tree();
         Parser pars;
         pars.expr(token);
-        // arraycheck(token.tokenarray, token.array_size);
         token.swapSlashVar();
-        // arraycheck(token.tokenarray, token.array_size);
         token.reverseArray(token.tokenarray, token.array_size-1);
-        // arraycheck(token.tokenarray, token.array_size);
         token.infixToPostfix();
-        // arraycheck(token.postfix, token.postfixSize);
         token.reverseArray(token.postfix, token.postfixSize);
-        // std::cout << std::endl;
-        // arraycheck(token.postfix, token.postfixSize);
-        // std::string temp = token.arrToStringForTree();
-        // std::cout << temp << std::endl;
         Tree->readIn(token.arrToStringForTree());
-        // pars.begin = Tree->begin;
-        // pars.expr(token, Tree->begin);
-        // std::cout << "voor print" <<std::endl;
         std::cout << "print1 :" <<std::endl;
         printTree(Tree->begin);
         Tree->reduce();
         std::cout << "print2 :" <<std::endl;
         printTree(Tree->begin);
-        // std::cout << "na reduce" <<std::endl;
-        // token.create_output(output);
-        // arraycheck(token.tokenarray, token.array_size);
-        // tree* tree1;
-        // tree1 = new tree(token.tokenarray, token.array_size);
         // token.create_output(output);
     }
     myFile.close();
-
-	// while (getline(cin, input)){
-    //     if (input == "0"){
-    //         break;
-    //     }
-    //     Tokenizer token(input);
-    //     Parser pars;
-    //     pars.expr(token);
-    //     token.create_output(output);
-    // }
     cout << output << endl;
-
-    // cout << "Parsing own output: " << endl;
-    // std::stringstream ss(output);
-    // while (getline(ss, input)){
-    //     if (input == "0"){
-    //         break;
-    //     }
-    //     Tokenizer token(input, false);
-    //     Parser pars;
-    //     pars.expr(token);
-    //     token.create_output(output2);
-    //     token.add_application();
-    //     arraycheck(token.tokenarray, token.array_size);
-    // }
-    // cout << output;
     exit(0);
 }
 

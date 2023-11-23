@@ -16,40 +16,6 @@
 // }
 
 
-// // Copies child to temp
-// void Parser::copySubboom(Node* child, Node* temp){
-//     temp->T = child->T;
-//     temp->var = child->var;
-//     if (child->left != nullptr){
-//         temp->left = new Node();
-//         copySubboom(child->left, temp->left);
-//     }
-//     else{
-//         temp->left = nullptr;
-//     }
-//     if (child->right != nullptr){
-//         temp->right = new Node();
-//         copySubboom(child->right, temp->right);
-//     }
-//     else{
-//         temp->right = nullptr;
-//     }
-// }
-
-// // Inserts an appllication above the root
-// void Parser::insApp(Node* root){
-//     Node* temp = new Node();
-//     temp->T = APP;
-//     temp->left = new Node();
-//     copySubboom(root, temp->left);
-//     // std::cout << "hier2" << std::endl;
-//     helpDestructor(root->left);
-//     helpDestructor(root->right);
-//     copySubboom(temp, root);
-//     // root = temp;
-//     //nog destructor hier?
-// }
-
 // Calls the lexpr function and exprprime function.
 void Parser::expr(Tokenizer &token){
     lexpr(token);
@@ -61,7 +27,6 @@ void Parser::expr(Tokenizer &token){
 // otherwise call lexpr. Will also fail if theres no variable after the SLASH. 
 // If no SLASH is found, call pexpr.
 void Parser::lexpr(Tokenizer &token){
-    // std::cout << "lexpr" << std::endl;
     if (token.peek() == SLASH){
         token.consume();
         if (token.peek() == VARIABLE){        
@@ -86,7 +51,6 @@ void Parser::lexpr(Tokenizer &token){
 // consume and call expr. If the next element is neither of those, send
 // error code.
 void Parser::pexpr(Tokenizer &token){
-    // std::cout << "pexpr" << std::endl;
     if (token.peek() == VARIABLE){
         token.consume();
     }

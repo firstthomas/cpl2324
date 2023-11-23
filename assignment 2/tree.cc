@@ -2,19 +2,6 @@
 #include "node.h"
 #include <sstream>
 
-void printTree2(Node* child){
-    std::cout << child->var << std::endl;
-    if (child->left != nullptr){
-        printTree2(child->left);
-    }
-    if (child->right != nullptr){
-        printTree2(child->right);
-    }
-}
-
-
-
-
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
 void tree::readIn(std::string input){
@@ -38,22 +25,11 @@ void tree::createTree(Node* child, std::istringstream &iss){
     createTree(child->right, iss);
 }
 
-// Looks for an Application with Lambda as its left child.
+// Looks for an Application with Lambda as its left child in the subtree 
+// with root walker and sets found to true when this is found.
+// Returns a pointer to parent of the Application or to begin if begin is
+// an Application and begin->left is a lambda.
 Node* tree::findAppLambda(Node* walker, bool &found){
-    // if (walker->T == APP && walker->left->T == SLASH){
-    //     found = true;
-    //     return walker;
-    // }
-    // else if(walker->left != nullptr){
-    //     walker = walker->left;
-    //     return findAppLambda(walker, found);
-    // }
-    // else if(walker->right != nullptr){
-    //     walker = walker->right;
-    //     return findAppLambda(walker, found);
-    // }
-    // found = false;
-    // return walker;
     Node* walker2 = walker;
     if (walker->T == VARIABLE){
         found = false;
@@ -87,60 +63,42 @@ Node* tree::findAppLambda(Node* walker, bool &found){
     return walker;
 }
 
-// Checks if there is a variable in the left side of the Application that
-// is bound to a lambda.
-Node* tree::Bound(Node* walker, std::string var, bool &bound){
-    // std::cout << "bound walker type "<< walker->T << std::endl;
-    if (walker->T == SLASH && walker->left->var == var){
-        bound = true;
-        return walker;
-    }
-    else if(walker->right != nullptr){
-        walker = walker->right;
-        return Bound(walker, var, bound);
-    }
-    return walker;
-}
-//
-Node* tree::alphaConversion(Node* walker, bool &alphaConversed){
-    walker->var = "w";
-    alphaConversed = true;
-    return walker;
-}
-
-void copySubboom2(Node* child, Node* temp){
+// Copies the subtree with root child to the subtree with root temp.
+void tree::copySubboom(Node* child, Node* temp){
     temp->T = child->T;
     temp->var = child->var;
     if (child->left != nullptr){
         temp->left = new Node();
-        copySubboom2(child->left, temp->left);
+        copySubboom(child->left, temp->left);
     }
     else{
         temp->left = nullptr;
     }
     if (child->right != nullptr){
         temp->right = new Node();
-        copySubboom2(child->right, temp->right);
+        copySubboom(child->right, temp->right);
     }
     else{
         temp->right = nullptr;
     }
 }
 
+// Replaces every variable equal to var in the subtree with root walker by 
+// the subtree with root replaceWithTree.
 void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree){
     // Booleans that are set to true if the left or right child were variables
     // before they were replaced.
     bool left = false;
     bool right = false;
-    // std::cout << "error?" <<std::endl;
-    if (walker->left->var == var){//verandert
+
+    if (walker->left->var == var){
         // Performs the subtitution on walker->left
-        copySubboom2(replaceWithTree, walker->left);
+        copySubboom(replaceWithTree, walker->left);
         left = true;
     }
     if (walker->right->var == var){
         // Performs the subtitution on walker->right
-        copySubboom2(replaceWithTree, walker->right);
+        copySubboom(replaceWithTree, walker->right);
         right = true;
         return;
     }
@@ -152,6 +110,9 @@ void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTr
     }
 }
 
+// Performs beta reduction on the subtree with root walker using if statments
+// to determine what exactly has to happen and using replaceVarWithTree to
+// perform the actual substitution.
 bool tree::betaReduce(Node* walker){
     if (walker == begin && begin->T == APP && begin->left->T == SLASH){
         Node* walker2 = walker->left;
@@ -161,12 +122,11 @@ bool tree::betaReduce(Node* walker){
         if (walker->left->right->T != VARIABLE){
             walker = walker->left->right;
             replaceVarWithTree(walker, replaceVar, replaceWithTree);
-            // std::cout << "error2?" <<std::endl;
         }
         // When lambda's right child is a var equal to replaceVar it can be
         // replaced without replaceVarWithTree().
         else if (walker->left->right->var == replaceVar){
-            copySubboom2(replaceWithTree, walker->left);   
+            copySubboom(replaceWithTree, walker->left);   
         }
         if (walker2->right != nullptr){
             begin = walker2->right;
@@ -175,22 +135,23 @@ bool tree::betaReduce(Node* walker){
             begin = walker2;
         }
     }
-    // Dit commentaar klopt nog niet:
     // Because the app lambda combination is not the begin we need to 
-    // apply betaReduction in the middle of the tree and thus
-    // either the left or right side of walker is the position of this combination.
-    // To maintain the correct structure we need the rembemer the pointer to this node.
-    else {
+    // apply betaReduction in the middle of the tree and thus either the
+    // left or right side of walker is the position of this combination.
+    // So we check were this combination is and based on that we set walker
+    // at the correct position to perform the reduction.
+    // To maintain the correct structure we need the rembemer the pointer to
+    // the root node of this subtree so that its left or right chidl can be
+    // set to the correct node after the reduction has been performed.
+    else{
         bool left = false;
-        bool right = false;
         Node* begin2 = walker;
         if (walker->left->T == APP && walker->left->left->T == SLASH){
             walker = walker->left;
             left = true;
         }
-        else {
+        else{
             walker = walker->right;
-            right = true;
         }
 
         Node* walker2 = walker->left;
@@ -202,7 +163,7 @@ bool tree::betaReduce(Node* walker){
             replaceVarWithTree(walker, replaceVar, replaceWithTree);
         }
         else if (walker->left->right->var == replaceVar){
-            copySubboom2(replaceWithTree, walker->left);   
+            copySubboom(replaceWithTree, walker->left);   
         }
         if (left){
             if (walker2->right != nullptr){
@@ -212,7 +173,7 @@ bool tree::betaReduce(Node* walker){
                 begin2->left = walker2;
             }
         }
-        else {
+        else{
             if (walker2->right != nullptr){
                 begin2->right = walker2->right;
             }
@@ -224,50 +185,51 @@ bool tree::betaReduce(Node* walker){
     return true;
 }
 
+// Reduces the abstract syntax tree with beta reduction(s) if possible.
+// Uses alpha conversions if necessary.
 void tree::reduce(){
     Node* walker = begin;
+    //This becomes either the parent of the application or begin.
+    Node* begin2 = nullptr;
     bool possibleB = false;
-    walker = findAppLambda(walker, possibleB);
-    Node* begin2 = walker;
-    // std::cout << "walker moet 5 zijn: " << walker->T << std::endl;
-    // std::cout << "possibleB: " << possibleB << std::endl;
-    bool alphaConversed = true;
-    bool bound = false;
     bool betaReduced = true;
     int i = 0;
-    while(possibleB && (alphaConversed || betaReduced) && i < 1000){
-        i++;
-        std::vector<std::string> alleVar;
+
+    walker = findAppLambda(walker, possibleB);
+
+    while(possibleB && betaReduced && i < 1000){
+        begin2 = walker;
+
+        std::vector<std::string> allVar; // Reset the vector by redeclaring
         tree* temp;
-        temp = new tree();
+        temp = new tree(); // tree used to check if the tree changed later on
         temp->begin = new Node();
+        copyTree(begin, temp->begin);
+        // Set walker on the application of the beta reduction
         if (walker != begin && walker->left->T == APP && walker->left->left->T == SLASH){
             walker = walker->left;
         }
         else if (walker != begin){
             walker = walker->right;
         }
-        copyTree(begin, temp->begin);
-        // std::cout << "waar1" <<std::endl;
-        findVar(walker->right, alleVar);
-        // std::cout << "waar2" <<std::endl;
-        findFreeVar(walker->right, alleVar);
-        // std::cout << "waar3" <<std::endl;
-        // zoekVar(walker->left, alleVar);
-        replaceFreeVar(walker->left, alleVar, walker->left->left->var);
-        // std::cout << "waar4" <<std::endl;
+
+        // Find all free variables and replace them if necessary (alpha conversion).
+        findVar(walker->right, allVar);
+        findFreeVar(walker->right, allVar);
+        replaceFreeVar(walker->left, allVar, walker->left->left->var);
+        
         betaReduced = betaReduce(begin2);
-        walker = begin;
-        // std::cout << "waar5" <<std::endl;
         if (equal(begin, temp->begin)){
             std::cout << "equal" <<std::endl;
             return;
         }
+
+        // Reset walker and check if beta reduction is still possible
         possibleB = false;
-        // std::cout << "waar5" <<std::endl;
+        walker = begin;
         walker = findAppLambda(walker, possibleB);
-        begin2 = walker;
-        delete temp;
+        i++;
+        delete temp;// Delete the tree
     }
     if (possibleB && i > 1000){
         std::cout << "Over 1000 reduction steps" <<std::endl;
@@ -275,6 +237,7 @@ void tree::reduce(){
     }
 } 
 
+// Returns true if replaceVar is somewhere in the subtree with root walker.
 bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
     if (walker->T == VARIABLE){
         if (walker->var == replaceVar){
@@ -285,40 +248,57 @@ bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
     return (findReplaceVar(walker->left, replaceVar) || findReplaceVar(walker->right, replaceVar));
 }
 
-void tree::replaceFreeVar(Node* walker, std::vector<std::string> &alleVar, std::string replaceVar) const{
+// For all variables in allVar, check if they are the left child of a lambda
+// somewere in the subtree were in the right child of this lambda the variable
+// replaceVar occurs and if so add "!" to the variable.
+// (So only replace variables that would cause a free variable to be bound after
+// beta reduction)
+// The first function call is with walker as a pointer to the right child of an
+// lambda for which beta reduction is performed. 
+void tree::replaceFreeVar(Node* walker, std::vector<std::string> &allVar, std::string replaceVar) const{
     if (walker->T == SLASH && findReplaceVar(walker->right, replaceVar)){
-        for (long long unsigned int i = 0; i < alleVar.size(); i++){
-            if (walker->left->var == alleVar[i]){
-                walker->left->var = "w";
+        for (long long unsigned int i = 0; i < allVar.size(); i++){
+            if (walker->left->var == allVar[i]){
+                // walker->left->var = "w";
+                walker->left->var = walker->left->var + "!";
                 break;
             }
         }
     }
     if (walker->left != nullptr && walker->left->T != VARIABLE){
-        replaceFreeVar(walker->left, alleVar, replaceVar);
+        replaceFreeVar(walker->left, allVar, replaceVar);
     }
     if (walker->right != nullptr && walker->right->T != VARIABLE){
-        replaceFreeVar(walker->right, alleVar, replaceVar);
+        replaceFreeVar(walker->right, allVar, replaceVar);
     }
 }
 
-void tree::findFreeVar(Node* walker, std::vector<std::string> &alleVar) const{
+// For all variables in allVar, checks if they are free variables in the
+// subtree with root walker. If a variable is not free and thus bound it is
+// set to "-1" in the vecotr.
+// The first function call is with walker as a pointer to the right child of an
+// application for which beta reduction is performed.
+void tree::findFreeVar(Node* walker, std::vector<std::string> &allVar) const{
     if (walker->T == SLASH){
-        for (long long unsigned int i = 0; i < alleVar.size(); i++){
-            if (walker->left->var == alleVar[i]){
-                alleVar[i] = "-1";
+        for (long long unsigned int i = 0; i < allVar.size(); i++){
+            if (walker->left->var == allVar[i]){
+                allVar[i] = "-1";
                 break;
             }
         }
     }
     if (walker->left != nullptr && walker->left->T != VARIABLE){
-        findFreeVar(walker->left, alleVar);
+        findFreeVar(walker->left, allVar);
     }
     if (walker->right != nullptr && walker->right->T != VARIABLE){
-        findFreeVar(walker->right, alleVar);
+        findFreeVar(walker->right, allVar);
     }
 }
 
+// Stores all variables in the subtree with root walker into the vector freeVar.
+// Only stores unique variables.
+// The first function call is with walker as a pointer to the right child of an
+// application for which beta reduction is performed.
 void tree::findVar(Node* walker, std::vector<std::string> &freeVar) const{
     bool hulp = false;
     if (walker->T == VARIABLE){
@@ -329,10 +309,10 @@ void tree::findVar(Node* walker, std::vector<std::string> &freeVar) const{
             }
         }
         if (!hulp){
-        freeVar.push_back(walker->var);
+            freeVar.push_back(walker->var);
         }
     }
-    else {
+    else{
         findVar(walker->left, freeVar);
         findVar(walker->right, freeVar);
     }

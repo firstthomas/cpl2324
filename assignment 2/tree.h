@@ -8,6 +8,7 @@ class tree{
 
     tree(){}
 
+    // Nog goeide destructor maken zie ds of parser.cc
     ~tree(){delete begin;};
 
     void readIn(std::string input);
@@ -24,10 +25,9 @@ class tree{
 
     Node* Bound(Node* walker, std::string var, bool &bound);
 
-    Node* alphaConversion(Node* walker, bool &alphaConversed);
-
     bool betaReduce(Node* walker);
-    // bool betaReduce(Node* walker);
+
+    void copySubboom(Node* child, Node* temp);
 
     void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree);
 

@@ -30,14 +30,6 @@ Tokenizer::Tokenizer(std::string input, bool file){
         }
         else if (input[i] == ' '){
             k--;
-            //spaces are not stored atm
-            // If there is a space after another space it is not stored.
-            // if (tokenarray[k-1].x != WHITESPACE){
-            //     tokenarray[k].x = WHITESPACE;
-            // }
-            // else {
-            //     k--;
-            // }
         } // The following if statement checks if the characters is equal
           // to a-z or A-Z using ascii code. 
           // Here the variables of unknown length are tokenized.
@@ -50,13 +42,13 @@ Tokenizer::Tokenizer(std::string input, bool file){
                     tokenarray[k].y += input[i];
                 }
                 else { // False input.
-                    cout << "Incorrect character1 input" << endl;
+                    cout << "Incorrect character input" << endl;
                     exit(1);
                 }
             }
         }
         else if(input[i] != '\n' && input[i] != '\r'){ // False input.
-            cout << "Incorrect character2 input" << endl;
+            cout << "Incorrect character input" << endl;
             exit(1);
         }
         k++;
@@ -201,7 +193,7 @@ void Tokenizer::arrToString(std::string &output){
 }
 
 // Inserts brackets at the correct positions for lambda expressions.
-void Tokenizer::hulpRecursie(int &i, int &var_counter){
+void Tokenizer::hulpRecursion(int &i, int &var_counter){
     int j = i;
     do{
         i++;
@@ -209,18 +201,14 @@ void Tokenizer::hulpRecursie(int &i, int &var_counter){
     while(tokenarray[i].x != VARIABLE);
     do{
         if (tokenarray[i].x == SLASH){
-            hulpRecursie(i, var_counter);
-            // cout << "1:" << i << endl;
+            hulpRecursion(i, var_counter);
             i--;
         }
         i++;
     }
     while(tokenarray[i].x != VARIABLE);
     i++;
-    // cout << "2:" << i << endl;
     insert_bracket(j,i+1);
-    // var_counter++;
-    // cout << "3:" << i << endl;
 }
 
 // Decides where brackets need to be inserted by looking in the tokenarray.
@@ -229,9 +217,7 @@ void Tokenizer::create_output(std::string &output){
     //(a) (b) spatie weghalen
     int var_counter = 0;
     int bracket_pos = 0;
-    int j;
     for (int i = 0; i < array_size; i++){
-        // cout << var_counter << "begin" << endl;
         if (var_counter > 2){
             var_counter = 2;
             if (tokenarray[i].x == BRACKET_CLOSE){
@@ -245,44 +231,23 @@ void Tokenizer::create_output(std::string &output){
         else if (tokenarray[i].x == WHITESPACE){
             continue;
         }
-        // else if (tokenarray[i].x == BRACKET_OPEN && i == 0){
-        //     var_counter = 0;
-        //     bracket_pos = i;
-        // }
         else if (tokenarray[i].x == BRACKET_CLOSE){
             var_counter--;
-            // bracket_pos  = i+1;
         }
         else if (tokenarray[i].x == VARIABLE){
             var_counter++;
-            // cout << "var " << var_counter << endl;
         }
         else if (tokenarray[i].x == SLASH){
-            hulpRecursie(i, var_counter);
-            // var_counter++;
-            // j = i;
-            // do{
-            //     i++;
-            // }
-            // while(tokenarray[i].x != VARIABLE);
-            // do{
-            //     i++;
-            // }
-            // while(tokenarray[i].x != VARIABLE);
-            // i++;
-            // insert_bracket(j,i+1);
-            // var_counter++;
-            // continue;
+            hulpRecursion(i, var_counter);
         }
         else if (tokenarray[i].x == END){
             break;
         }
-        // cout << "brackpos" << bracket_pos << endl;
-        // cout << var_counter << endl;
     }
     arrToString(output);
 }
 
+// Reverses the array tokenArr with size Size.
 void Tokenizer::reverseArray(Token tokenArr[], int Size){
     int start = 0;
     int end = Size-1;
@@ -302,7 +267,8 @@ void Tokenizer::reverseArray(Token tokenArr[], int Size){
         }
     }
 }
-
+// Converts the tokenarray (infix) to the postfix array(postfix), using a
+// stack.
 void Tokenizer::infixToPostfix(){
     stack<Token> st;
     string element;
@@ -346,6 +312,7 @@ void Tokenizer::infixToPostfix(){
     postfixSize = k;
 }
 
+// Swaps every slash and the var directly after it.
 void Tokenizer::swapSlashVar(){
     for (int i = 0; i < array_size; i++){
         if (tokenarray[i].x == SLASH){
