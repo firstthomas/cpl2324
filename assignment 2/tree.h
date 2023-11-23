@@ -8,7 +8,7 @@ class tree{
 
     tree(){}
 
-    ~tree();
+    ~tree(){delete begin;};
 
     void readIn(std::string input);
 
@@ -31,9 +31,17 @@ class tree{
 
     void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree);
 
-    void zoekFreeVar(Node* walker, std::vector<std::string> &alleVar, bool left) const;
+    void findFreeVar(Node* walker, std::vector<std::string> &alleVar) const;
 
-    void zoekVar(Node* walker, std::vector<std::string> &freeVar) const;
+    bool findReplaceVar(Node* walker, std::string replaceVar) const;
+
+    void replaceFreeVar(Node* walker, std::vector<std::string> &alleVar, std::string replaceVar) const;
+
+    void findVar(Node* walker, std::vector<std::string> &freeVar) const;
+
+    void copyTree(Node* oldTree, Node* newTree) const;
+
+    bool equal(Node* oldTree, Node* newTree) const;
 };
 
 

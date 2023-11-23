@@ -81,9 +81,10 @@ int main(){
         // pars.begin = Tree->begin;
         // pars.expr(token, Tree->begin);
         // std::cout << "voor print" <<std::endl;
+        std::cout << "print1 :" <<std::endl;
         printTree(Tree->begin);
-        // std::cout << "na print" <<std::endl;
         Tree->reduce();
+        std::cout << "print2 :" <<std::endl;
         printTree(Tree->begin);
         // std::cout << "na reduce" <<std::endl;
         // token.create_output(output);

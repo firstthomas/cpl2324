@@ -2,6 +2,19 @@
 #include "node.h"
 #include <sstream>
 
+void printTree2(Node* child){
+    std::cout << child->var << std::endl;
+    if (child->left != nullptr){
+        printTree2(child->left);
+    }
+    if (child->right != nullptr){
+        printTree2(child->right);
+    }
+}
+
+
+
+
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
 void tree::readIn(std::string input){
@@ -27,15 +40,46 @@ void tree::createTree(Node* child, std::istringstream &iss){
 
 // Looks for an Application with Lambda as its left child.
 Node* tree::findAppLambda(Node* walker, bool &found){
-    if (walker->T == APP && walker->left->T == SLASH){
+    // if (walker->T == APP && walker->left->T == SLASH){
+    //     found = true;
+    //     return walker;
+    // }
+    // else if(walker->left != nullptr){
+    //     walker = walker->left;
+    //     return findAppLambda(walker, found);
+    // }
+    // else if(walker->right != nullptr){
+    //     walker = walker->right;
+    //     return findAppLambda(walker, found);
+    // }
+    // found = false;
+    // return walker;
+    Node* walker2 = walker;
+    if (walker->T == VARIABLE){
+        found = false;
+        return walker;
+    }
+    if (walker == begin && walker->T == APP && walker->left->T == SLASH){
         found = true;
         return walker;
     }
-    else if(walker->left != nullptr){
-        walker = walker->left;
-        return findAppLambda(walker, found);
+    if (walker->left->T == APP && walker->left->left->T == SLASH){
+        found = true;
+        return walker;
     }
-    else if(walker->right != nullptr){
+    if (walker->right->T == APP && walker->right->left->T == SLASH){
+        found = true;
+        return walker;
+    }
+    if(walker->left != nullptr && walker->left->T != VARIABLE){
+        walker = walker->left;
+        walker = findAppLambda(walker, found);
+        if (found){
+            return walker;
+        }
+    }
+    walker = walker2;
+    if(walker->right != nullptr && walker->right->T != VARIABLE){
         walker = walker->right;
         return findAppLambda(walker, found);
     }
@@ -84,111 +128,199 @@ void copySubboom2(Node* child, Node* temp){
 }
 
 void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree){
-    if (walker->T != SLASH && walker->left->var == var){
-        // zet op walker->left
+    // Booleans that are set to true if the left or right child were variables
+    // before they were replaced.
+    bool left = false;
+    bool right = false;
+    // std::cout << "error?" <<std::endl;
+    if (walker->left->var == var){//verandert
+        // Performs the subtitution on walker->left
         copySubboom2(replaceWithTree, walker->left);
+        left = true;
     }
     if (walker->right->var == var){
-        // zet op walker->right
+        // Performs the subtitution on walker->right
         copySubboom2(replaceWithTree, walker->right);
+        right = true;
         return;
     }
-    if (walker->right->T != VARIABLE){
+    if (walker->left->T != VARIABLE && !left){
+        replaceVarWithTree(walker->left, var, replaceWithTree);
+    }
+    if (walker->right->T != VARIABLE && !right){
         replaceVarWithTree(walker->right, var, replaceWithTree);
     }
-    // if (walker->right->right != nullptr){
-    //     replaceVarWithTree(walker->right, var, replaceWithTree);
-    // }
 }
 
 bool tree::betaReduce(Node* walker){
-    Node* walker2 = walker->left;
-    std::cout << "betaReduce" <<std::endl;
-    std::string replaceVar = walker->left->left->var;
-    Node* replaceWithTree = walker->right;
-    walker = walker->left;
-    while(walker->right->T == SLASH){
-        walker = walker->right;
+    if (walker == begin && begin->T == APP && begin->left->T == SLASH){
+        Node* walker2 = walker->left;
+        std::string replaceVar = walker2->left->var;
+        Node* replaceWithTree = walker->right;
+
+        if (walker->left->right->T != VARIABLE){
+            walker = walker->left->right;
+            replaceVarWithTree(walker, replaceVar, replaceWithTree);
+            // std::cout << "error2?" <<std::endl;
+        }
+        // When lambda's right child is a var equal to replaceVar it can be
+        // replaced without replaceVarWithTree().
+        else if (walker->left->right->var == replaceVar){
+            copySubboom2(replaceWithTree, walker->left);   
+        }
+        if (walker2->right != nullptr){
+            begin = walker2->right;
+        }
+        else{
+            begin = walker2;
+        }
     }
-    replaceVarWithTree(walker, replaceVar, replaceWithTree);
-    // std::cout << "replaced" <<std::endl;
-    begin = walker2->right;
-    // std::cout << "error?" <<std::endl;
+    // Dit commentaar klopt nog niet:
+    // Because the app lambda combination is not the begin we need to 
+    // apply betaReduction in the middle of the tree and thus
+    // either the left or right side of walker is the position of this combination.
+    // To maintain the correct structure we need the rembemer the pointer to this node.
+    else {
+        bool left = false;
+        bool right = false;
+        Node* begin2 = walker;
+        if (walker->left->T == APP && walker->left->left->T == SLASH){
+            walker = walker->left;
+            left = true;
+        }
+        else {
+            walker = walker->right;
+            right = true;
+        }
+
+        Node* walker2 = walker->left;
+        std::string replaceVar = walker2->left->var;
+        Node* replaceWithTree = walker->right;
+
+        if (walker->left->right->T != VARIABLE){
+            walker = walker->left->right;
+            replaceVarWithTree(walker, replaceVar, replaceWithTree);
+        }
+        else if (walker->left->right->var == replaceVar){
+            copySubboom2(replaceWithTree, walker->left);   
+        }
+        if (left){
+            if (walker2->right != nullptr){
+                begin2->left = walker2->right;
+            }
+            else{
+                begin2->left = walker2;
+            }
+        }
+        else {
+            if (walker2->right != nullptr){
+                begin2->right = walker2->right;
+            }
+            else{
+                begin2->right = walker2;
+            }
+        }
+    }
     return true;
 }
 
 void tree::reduce(){
     Node* walker = begin;
-    Node* walker2 = begin;
     bool possibleB = false;
     walker = findAppLambda(walker, possibleB);
-    std::cout << "walker moet 5 zijn: " << walker->T << std::endl;
+    Node* begin2 = walker;
+    // std::cout << "walker moet 5 zijn: " << walker->T << std::endl;
+    // std::cout << "possibleB: " << possibleB << std::endl;
     bool alphaConversed = true;
     bool bound = false;
     bool betaReduced = true;
-    if (possibleB){
+    int i = 0;
+    while(possibleB && (alphaConversed || betaReduced) && i < 1000){
+        i++;
         std::vector<std::string> alleVar;
-        std::vector<std::string> freeVar;
-
-        zoekVar(walker->right, alleVar);
-
-        zoekFreeVar(walker->right, alleVar, false);
-        // zoekVar(walker->left, alleVar);
-        zoekFreeVar(walker->left, alleVar, true);
-    }
-    // int i = 0;
-    while(possibleB && (alphaConversed || betaReduced)){// && i < 5){
-        // i++;
-        walker2 = walker;
-        std::cout << "walker2 var moet y zijn: " << walker2->right->var << std::endl;
-        std::cout << "walker2 links rechts moet 3 zijn: " << walker2->left->right->T << std::endl;
-        walker2 = Bound(walker2->left->right, walker2->right->var, bound);
-        std::cout << "bound:" << bound << std::endl;
-        if (bound){
-            walker2 = alphaConversion(walker2->left, alphaConversed);
-            std::cout << "walker2 na alpha" <<std::endl;
-            bound = false;
+        tree* temp;
+        temp = new tree();
+        temp->begin = new Node();
+        if (walker != begin && walker->left->T == APP && walker->left->left->T == SLASH){
+            walker = walker->left;
         }
-        else{
-            betaReduced = betaReduce(walker);
+        else if (walker != begin){
+            walker = walker->right;
+        }
+        copyTree(begin, temp->begin);
+        // std::cout << "waar1" <<std::endl;
+        findVar(walker->right, alleVar);
+        // std::cout << "waar2" <<std::endl;
+        findFreeVar(walker->right, alleVar);
+        // std::cout << "waar3" <<std::endl;
+        // zoekVar(walker->left, alleVar);
+        replaceFreeVar(walker->left, alleVar, walker->left->left->var);
+        // std::cout << "waar4" <<std::endl;
+        betaReduced = betaReduce(begin2);
+        walker = begin;
+        // std::cout << "waar5" <<std::endl;
+        if (equal(begin, temp->begin)){
+            std::cout << "equal" <<std::endl;
+            return;
         }
         possibleB = false;
-        walker = begin;
-        std::cout << "waar1" <<std::endl;
+        // std::cout << "waar5" <<std::endl;
         walker = findAppLambda(walker, possibleB);
-        std::cout << "waar2" <<std::endl;
+        begin2 = walker;
+        delete temp;
     }
-    std::cout << "waar3" <<std::endl;
+    if (possibleB && i > 1000){
+        std::cout << "Over 1000 reduction steps" <<std::endl;
+        exit(2);
+    }
 } 
 
-void tree::zoekFreeVar(Node* walker, std::vector<std::string> &alleVar, bool left) const{
-    if (walker->T == SLASH){
+bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
+    if (walker->T == VARIABLE){
+        if (walker->var == replaceVar){
+            return true;
+        }
+        return false;
+    }
+    return (findReplaceVar(walker->left, replaceVar) || findReplaceVar(walker->right, replaceVar));
+}
+
+void tree::replaceFreeVar(Node* walker, std::vector<std::string> &alleVar, std::string replaceVar) const{
+    if (walker->T == SLASH && findReplaceVar(walker->right, replaceVar)){
         for (long long unsigned int i = 0; i < alleVar.size(); i++){
             if (walker->left->var == alleVar[i]){
-                if (left){
-                    walker->left->var = "w";
-                    std::cout << "test" << std::endl;
-                }
-                else {
-                    alleVar[i] = "-1";
-                    std::cout << "test3" << std::endl;
-                }
+                walker->left->var = "w";
                 break;
             }
         }
     }
     if (walker->left != nullptr && walker->left->T != VARIABLE){
-        zoekFreeVar(walker->left, alleVar, left);
+        replaceFreeVar(walker->left, alleVar, replaceVar);
     }
     if (walker->right != nullptr && walker->right->T != VARIABLE){
-        zoekFreeVar(walker->right, alleVar, left);
+        replaceFreeVar(walker->right, alleVar, replaceVar);
     }
-    // return alleVar;
 }
 
-void tree::zoekVar(Node* walker, std::vector<std::string> &freeVar) const{
+void tree::findFreeVar(Node* walker, std::vector<std::string> &alleVar) const{
+    if (walker->T == SLASH){
+        for (long long unsigned int i = 0; i < alleVar.size(); i++){
+            if (walker->left->var == alleVar[i]){
+                alleVar[i] = "-1";
+                break;
+            }
+        }
+    }
+    if (walker->left != nullptr && walker->left->T != VARIABLE){
+        findFreeVar(walker->left, alleVar);
+    }
+    if (walker->right != nullptr && walker->right->T != VARIABLE){
+        findFreeVar(walker->right, alleVar);
+    }
+}
+
+void tree::findVar(Node* walker, std::vector<std::string> &freeVar) const{
     bool hulp = false;
-    std::cout << "test4" << std::endl;
     if (walker->T == VARIABLE){
         for (long long unsigned int i = 0; i < freeVar.size(); i++){
             if (freeVar[i] == walker->var){
@@ -198,19 +330,49 @@ void tree::zoekVar(Node* walker, std::vector<std::string> &freeVar) const{
         }
         if (!hulp){
         freeVar.push_back(walker->var);
-        std::cout << "test2" << std::endl;
         }
     }
     else {
-        zoekVar(walker->left, freeVar);
-        zoekVar(walker->right, freeVar);
+        findVar(walker->left, freeVar);
+        findVar(walker->right, freeVar);
     }
 }
 
-// Eerst rechts van de application kijken welke variabelen free zijn
-// Dan links kijken voor voor alle free variables dat ze niet links zijn van de lambda.
-// Als ze links zijn van een lambda dan moeten we ze vervangen.
+// Copies the Node oldTree and all its children to the Node newTree.
+void tree::copyTree(Node* oldTree, Node* newTree) const{
+    newTree->T = oldTree->T;
+    newTree->var = oldTree->var;
+    if (oldTree->left != nullptr){
+        newTree->left = new Node();
+        copyTree(oldTree->left, newTree->left);
+    }
+    if (oldTree->right != nullptr){
+        newTree->right = new Node();
+        copyTree(oldTree->right, newTree->right);
+    }
+}
 
-// Alle variabelen rechts zoeken en slaan we op in vector. 
-// Dan voor elk linkerkind van een lambda kijken of die voorkomt in de vector. 
-// Als het linkerkind voorkomt in de vector dan haal je m eruit. 
+// Checks if both trees are equal.
+bool tree::equal(Node* oldTree, Node* newTree) const{
+    bool equalTrees = true;
+    if (oldTree->T != newTree->T || oldTree->var != newTree->var){
+        return false;
+    }
+    if (oldTree->left != nullptr){
+        if (newTree->left != nullptr){
+            equalTrees = equal(oldTree->left, newTree->left);
+        }
+        else{
+            return false;
+        }
+    }
+    if (oldTree->right != nullptr && equalTrees){
+        if (newTree->right != nullptr){
+            equalTrees = equal(oldTree->right, newTree->right);
+        }
+        else{
+            return false;
+        }
+    }
+    return equalTrees;
+}
