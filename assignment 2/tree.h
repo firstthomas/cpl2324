@@ -17,6 +17,10 @@ class tree{
 
     void reduce();
 
+    void printTree();
+
+    void printInfix(Node* child, std::string &output);
+
     Node* begin;
     
     private:

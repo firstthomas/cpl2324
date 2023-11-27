@@ -1,8 +1,5 @@
-#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <climits>
-#include <string>
 #include "parser.h"
 #include "node.h"
 #include "tree.h"
@@ -32,51 +29,62 @@ void arraycheck(Token tokenArray[], int array_size){
     std::cout << std::endl;
 }
 
-void printTree(Node* child){
-    std::cout << child->var << std::endl;
-    if (child->left != nullptr){
-        printTree(child->left);
-    }
-    if (child->right != nullptr){
-        printTree(child->right);
-    }
-}
+// void printTree(Node* child, std::string &finalTree){
+//     finalTree += child->var;
+//     if (child->left != nullptr){
+//         printTree(child->left, finalTree);
+//     }
+//     if (child->right != nullptr){
+//         printTree(child->right, finalTree);
+//     }
+// }
 
 
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
 // the standard output. It then repeats these steps on its own output.
-int main(){
+int main(int argc, char** argv){
     std::string input;
     std::string output;
     std::string filenaam;
     std::string output2; // For parsing own output
-    cout << "Enter file name." << endl;
-    cout << "To stop the program enter 0" << endl;
-    cin >> filenaam;
-    ifstream myFile (filenaam);
-    while (getline(myFile, input)){
-        if (input == "0"){
-            break;
-        }
-        Tokenizer token(input, true);
-        token.add_application();
-        tree* Tree;
-        Tree = new tree();
-        Parser pars;
-        pars.expr(token);
-        token.swapSlashVar();
-        token.reverseArray(token.tokenarray, token.array_size-1);
-        token.infixToPostfix();
-        token.reverseArray(token.postfix, token.postfixSize);
-        Tree->readIn(token.arrToStringForTree());
-        std::cout << "print1 :" <<std::endl;
-        printTree(Tree->begin);
-        Tree->reduce();
-        std::cout << "print2 :" <<std::endl;
-        printTree(Tree->begin);
-        // token.create_output(output);
+
+    if (argc > 1){ // Checks if argument is given.
+        filenaam = std::string(argv[1]);
     }
+    else { // No argument.
+        cout << "Enter file name." << endl;
+        cin >> filenaam;
+    }
+
+    ifstream myFile (filenaam);
+    getline(myFile, input);
+    
+    Tokenizer token(input, true);
+    token.add_application();
+
+    tree* Tree;
+    Tree = new tree();
+
+    Parser pars;
+    pars.expr(token);
+
+    token.swapSlashVar();
+    token.reverseArray(token.tokenarray, token.array_size-1);
+    token.infixToPostfix();
+    token.reverseArray(token.postfix, token.postfixSize);
+
+    Tree->readIn(token.arrToStringForTree());
+
+    std::cout << "print1 :" <<std::endl;
+    Tree->printTree();
+    Tree->reduce();
+    std:: cout << std::endl;
+
+    std::cout << "print2 :" <<std::endl;
+    Tree->printTree();
+    // token.create_output(output);
+    
     myFile.close();
     cout << output << endl;
     exit(0);
@@ -85,14 +93,9 @@ int main(){
 
 
 //README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
-//deviations from the assignment?
 //may include explanation of how the programs work
 
 //may include positive.zip and negative.zip file
-
-//should use least amount of std library code overal std neerzetten
-
-
 
 //tijd over:
 

@@ -1,5 +1,4 @@
 #include "tree.h"
-#include "node.h"
 #include <sstream>
 
 // Gets the expression as input in prefix notation. Assumes the expression
@@ -126,7 +125,7 @@ bool tree::betaReduce(Node* walker){
         // When lambda's right child is a var equal to replaceVar it can be
         // replaced without replaceVarWithTree().
         else if (walker->left->right->var == replaceVar){
-            copySubboom(replaceWithTree, walker->left);   
+            copySubboom(replaceWithTree, walker->left->right);   
         }
         if (walker2->right != nullptr){
             begin = walker2->right;
@@ -355,4 +354,41 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
         }
     }
     return equalTrees;
+}
+
+
+void tree::printTree(){
+    std::string output;
+    printInfix(begin, output);
+    std::cout << output << std::endl;
+}
+
+void tree::printInfix(Node* child, std::string &output){
+    if (child->T == SLASH && child->left != nullptr && child->left->T == VARIABLE){
+        output += "\\";
+        output += child->left->var;
+        output += " ";
+    }
+    else if (child->T != APP){
+        output += child->var;
+        output += " ";
+    }
+
+    if (child->T != SLASH && child->left != nullptr){
+        printInfix(child->left, output);
+    }
+
+    if (child->right != nullptr){
+        if (child->right->T == APP){
+            output += "(";
+            // output += child->var;
+            std::cout << "test" << std::endl;
+            printInfix(child->right, output);
+            output += ")";
+        }
+        else {
+            // output += child->var;
+            printInfix(child->right, output);
+        }
+    }
 }
