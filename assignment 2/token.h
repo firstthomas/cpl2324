@@ -36,17 +36,24 @@ class Tokenizer{
     // Creates output by inserting brackets
     void create_output(std::string &output);
 
+    // Inserts application at the position pos.
     void insert_application(int pos);
 
+    // Adds application to the array.
     void add_application();    
 
+    // Reverses the array tokenArr with size Size.
     void reverseArray(Token tokenArr[], int Size);
 
+    // Converts the tokenarray (infix) to the postfix array(postfix), using
+    // a stack.
     void infixToPostfix();
 
+    // Swaps every slash and the var directly after it.
     void swapSlashVar();
 
-    std::string arrToStringForTree();
+    // Converts the array back to a string.
+    std::string arrToStringForTree() const;
 
     // Array in which character are stored as tokens
     Token tokenarray[max_size];
@@ -54,13 +61,11 @@ class Tokenizer{
     Token postfix[max_size];
 
     int array_size;// Stores the size of the token array
-    int postfixSize;
-    // Interger used as index to store the current position in the array
-    int j = 0; 
 
-    // bool inBrackets = false;
-    // int inBrackets = 0;
-    // int bracketOpensConsumed = 0;
-    // int bracketClosedConsumed = 0;
+    int postfixSize;// Stores the size of the postfix array
+    
+    // Interger used for parsing as index to store the current position in 
+    // the array
+    int j = 0; 
 };
 #endif

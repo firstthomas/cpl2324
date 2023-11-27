@@ -5,30 +5,6 @@
 #include "tree.h"
 using namespace std;
 
-void arraycheck(Token tokenArray[], int array_size){
-    for (int i = 0; i < array_size; i++){
-        if(tokenArray[i].x == SLASH){
-            cout << "/";
-        }
-        else if(tokenArray[i].x == BRACKET_OPEN){
-            cout << "(";
-        }
-        else if(tokenArray[i].x == BRACKET_CLOSE){
-            cout << ")";
-        }
-        else if(tokenArray[i].x == VARIABLE){
-            cout << tokenArray[i].y;
-        }
-        else if(tokenArray[i].x == APP){
-            cout << "@";
-        }
-        else if(tokenArray[i].x == END){
-            cout << "END";
-        }
-    }
-    std::cout << std::endl;
-}
-
 // void printTree(Node* child, std::string &finalTree){
 //     finalTree += child->var;
 //     if (child->left != nullptr){
@@ -47,7 +23,6 @@ int main(int argc, char** argv){
     std::string input;
     std::string output;
     std::string filenaam;
-    std::string output2; // For parsing own output
 
     if (argc > 1){ // Checks if argument is given.
         filenaam = std::string(argv[1]);
@@ -56,37 +31,42 @@ int main(int argc, char** argv){
         cout << "Enter file name." << endl;
         cin >> filenaam;
     }
-
+   
     ifstream myFile (filenaam);
     getline(myFile, input);
     
+    // Read the expression into a token array and add applications.
     Tokenizer token(input, true);
     token.add_application();
 
     tree* Tree;
     Tree = new tree();
 
+    // Pars the expression
     Parser pars;
     pars.expr(token);
 
+    // Create the postfix array from the tokenarray.
     token.swapSlashVar();
     token.reverseArray(token.tokenarray, token.array_size-1);
     token.infixToPostfix();
     token.reverseArray(token.postfix, token.postfixSize);
 
+    // Builds the tree from the postfix array converted to a string
     Tree->readIn(token.arrToStringForTree());
 
     std::cout << "print1 :" <<std::endl;
     Tree->printTree();
+    // Reduce the tree
     Tree->reduce();
     std:: cout << std::endl;
 
     std::cout << "print2 :" <<std::endl;
+    // Print the tree
     Tree->printTree();
     // token.create_output(output);
     
     myFile.close();
-    cout << output << endl;
     exit(0);
 }
 
@@ -112,12 +92,58 @@ int main(int argc, char** argv){
 // this format may be explained in the README
 // dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
 
-//dit vindt ik teveel moeite:
-//may support inernational variable names(unicode with lambda instead of \)
-
-
-// void arraycheck(Tokenizer token){
-//     for (int i = 0; i < token.array_size; i++){
-//         cout << "token_type" << token.tokenarray[i].x << endl;
+// void arraycheck(Token tokenArray[], int array_size){
+//     for (int i = 0; i < array_size; i++){
+//         if(tokenArray[i].x == SLASH){
+//             cout << "/";
+//         }
+//         else if(tokenArray[i].x == BRACKET_OPEN){
+//             cout << "(";
+//         }
+//         else if(tokenArray[i].x == BRACKET_CLOSE){
+//             cout << ")";
+//         }
+//         else if(tokenArray[i].x == VARIABLE){
+//             cout << tokenArray[i].y;
+//         }
+//         else if(tokenArray[i].x == APP){
+//             cout << "@";
+//         }
+//         else if(tokenArray[i].x == END){
+//             cout << "END";
+//         }
 //     }
+//     std::cout << std::endl;
+// }
+
+//Assignment 2:
+
+
+// code style in token.h/cc ook assignment1
+// aantal functies voor de ouput in token.h/cc kunnen weg 
+// maar 1 keer output
+// commentaat in .h files
+// overal std?
+// makefile uit assignment 1
+// An archive (positive.tar.gz) of the positive examples used for testing.
+// • An archive (negative.tar.gz) of the negative examples used for testing.
+// check voor lege input moet exit(1) zijn bij leeg
+
+// vragen:
+// destructor als ze mememory leaks niet mogen zie tree.h
+// moet dit wel? If this first construction cannot be reduced any other construction is also not reduced.
+// wat voor output?
+
+
+// // Deletes the Node temp and its childeren
+// void Parser::helpDestructor(Node* temp) const{
+//     if (temp->left != nullptr){ 
+//         Node* left = temp->left;
+//         helpDestructor(left);
+//     }
+//     if (temp->right != nullptr){
+//         Node* right = temp->right;
+//         helpDestructor(right);
+//     }
+//     delete temp; // delete node
 // }

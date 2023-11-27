@@ -8,7 +8,6 @@ class tree{
 
     tree(){}
 
-    // Nog goeide destructor maken zie ds of parser.cc
     ~tree(){delete begin;};
 
     void readIn(std::string input);
@@ -24,8 +23,6 @@ class tree{
     private:
 
     Node* findAppLambda(Node* walker, bool &found) const;
-
-    // Node* Bound(Node* walker, std::string var, bool &bound) const;
 
     bool betaReduce(Node* walker);
 

@@ -13,9 +13,6 @@ parser.o: parser.cc parser.h token.h tree.h node.h
 tree.o: tree.cc tree.h
 	$(CC) $(CompileParms) tree.cc
 
-# prefix.o: prefix.cc prefix.h
-# 	$(CC) $(CompileParms) prefix.cc
-
 token.o: token.cc token.h
 	$(CC) $(CompileParms) token.cc
 

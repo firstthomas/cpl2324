@@ -6,16 +6,18 @@ class Node {
 
     public:
         std::string var;
-        token_type T; // Type van de token
-        Node* left = nullptr; // Pointer naar de linker token in de tree.
-        Node* right = nullptr; // Pointer naar de rechter token in de tree.
+        token_type T; // Token Type
+        Node* left = nullptr; // Pointer to left child in the tree.
+        Node* right = nullptr; // Pointer to right child in the tree.
 
+    // Standaard constructor for a Node.
     Node(){
         this->var = "-1";
         this->left = NULL;
         this->right = NULL;
     };
     
+    // Constructor with input for a Node.
     Node(std::string str){
             this->var = str;
             if (str == "\\"){this->T = SLASH;}

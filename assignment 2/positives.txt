@@ -21,6 +21,7 @@ a (\x d \x a (b c))
 \x (\z x) \z (\x z)
 (\x \y x)(\z y)
 \x \y (x z) y
+(\x x)(\y y)
 0
 \x (\x (x x)) \x (\x (x x)) bij inleveren deze boven de nul zetten
 Antwoorden na reductie:

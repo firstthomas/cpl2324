@@ -1,20 +1,5 @@
 #include "parser.h"
 
-
-// // Deletes the Node temp and its childeren
-// void Parser::helpDestructor(Node* temp) const{
-//     if (temp->left != nullptr){ 
-//         Node* left = temp->left;
-//         helpDestructor(left);
-//     }
-//     if (temp->right != nullptr){
-//         Node* right = temp->right;
-//         helpDestructor(right);
-//     }
-//     delete temp; // delete node
-// }
-
-
 // Calls the lexpr function and exprprime function.
 void Parser::expr(Tokenizer &token){
     lexpr(token);

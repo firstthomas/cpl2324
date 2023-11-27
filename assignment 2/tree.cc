@@ -219,7 +219,6 @@ void tree::reduce(){
         
         betaReduced = betaReduce(begin2);
         if (equal(begin, temp->begin)){
-            std::cout << "equal" <<std::endl;
             return;
         }
 
@@ -228,7 +227,7 @@ void tree::reduce(){
         walker = begin;
         walker = findAppLambda(walker, possibleB);
         i++;
-        delete temp;// Delete the tree
+        delete temp;// Delete the copy of the tree
     }
     if (possibleB && i > 1000){
         std::cout << "Over 1000 reduction steps" <<std::endl;
@@ -366,7 +365,7 @@ void tree::printTree() const{
 // Will recursively walk through the tree configuring the output. 
 // Will check for certain situations to add parentheses or not. 
 void tree::printInfix(Node* child, std::string &output) const{
-    if (child->T == SLASH && child->left != nullptr && child->left->T == VARIABLE){
+    if (child->T == SLASH){
         output += "\\";
         output += child->left->var;
         output += " ";

@@ -63,6 +63,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
     array_size = k;
 }
 
+// Inserts application at the position pos.
 void Tokenizer::insert_application(int pos){
     if (tokenarray[pos].x != END){
         for (int i = array_size; i > pos; i--){
@@ -74,6 +75,7 @@ void Tokenizer::insert_application(int pos){
     }
 }
 
+// Adds application to the array.
 void Tokenizer::add_application(){
     int varCounter = 0;
     bool slash = false;
@@ -100,14 +102,6 @@ void Tokenizer::add_application(){
             varCounter = 0;
             slash = true;
         }
-        // else if(varCounter == 1 && slash && tokenarray[i+1].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
-        //     varCounter = 0;
-        //     while (tokenarray[i+1].x == BRACKET_CLOSE){
-        //         i++;
-        //     }
-        //     insert_application(i+1);
-        //     slash = false;
-        // }
         else if(tokenarray[i].x == VARIABLE){
             varCounter++;
         }
@@ -213,8 +207,6 @@ void Tokenizer::hulpRecursion(int &i, int &var_counter){
 
 // Decides where brackets need to be inserted by looking in the tokenarray.
 void Tokenizer::create_output(std::string &output){
-    //brackets verwijderen nog
-    //(a) (b) spatie weghalen
     int var_counter = 0;
     int bracket_pos = 0;
     for (int i = 0; i < array_size; i++){
@@ -323,8 +315,9 @@ void Tokenizer::swapSlashVar(){
         }
     }
 }
+
 // Converts the array back to a string.
-std::string Tokenizer::arrToStringForTree(){
+std::string Tokenizer::arrToStringForTree() const{
     std::string str = "";
     for (int i = 0; i < postfixSize; i++){
         if (postfix[i].x == VARIABLE){
