@@ -28,7 +28,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
 // with root walker and sets found to true when this is found.
 // Returns a pointer to parent of the Application or to begin if begin is
 // an Application and begin->left is a lambda.
-Node* tree::findAppLambda(Node* walker, bool &found){
+Node* tree::findAppLambda(Node* walker, bool &found) const{
     Node* walker2 = walker;
     if (walker->T == VARIABLE){
         found = false;
@@ -63,7 +63,7 @@ Node* tree::findAppLambda(Node* walker, bool &found){
 }
 
 // Copies the subtree with root child to the subtree with root temp.
-void tree::copySubboom(Node* child, Node* temp){
+void tree::copySubboom(Node* child, Node* temp) const{
     temp->T = child->T;
     temp->var = child->var;
     if (child->left != nullptr){
@@ -84,7 +84,7 @@ void tree::copySubboom(Node* child, Node* temp){
 
 // Replaces every variable equal to var in the subtree with root walker by 
 // the subtree with root replaceWithTree.
-void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree){
+void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree) const{
     // Booleans that are set to true if the left or right child were variables
     // before they were replaced.
     bool left = false;
@@ -356,14 +356,16 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
     return equalTrees;
 }
 
-
-void tree::printTree(){
+// Print function which will call another function that will configuer the output string.
+void tree::printTree() const{
     std::string output;
     printInfix(begin, output);
     std::cout << output << std::endl;
 }
 
-void tree::printInfix(Node* child, std::string &output){
+// Will recursively walk through the tree configuring the output. 
+// Will check for certain situations to add parentheses or not. 
+void tree::printInfix(Node* child, std::string &output) const{
     if (child->T == SLASH && child->left != nullptr && child->left->T == VARIABLE){
         output += "\\";
         output += child->left->var;
@@ -381,13 +383,10 @@ void tree::printInfix(Node* child, std::string &output){
     if (child->right != nullptr){
         if (child->right->T == APP){
             output += "(";
-            // output += child->var;
-            std::cout << "test" << std::endl;
             printInfix(child->right, output);
             output += ")";
         }
         else {
-            // output += child->var;
             printInfix(child->right, output);
         }
     }

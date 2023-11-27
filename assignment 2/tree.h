@@ -17,23 +17,21 @@ class tree{
 
     void reduce();
 
-    void printTree();
-
-    void printInfix(Node* child, std::string &output);
+    void printTree() const;
 
     Node* begin;
     
     private:
 
-    Node* findAppLambda(Node* walker, bool &found);
+    Node* findAppLambda(Node* walker, bool &found) const;
 
-    Node* Bound(Node* walker, std::string var, bool &bound);
+    // Node* Bound(Node* walker, std::string var, bool &bound) const;
 
     bool betaReduce(Node* walker);
 
-    void copySubboom(Node* child, Node* temp);
+    void copySubboom(Node* child, Node* temp) const;
 
-    void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree);
+    void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree) const;
 
     void findFreeVar(Node* walker, std::vector<std::string> &alleVar) const;
 
@@ -46,6 +44,8 @@ class tree{
     void copyTree(Node* oldTree, Node* newTree) const;
 
     bool equal(Node* oldTree, Node* newTree) const;
+
+    void printInfix(Node* child, std::string &output) const;
 };
 
 
