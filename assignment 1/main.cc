@@ -1,94 +1,100 @@
-#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <climits>
-#include <string>
 #include "parser.h"
-using namespace std;
+#include "tree.h"
+
 
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
 // the standard output. It then repeats these steps on its own output.
-int main(){
+int main(int argc, char** argv){
     std::string input;
     std::string output;
-    std::string filenaam;
-    std::string output2; // For parsing own output
-    cout << "Enter file name." << endl;
-    cout << "To stop the program enter 0" << endl;
-    cin >> filenaam;
-    ifstream myFile (filenaam);
-    while (getline(myFile, input)){
-        if (input == "0"){
-            break;
-        }
-        Tokenizer token(input, true);
-        Parser pars;
-        pars.expr(token);
-        token.create_output(output);
-    }
-    myFile.close();
-
-	// while (getline(cin, input)){
-    //     if (input == "0"){
-    //         break;
-    //     }
-    //     Tokenizer token(input);
-    //     Parser pars;
-    //     pars.expr(token);
-    //     token.create_output(output);
+    // std::string filenaam;
+    std::string output2;
+    // if (argc > 1){ // Checks if argument is given.
+    //     filenaam = std::string(argv[1]);
     // }
-    cout << output << endl;;
+    // else { // No argument.
+    //     // std::cout << "Enter file name." << std::endl;
+    //     // std::cin >> filenaam;
+    //     exit(1);
+    // }
+   
+    // std::ifstream myFile (filenaam);
+    // std::getline(myFile, input);
 
-    cout << "Parsing own output: " << endl;
-    std::stringstream ss(output);
-    while (getline(ss, input)){
-        if (input == "0"){
-            break;
-        }
-        Tokenizer token(input, false);
-        Parser pars;
-        pars.expr(token);
-        token.create_output(output2);
-    }
-    cout << output;
+    // if (input == ""){
+    //     exit(1);
+    // }
+    std::getline(std::cin, input);
+    
+    // Read the expression into a token array and add applications.
+    Tokenizer token(input, false);
+    token.add_application();
+    
+    // Pars the expression
+    Parser pars;
+    pars.expr(token);
+
+    tree* Tree;
+    Tree = new tree();
+
+    // Create the postfix array from the tokenarray.
+    token.swapSlashVar();
+    token.reverseArray(token.tokenarray, token.arraySize-1);
+    token.infixToPostfix();
+    token.reverseArray(token.postfix, token.postfixSize);
+
+    // Builds the tree from the postfix array converted to a string
+    Tree->readIn(token.arrToStringForTree());
+
+    // Print the tree
+    std::string outputPrint1;
+    Tree->printTree(outputPrint1);
+
+
+    // Parsers own ouput and produce the result again
+    Tokenizer token2(outputPrint1, false);
+    token2.add_application();
+    
+    // Pars the expression
+    Parser pars2;
+    pars2.expr(token2);
+
+    tree* Tree2;
+    Tree2 = new tree();
+
+    // Create the postfix array from the tokenarray.
+    token2.swapSlashVar();
+    token2.reverseArray(token2.tokenarray, token2.arraySize-1);
+    token2.infixToPostfix();
+    token2.reverseArray(token2.postfix, token2.postfixSize);
+
+    // Builds the tree from the postfix array converted to a string
+    Tree2->readIn(token2.arrToStringForTree());
+
+    // Print the tree
+    std::string outputPrint2;
+    Tree2->printTree(outputPrint2);
+
+    // myFile.close();
     exit(0);
 }
 
-
+// Assignment 1:
 
 //README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
-//deviations from the assignment?
 //may include explanation of how the programs work
-
 //may include positive.zip and negative.zip file
-
-//should use least amount of std library code overal std neerzetten
-
-//const correctness public private ook opdracht 2
-
-
-//tijd over:
-
-//eigen output parsen werkt alleen de output moet nog () teoevoegen als nodig
-//zoals hieronder staat uitgelegd
-//If parsing is succesful, the output of the program must be again acceptable
-// by the program to parse: the program then succesfully parses its own output and
-// should produce the exact same result. The output should be an UNAMBIGUOUS
-// expression, i.e. with sufficiently many parentheses inserted so the parser never
-// applies any of the precedence rules. The output may use the least amount of
-// whitespace and parentheses in its output.
-// Geeft nu output alleen nog niet UNAMBIGUOUS
 // outputs a character string in a standard format to standard output
 // this format may be explained in the README
-// dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
 
-//dit vindt ik teveel moeite:
-//may support inernational variable names(unicode with lambda instead of \)
+//Assignment 2:
 
+// makefile uit assignment 1
+// An archive (positive.tar.gz) of the positive examples used for testing.
+// • An archive (negative.tar.gz) of the negative examples used for testing.
 
-// void arraycheck(Tokenizer token){
-//     for (int i = 0; i < token.array_size; i++){
-//         cout << "token_type" << token.tokenarray[i].x << endl;
-//     }
-// }
+// vragen:
+// destructor als ze memory leaks niet mogen zie tree.h

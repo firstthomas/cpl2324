@@ -1,4 +1,3 @@
-#include <iostream>
 #include "parser.h"
 
 // Calls the lexpr function and exprprime function.
@@ -14,7 +13,7 @@ void Parser::expr(Tokenizer &token){
 void Parser::lexpr(Tokenizer &token){
     if (token.peek() == SLASH){
         token.consume();
-        if (token.peek() == VARIABLE){
+        if (token.peek() == VARIABLE){        
             token.consume();
             if (token.peek() == END){
                 std::cout << "missing expression after lambda abstraction" << std::endl;
@@ -27,7 +26,7 @@ void Parser::lexpr(Tokenizer &token){
             exit(1);
         }
     }
-    else{
+    else{   
         pexpr(token);
     }
 }
