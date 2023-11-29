@@ -30,7 +30,7 @@ SRCS= main.cc parser.cc token.cc tree.cc
 OBJS=$(subst .cc,.o,$(SRCS))
 all: main
 main: $(OBJS)
-	$(CXX) $(LDFLAGS) -o tool $(OBJS) $(LDLIBS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
 main.o: main.cc parser.h tree.h
 parser.o: parser.h token.h parser.cc
 token.o: token.h token.cc
@@ -38,8 +38,8 @@ tree.o: tree.h node.h tree.cc
 clean:
 	$(RM) $(OBJS)
 distclean: clean
-	$(RM) tool
-build: tool
+	$(RM) main
+build: main
 	echo finished
 run: build
-	./tool positives.txt
+	./main positives.txt
