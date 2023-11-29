@@ -1,9 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include "parser.h"
-#include "node.h"
 #include "tree.h"
-using namespace std;
 
 // void printTree(Node* child, std::string &finalTree){
 //     finalTree += child->var;
@@ -28,12 +26,17 @@ int main(int argc, char** argv){
         filenaam = std::string(argv[1]);
     }
     else { // No argument.
-        cout << "Enter file name." << endl;
-        cin >> filenaam;
+        // std::cout << "Enter file name." << std::endl;
+        // std::cin >> filenaam;
+        exit(1);
     }
    
-    ifstream myFile (filenaam);
-    getline(myFile, input);
+    std::ifstream myFile (filenaam);
+    std::getline(myFile, input);
+
+    if (input == ""){
+        exit(1);
+    }
     
     // Read the expression into a token array and add applications.
     Tokenizer token(input, true);
@@ -48,23 +51,16 @@ int main(int argc, char** argv){
 
     // Create the postfix array from the tokenarray.
     token.swapSlashVar();
-    token.reverseArray(token.tokenarray, token.array_size-1);
+    token.reverseArray(token.tokenarray, token.arraySize-1);
     token.infixToPostfix();
     token.reverseArray(token.postfix, token.postfixSize);
 
     // Builds the tree from the postfix array converted to a string
     Tree->readIn(token.arrToStringForTree());
 
-    std::cout << "print1 :" <<std::endl;
-    Tree->printTree();
-    // Reduce the tree
     Tree->reduce();
-    std:: cout << std::endl;
-
-    std::cout << "print2 :" <<std::endl;
     // Print the tree
     Tree->printTree();
-    // token.create_output(output);
     
     myFile.close();
     exit(0);
@@ -118,22 +114,12 @@ int main(int argc, char** argv){
 
 //Assignment 2:
 
-
-// code style in token.h/cc ook assignment1
-// aantal functies voor de ouput in token.h/cc kunnen weg 
-// maar 1 keer output
-// commentaat in .h files
-// overal std?
 // makefile uit assignment 1
 // An archive (positive.tar.gz) of the positive examples used for testing.
 // • An archive (negative.tar.gz) of the negative examples used for testing.
-// check voor lege input moet exit(1) zijn bij leeg
 
 // vragen:
-// destructor als ze mememory leaks niet mogen zie tree.h
-// moet dit wel? If this first construction cannot be reduced any other construction is also not reduced.
-// wat voor output?
-
+// destructor als ze memory leaks niet mogen zie tree.h
 
 // // Deletes the Node temp and its childeren
 // void Parser::helpDestructor(Node* temp) const{

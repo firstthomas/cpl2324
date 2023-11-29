@@ -219,7 +219,8 @@ void tree::reduce(){
         
         betaReduced = betaReduce(begin2);
         if (equal(begin, temp->begin)){
-            return;
+            printTree();
+            exit(2);
         }
 
         // Reset walker and check if beta reduction is still possible
@@ -331,6 +332,7 @@ void tree::copyTree(Node* oldTree, Node* newTree) const{
 }
 
 // Checks if both trees are equal.
+// Uses recursion to walk through both trees.
 bool tree::equal(Node* oldTree, Node* newTree) const{
     bool equalTrees = true;
     if (oldTree->T != newTree->T || oldTree->var != newTree->var){
@@ -355,15 +357,15 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
     return equalTrees;
 }
 
-// Print function which will call another function that will configuer the output string.
+// Print function which will call another function that will configure the output string.
 void tree::printTree() const{
     std::string output;
     printInfix(begin, output);
     std::cout << output << std::endl;
 }
 
-// Will recursively walk through the tree configuring the output. 
-// Will check for certain situations to add parentheses or not. 
+// Will recursively walk through the tree to determine the output. 
+// Will check for certain situations to decide to add parentheses or not. 
 void tree::printInfix(Node* child, std::string &output) const{
     if (child->T == SLASH){
         output += "\\";
@@ -383,6 +385,9 @@ void tree::printInfix(Node* child, std::string &output) const{
         if (child->right->T == APP){
             output += "(";
             printInfix(child->right, output);
+            if (output.back() == ' '){
+                output.pop_back();
+            }
             output += ")";
         }
         else {

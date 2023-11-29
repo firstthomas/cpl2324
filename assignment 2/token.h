@@ -5,7 +5,7 @@
 #include <string>
 
 // maximum size of the array
-const int max_size = 5000;
+const int maxSize = 5000;
 
 // enum to give Tokens a classification
 enum token_type { BRACKET_OPEN, BRACKET_CLOSE, VARIABLE, 
@@ -22,22 +22,12 @@ class Tokenizer{
     public:
     // Read the input string and stores it into the tokenarray as tokens
     Tokenizer(std::string input, bool file);
+    
     // Peeks the next token
     token_type peek();
 
     // Consume the next token
     void consume();
-    // Inserts two bracket, one at bracket_pos and one at pos
-    void insert_bracket(int bracket_pos, int pos);
-    // Converts the array back to a string
-    void arrToString(std::string &output);
-    // Helps with inserting brackets at the correct position for lambda expressions
-    void hulpRecursion(int &i, int &var_counter);
-    // Creates output by inserting brackets
-    void create_output(std::string &output);
-
-    // Inserts application at the position pos.
-    void insert_application(int pos);
 
     // Adds application to the array.
     void add_application();    
@@ -56,14 +46,19 @@ class Tokenizer{
     std::string arrToStringForTree() const;
 
     // Array in which character are stored as tokens
-    Token tokenarray[max_size];
+    Token tokenarray[maxSize];
 
-    Token postfix[max_size];
+    Token postfix[maxSize];
 
-    int array_size;// Stores the size of the token array
+    int arraySize;// Stores the size of the token array
 
     int postfixSize;// Stores the size of the postfix array
     
+    private:
+
+    // Inserts application at the position pos.
+    void insert_application(int pos);
+
     // Interger used for parsing as index to store the current position in 
     // the array
     int j = 0; 
