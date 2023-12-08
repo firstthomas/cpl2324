@@ -45,6 +45,9 @@ class Tokenizer{
     // Converts the array back to a string.
     std::string arrToStringForTree() const;
 
+    // Returns if variable at position j starts with a lowercase letter
+    bool lowercase();
+
     // Array in which character are stored as tokens
     Token tokenarray[maxSize];
 

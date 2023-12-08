@@ -16,7 +16,6 @@ Tokenizer::Tokenizer(std::string input, bool file){
         hulp = input.size();
     }
     for (int i = 0; i < hulp; i++){
-        std::cout << input[i] << std::endl;
         if (input[i] == '(' ){
             tokenarray[k].x = BRACKET_OPEN;
             open_count++;
@@ -86,7 +85,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
 
 // Inserts application at the position pos.
 void Tokenizer::insert_application(int pos){
-    if (tokenarray[pos].x != END && tokenarray[pos].x != COLON){
+    if (tokenarray[pos].x != END && tokenarray[pos].x != COLON && tokenarray[pos].x != ARROW){
         for (int i = arraySize; i > pos; i--){
             tokenarray[i] = tokenarray[i - 1];
         }
@@ -102,20 +101,16 @@ void Tokenizer::add_application(){
     bool slash = false;
     int i = 0;
     while(tokenarray[i].x != END){
-        // std::cout << tokenarray[i].x << std::endl;
         while (tokenarray[i].x == BRACKET_OPEN || tokenarray[i].x == EXP || tokenarray[i].x == ARROW){
             i++;
-            // std::cout << tokenarray[i].x << std::endl;
         }
         if (tokenarray[i].x == COLON){
-            varCounter = 0;
-            slash = false;
+            break;
         }
-        else if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END && tokenarray[i+1].x != ARROW){
+        else if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;
             }
-            std::cout << "insert1" << std::endl;
             insert_application(i+1);
         }
         else if(varCounter == 1 && slash && tokenarray[i].x != SLASH && tokenarray[i+1].x != END){
@@ -123,7 +118,6 @@ void Tokenizer::add_application(){
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;
             }
-            std::cout << "insert2" << std::endl;
             insert_application(i+1);
             slash = false;
         }
@@ -249,4 +243,9 @@ std::string Tokenizer::arrToStringForTree() const{
         str += " ";
     }
     return str;
+}
+
+// Returns if variable at position j starts with a lowercase letter
+bool Tokenizer::lowercase(){
+    return (tokenarray[j].y[0] > 96 &&  tokenarray[j].y[0] < 123);
 }

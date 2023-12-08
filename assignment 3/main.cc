@@ -33,6 +33,9 @@ void arraycheck(Token tokenArray[], int array_size){
         else if(tokenArray[i].x == END){
             std::cout << "END";
         }
+        else{
+            std::cout << "wrong" << std::endl;
+        }
     }
     std::cout << std::endl;
 }
@@ -83,9 +86,9 @@ int main(int argc, char** argv){
     // tree* Tree;
     // Tree = new tree();
 
-    // // Pars the expression
-    // Parser pars;
-    // pars.expr(token);
+    // Pars the expression
+    Parser pars;
+    pars.judge(token);
 
     // // Create the postfix array from the tokenarray.
     // token.swapSlashVar();
