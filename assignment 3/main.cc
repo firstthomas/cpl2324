@@ -42,15 +42,41 @@ void arraycheck(Token tokenArray[], int array_size){
 
 
 
-// void printTree(Node* child, std::string &finalTree){
-//     finalTree += child->var;
+// void printTree(Node* child){
+//     if (child->T == SLASH){
+//         std::cout << "\\" << std::endl;
+//     }
+//     else if (child->T == COLON){
+//         std::cout << ":" << std::endl;
+//     }
+//     else if (child->T == APP){
+//         std::cout << "@" << std::endl;
+//     }
+//     else if (child->T == ARROW){
+//         std::cout << "->" << std::endl;
+//     }
+//     else if (child->T == EXP){
+//         std::cout << "^" << std::endl;
+//     }
+//     else if (child->T == VARIABLE){
+//         std::cout << child << std::endl;
+//     }
 //     if (child->left != nullptr){
-//         printTree(child->left, finalTree);
+//         printTree(child->left);
 //     }
 //     if (child->right != nullptr){
-//         printTree(child->right, finalTree);
+//         printTree(child->right);
 //     }
 // }
+void printTree(Node* child, std::string &finalTree){
+    finalTree += child->var;
+    if (child->left != nullptr){
+        printTree(child->left, finalTree);
+    }
+    if (child->right != nullptr){
+        printTree(child->right, finalTree);
+    }
+}
 
 
 // Asks the user for 1 or more input expressions and reads it into a
@@ -83,25 +109,27 @@ int main(int argc, char** argv){
     token.add_application();
     arraycheck(token.tokenarray, token.arraySize);
 
-    // tree* Tree;
-    // Tree = new tree();
+    tree* Tree;
+    Tree = new tree();
 
     // Pars the expression
     Parser pars;
     pars.judge(token);
 
     // // Create the postfix array from the tokenarray.
-    // token.swapSlashVar();
-    // token.reverseArray(token.tokenarray, token.arraySize-1);
-    // token.infixToPostfix();
-    // token.reverseArray(token.postfix, token.postfixSize);
+    token.swapSlashVar();
+    token.reverseArray(token.tokenarray, token.arraySize-1);
+    token.infixToPostfix();
+    token.reverseArray(token.postfix, token.postfixSize);
 
     // // Builds the tree from the postfix array converted to a string
-    // Tree->readIn(token.arrToStringForTree());
+    Tree->readIn(token.arrToStringForTree());
 
     // Tree->reduce();
     // // Print the tree
-    // Tree->printTree();
+    // std::string temp;
+    // printTree(Tree->begin, temp);
+    // std::cout << temp;
     
     myFile.close();
     exit(0);

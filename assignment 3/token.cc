@@ -240,8 +240,18 @@ std::string Tokenizer::arrToStringForTree() const{
         else if (postfix[i].x == APP){
             str += "@";
         }
+        else if (postfix[i].x == ARROW){
+            str += "->";
+        }
+        else if (postfix[i].x == EXP){
+            str += "^";
+        }
+        else if (postfix[i].x == COLON){
+            str += ":";
+        }
         str += " ";
     }
+    std::cout << "arrtostring string" << str << std::endl;
     return str;
 }
 

@@ -5,8 +5,13 @@
 // is valid.
 void tree::readIn(std::string input){
     std::istringstream iss(input);
-    begin = new Node();
-    createTree(begin, iss);
+    std::string str;
+    begin = new Node(":");
+    begin->left = new Node();
+    begin->right = new Node();
+    createTree(begin->left, iss);
+    // iss >> str;
+    // createTree(begin->right, iss);
 }
 
 // Builds the tree using recursion.
@@ -15,11 +20,22 @@ void tree::createTree(Node* child, std::istringstream &iss){
     iss >> str;
     delete child;
     child = new Node(str);
+    if (str == "-"){
+        iss >> str;
+    }
     if ((str[0] > 64 && str[0] < 91) || (str[0] > 96 && str[0] < 123)){
         return;
     }
     child->left = new Node();
     createTree(child->left, iss);
+    if (str == "\\"){
+        iss >> str;
+        if (str == "^"){
+            std::cout << "dakje" << std::endl;
+            child->mid = new Node();
+            createTree(child->mid, iss);
+        }
+    }
     child->right = new Node();
     createTree(child->right, iss);
 }
