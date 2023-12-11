@@ -126,7 +126,13 @@ void Tokenizer::add_application(){
             slash = true;
         }
         else if(tokenarray[i].x == VARIABLE){
+            // if (tokenarray[i+1].x != EXP && tokenarray[i+1].x != ARROW){
+            //     varCounter++;
+            // }
             if (tokenarray[i+1].x != EXP && tokenarray[i+1].x != ARROW){
+                while (tokenarray[i+1].x == BRACKET_CLOSE){
+                    i++;
+                }
                 varCounter++;
             }
         }
@@ -170,6 +176,23 @@ void Tokenizer::reverseArray(Token tokenArr[], int Size){
         }
     }
 }
+
+
+int prec(token_type c)
+{
+    if (c == EXP)
+        return 4;
+    else if (c == SLASH)
+        return 3;
+    else if (c == APP)
+        return 2;
+    else if (c == ARROW)
+        return 4;
+    else
+        return -1;
+}
+
+
 // Converts the tokenarray (infix) to the postfix array(postfix), using a
 // stack.
 void Tokenizer::infixToPostfix(){
@@ -177,7 +200,7 @@ void Tokenizer::infixToPostfix(){
     std::string element;
     int k = 0;
     for(int i = 0; i < arraySize; i++){
-        if(tokenarray[i].x == VARIABLE){
+        if(tokenarray[i].x == VARIABLE){ //|| tokenarray[i].x == EXP){
             postfix[k] = tokenarray[i];
             k++;
         }
@@ -195,10 +218,19 @@ void Tokenizer::infixToPostfix(){
         else if(tokenarray[i].x == END){
             continue;
         }
+        // else{
+        //     while(!st.empty() && st.top().x != BRACKET_OPEN && (
+        //     (st.top().x == SLASH && tokenarray[i].x == SLASH)
+        //     || (st.top().x == SLASH && tokenarray[i].x == APP))){
+        //         postfix[k] = st.top();
+        //         k++;
+        //         st.pop();
+        //     }
+        //     st.push(tokenarray[i]);
+        // }
         else{
-            while(!st.empty() && st.top().x != BRACKET_OPEN && (
-            (st.top().x == SLASH && tokenarray[i].x == SLASH)
-            || (st.top().x == SLASH && tokenarray[i].x == APP))){
+            while(!st.empty() && st.top().x != BRACKET_OPEN &&
+                  prec(tokenarray[i].x) <= prec(st.top().x)){
                 postfix[k] = st.top();
                 k++;
                 st.pop();
@@ -242,6 +274,9 @@ std::string Tokenizer::arrToStringForTree() const{
         }
         else if (postfix[i].x == ARROW){
             str += "->";
+            // if (postfix[i+1].x == EXP){
+            //     i++;
+            // }
         }
         else if (postfix[i].x == EXP){
             str += "^";
@@ -251,7 +286,7 @@ std::string Tokenizer::arrToStringForTree() const{
         }
         str += " ";
     }
-    std::cout << "arrtostring string" << str << std::endl;
+    std::cout << "arrtostring string " << str << std::endl;
     return str;
 }
 
