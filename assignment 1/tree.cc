@@ -61,8 +61,8 @@ void tree::printInfix(Node* child, std::string &output) const{
             printInfix(child->right, output);
         }
         if (output.back() == ' '){
-                output.pop_back();
-            }
-            output += ")";
+            output.pop_back();
+        }
+        output += ")";
     }
 }

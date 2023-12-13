@@ -79,7 +79,11 @@ void Tokenizer::add_application(){
     int varCounter = 0;
     bool slash = false;
     int i = 0;
-    while(tokenarray[i].x != END){
+    while (tokenarray[i].x == BRACKET_OPEN){
+        i++;
+    }
+    while(tokenarray[i].x != END && tokenarray[i].x != BRACKET_OPEN){
+        std::cout << i << std::endl;
         while (tokenarray[i].x == BRACKET_OPEN){
             i++;
         }
@@ -105,6 +109,9 @@ void Tokenizer::add_application(){
             varCounter++;
         }
         i++;
+        while (tokenarray[i].x == BRACKET_OPEN){
+            i++;
+        }
     }
 }   
 

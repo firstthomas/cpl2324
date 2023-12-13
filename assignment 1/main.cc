@@ -4,6 +4,35 @@
 #include "tree.h"
 
 
+void arraycheck(Token tokenArray[], int array_size){
+    for (int i = 0; i < array_size; i++){
+        if(tokenArray[i].x == SLASH){
+            std::cout << "/";
+        }
+        else if(tokenArray[i].x == BRACKET_OPEN){
+            std::cout << "(";
+        }
+        else if(tokenArray[i].x == BRACKET_CLOSE){
+            std::cout << ")";
+        }
+        else if(tokenArray[i].x == VARIABLE){
+            std::cout << tokenArray[i].y;
+        }
+        else if(tokenArray[i].x == APP){
+            std::cout << "@";
+        }
+        else if(tokenArray[i].x == END){
+            std::cout << "END";
+        }
+        else{
+            std::cout << "wrong" << std::endl;
+        }
+    }
+    std::cout << std::endl;
+}
+
+
+
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
 // the standard output. It then repeats these steps on its own output.
@@ -28,11 +57,14 @@ int main(int argc, char** argv){
     //     exit(1);
     // }
     std::getline(std::cin, input);
-    
+    // while (input != ""){
+    std::cout << input << std::endl;
     // Read the expression into a token array and add applications.
-    Tokenizer token(input, false);
+    Tokenizer token(input, true);
+    // arraycheck(token.tokenarray, token.arraySize);
     token.add_application();
-    
+    // arraycheck(token.tokenarray, token.arraySize);
+
     // Pars the expression
     Parser pars;
     pars.expr(token);
@@ -45,15 +77,12 @@ int main(int argc, char** argv){
     token.reverseArray(token.tokenarray, token.arraySize-1);
     token.infixToPostfix();
     token.reverseArray(token.postfix, token.postfixSize);
-
     // Builds the tree from the postfix array converted to a string
     Tree->readIn(token.arrToStringForTree());
 
     // Print the tree
     std::string outputPrint1;
     Tree->printTree(outputPrint1);
-
-
     // Parsers own ouput and produce the result again
     Tokenizer token2(outputPrint1, false);
     token2.add_application();
@@ -78,12 +107,19 @@ int main(int argc, char** argv){
     std::string outputPrint2;
     Tree2->printTree(outputPrint2);
 
+    delete Tree;
+    delete Tree2;
+    std::getline(std::cin, input);
+    // }
     // myFile.close();
     exit(0);
 }
 
 // Assignment 1: ook bij assignment 3
 // The program may accept multiple expressions, one per line.::
+// all de onnodig commentaar weghalen
+// MEERDERE EXPRESSIE SEGFAULT SOMS Bij < POSITIVES.TXT moet hier voor werken
+// input abc werkt niet wordt ab ofzo
 
 // 1.3.1 Positive examples
 // The following examples are acceptable (the program must work if the program

@@ -43,7 +43,8 @@ void Parser::pexpr(Tokenizer &token){
         expr(token);
     }
     else{
-        std::cout << "missing expression after opening parenthesis" << std::endl;
+        std::cout << "missing expression after opening parenthesis or";
+        std::cout << " no expression" << std::endl;
         exit(1);
     }
 }
