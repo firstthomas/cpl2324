@@ -49,6 +49,21 @@ void tree::createTree(Node* child, std::istringstream &iss){
     createTree(child->right, iss);
 }
 
+void tree::typeCheck(){
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // Print function which will call another function that will configure the output string.
 void tree::printTree() const{
     std::string output;

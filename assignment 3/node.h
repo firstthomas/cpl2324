@@ -20,7 +20,7 @@ class Node {
     
     // Constructor with input for a Node.
     Node(std::string str){
-            std::cout << str << std::endl;
+            // std::cout << str << std::endl;
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
             else if (str == "@"){this->T = APP;}

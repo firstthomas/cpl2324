@@ -122,19 +122,18 @@ int main(int argc, char** argv){
     // // Create the postfix array from the tokenarray.
     token.swapSlashVar();
     token.reverseArray(token.tokenarray, token.arraySize-1);
-    std::cout << "infix reverse" << std::endl;
-    arraycheck(token.tokenarray, token.arraySize-1);
+    // std::cout << "infix reverse" << std::endl;
+    // arraycheck(token.tokenarray, token.arraySize-1);
     token.infixToPostfix();
-    std::cout << "postfix" << std::endl;
-    arraycheck(token.postfix, token.postfixSize);
+    // std::cout << "postfix" << std::endl;
+    // arraycheck(token.postfix, token.postfixSize);
     token.reverseArray(token.postfix, token.postfixSize);
-    std::cout << "prefix" << std::endl;
-    arraycheck(token.postfix, token.postfixSize);
+    // std::cout << "prefix" << std::endl;
+    // arraycheck(token.postfix, token.postfixSize);
 
     // // Builds the tree from the postfix array converted to a string
     Tree->readIn(token.arrToStringForTree());
 
-    // Tree->reduce();
     // Print the tree
     // std::cout << "tree" << std::endl;
     std::string temp;
