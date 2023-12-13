@@ -68,16 +68,16 @@ void arraycheck(Token tokenArray[], int array_size){
 //         printTree(child->right);
 //     }
 // }
-void printTree(Node* child, std::string &finalTree){
+void printTree(Node* child, std::string &finalTree, bool mid){
     finalTree += child->var;
     if (child->left != nullptr){
-        printTree(child->left, finalTree);
+        printTree(child->left, finalTree, mid);
     }
-    if (child->mid != nullptr){
-        printTree(child->mid, finalTree);
+    if (child->mid != nullptr && mid){
+        printTree(child->mid, finalTree, mid);
     }
     if (child->right != nullptr){
-        printTree(child->right, finalTree);
+        printTree(child->right, finalTree, mid);
     }
 }
 
@@ -137,8 +137,15 @@ int main(int argc, char** argv){
     // Print the tree
     // std::cout << "tree" << std::endl;
     std::string temp;
-    printTree(Tree->begin, temp);
-    std::cout << temp;
+    printTree(Tree->begin, temp, true);
+    std::cout << "tree: "<< temp;
+    
+    //print na typecheck moet zonder de mid
+    std::cout << std::endl;
+    Tree->typeCheck(Tree->begin, true);
+    std::string temp2;
+    printTree(Tree->begin, temp2, false);
+    std::cout << temp2;
     
     myFile.close();
     exit(0);
@@ -212,4 +219,4 @@ int main(int argc, char** argv){
 //     delete temp; // delete node
 // }
 
-//Assignment 3: missing types error
+//Assignment 3: missing types error, kan wss als er niks is na ^ ofzo

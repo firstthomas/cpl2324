@@ -6,6 +6,7 @@ class Node {
 
     public:
         std::string var; // variable string
+        Node* type = nullptr; // Stores the type of this node if it is a variable
         token_type T; // Token Type
         Node* left = nullptr; // Pointer to left child in the tree.
         Node* right = nullptr; // Pointer to right child in the tree.
