@@ -83,13 +83,13 @@ void Tokenizer::add_application(){
         while (tokenarray[i].x == BRACKET_OPEN){
             i++;
         }
-        if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){//&&niet einde bv a
+        if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;
             }
             insert_application(i+1);
         }
-        else if(varCounter == 1 && slash && tokenarray[i].x != SLASH && tokenarray[i+1].x != END){//&&niet einde bv \x a
+        else if(varCounter == 1 && slash && tokenarray[i].x != SLASH && tokenarray[i+1].x != END){
             varCounter = 0;
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;

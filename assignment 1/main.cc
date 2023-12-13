@@ -82,7 +82,13 @@ int main(int argc, char** argv){
     exit(0);
 }
 
-// Assignment 1:
+// Assignment 1: ook bij assignment 3
+// The program may accept multiple expressions, one per line.::
+
+// 1.3.1 Positive examples
+// The following examples are acceptable (the program must work if the program
+// is invoked separately and supplied each expression, the program should accept
+// multiple expressions each on its own line):
 
 //README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
 //may include explanation of how the programs work
@@ -98,3 +104,6 @@ int main(int argc, char** argv){
 
 // vragen:
 // destructor als ze memory leaks niet mogen zie tree.h
+
+
+//private functions in parser!!!!! elke assignment

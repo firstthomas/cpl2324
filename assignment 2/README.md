@@ -2,7 +2,7 @@
 
 Class number: 2324-S1
 
-Group number: ?
+Group number: Robert+Thomas
 
 Students:
     Thomas Verwaal  s2615223

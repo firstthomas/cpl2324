@@ -9,7 +9,7 @@ const int maxSize = 5000;
 
 // enum to give Tokens a classification
 enum token_type { BRACKET_OPEN, BRACKET_CLOSE, VARIABLE, 
-                  SLASH, WHITESPACE, APP, END};
+                  SLASH, WHITESPACE, APP, COLON, EXP, ARROW, END};
 
 // struct to store token type and if its a variable its contents
 struct Token{
