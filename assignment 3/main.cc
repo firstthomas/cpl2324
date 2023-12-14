@@ -53,7 +53,6 @@ void printTree(Node* child, std::string &finalTree, bool mid){
     }
 }
 
-
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
 // the standard output. It then repeats these steps on its own output.
@@ -79,32 +78,32 @@ int main(int argc, char** argv){
     }
     
     // Read the expression into a token array and add applications.
-    Tokenizer token(input, true);
-    arraycheck(token.tokenarray, token.arraySize);
-    token.add_application();
-    arraycheck(token.tokenarray, token.arraySize);
+    Tokenizer *token = new Tokenizer(input, true);
+    arraycheck(token->tokenarray, token->arraySize);
+    token->add_application();
+    arraycheck(token->tokenarray, token->arraySize);
 
     tree* Tree;
     Tree = new tree();
 
     // Pars the expression
-    Parser pars;
-    pars.judge(token);
+    Parser *pars = new Parser();
+    pars->judge(*token);
 
-    // // Create the postfix array from the tokenarray.
-    token.swapSlashVar();
-    token.reverseArray(token.tokenarray, token.arraySize-1);
+    // Create the postfix array from the tokenarray.
+    token->swapSlashVar();
+    token->reverseArray(token->tokenarray, token->arraySize-1);
     // std::cout << "infix reverse" << std::endl;
     // arraycheck(token.tokenarray, token.arraySize-1);
-    token.infixToPostfix();
+    token->infixToPostfix();
     // std::cout << "postfix" << std::endl;
     // arraycheck(token.postfix, token.postfixSize);
-    token.reverseArray(token.postfix, token.postfixSize);
+    token->reverseArray(token->postfix, token->postfixSize);
     // std::cout << "prefix" << std::endl;
     // arraycheck(token.postfix, token.postfixSize);
 
-    // // Builds the tree from the postfix array converted to a string
-    Tree->readIn(token.arrToStringForTree());
+    // Builds the tree from the postfix array converted to a string
+    Tree->readIn(token->arrToStringForTree());
 
     // Print the tree
     // std::cout << "tree" << std::endl;
@@ -113,19 +112,22 @@ int main(int argc, char** argv){
     // std::cout << "tree: "<< temp;
     
     //print na typecheck moet zonder de mid
-    Tree->checkTypes();
-    std::cout << std::endl;
-    std::string temp2;
-    printTree(Tree->begin, temp2, false);
-    Tree->printTree();
-
     // Tree->checkTypes();
+    // std::cout << std::endl;
+    std::string temp2;
+    // printTree(Tree->begin, temp2, false);
+    Tree->printTree(temp2);
+
+    Tree->checkTypes();
     // Tree->typeCheck(Tree->begin, true);
     std::cout << temp2;
-    
     myFile.close();
+    delete token;
+    delete pars;
     delete Tree;
+    //als we met exit(0) dan still reachable memory leaks denk niet erg
     exit(0);
+    // return 0;
 // sla de output van de tree op en dan checktypes aan roepen daarna string printen
 // If the program exists with exit status 0 then the program should
 // output the judgement printed to standard output in an unambiguous and standardized output format (where each complex expression and type is surrounded

@@ -1,12 +1,11 @@
 #ifndef TREE_H
 #define TREE_H
 #include "node.h"
-#include <vector>
 
 class tree{
     public:
 
-    tree(){}
+    tree();
 
     ~tree();
 
@@ -31,7 +30,7 @@ class tree{
     void checkTypes();
 
     // Print function which will call another function that will configure the output string.
-    void printTree() const;
+    void printTree(std::string &output) const;
 
     Node* begin;// Root of the tree
     

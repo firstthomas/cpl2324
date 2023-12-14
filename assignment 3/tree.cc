@@ -3,58 +3,51 @@
 
 // Deletes the Node temp and its childeren
 void tree::helpDestructor(Node* temp) const{
-    std::cout << "hulp" << std::endl;
     if (temp->left != nullptr){ 
-        Node* left = temp->left;
-        helpDestructor(left);
+        helpDestructor(temp->left);
     }
     if (temp->type != nullptr){
-        Node* type = temp->type;
-        helpDestructor(type);
+        helpDestructor(temp->type);
     }
     if (temp->mid != nullptr){
-        Node* mid = temp->mid;
-        helpDestructor(mid);
+        helpDestructor(temp->mid);
     }
     if (temp->right != nullptr){
-        Node* right = temp->right;
-        helpDestructor(right);
+        helpDestructor(temp->right);
     }
-    std::cout << "hulp2" << std::endl;
     delete temp; // delete node
+}
+
+
+tree::tree(){
+    begin = new Node();
 }
 
 // Destructor
 tree::~tree(){
-    std::cout << "destructor" << std::endl;
     if (begin->left != nullptr){
-        Node* left = begin->left;
-        helpDestructor(left);
+        helpDestructor(begin->left);
     }
     if (begin->type != nullptr){
-        Node* type = begin->type;
-        helpDestructor(type);
+        helpDestructor(begin->type);
     }
     if (begin->mid != nullptr){
-        Node* mid = begin->mid;
-        helpDestructor(mid);
+        helpDestructor(begin->mid);
     }
     if (begin->right != nullptr){
-        Node* right = begin->right;
-        helpDestructor(right);
+        helpDestructor(begin->right);
     }
-    std::cout << "destructor2" << std::endl;
-    delete begin;
+    delete begin; // delete begin
 }
-
-
 
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
 void tree::readIn(std::string input){
     std::istringstream iss(input);
     std::string str;
-    begin = new Node(":");
+    // delete begin;
+    // begin = new Node(":");
+    begin->setNodeValues(":");
     begin->left = new Node();
     begin->right = new Node();
     iss >> str;
@@ -66,9 +59,11 @@ void tree::readIn(std::string input){
 void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
-    delete child;
-    // std::cout << "string in creatree" << str << std::endl;
-    child = new Node(str);
+    // delete child;
+    // Node* temp = new Node(str);
+    // child = new Node(str);
+    child->setNodeValues(str);
+    // child = temp;
     if (str == "-"){
         iss >> str;
     }
@@ -86,7 +81,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
         }
         else if (str == "->"){
             std::cout << "dakje2 als het goed is nooit hier" << std::endl;
-            child->mid = new Node("->");
+            // child->mid = new Node("->");
             child->mid->left = new Node();
             child->mid->right = new Node();
             createTree(child->mid->left, iss);
@@ -99,6 +94,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
 
 // Copies the subtree with root child to the subtree with root temp.
 void tree::copySubboom(Node* child, Node* temp) const{
+    // temp->setNodeValues(child->var);
     temp->T = child->T;
     temp->var = child->var;
     if (child->left != nullptr){
@@ -154,15 +150,11 @@ void tree::typeCheck(Node* child, bool left){
     }
     if (child->T == SLASH){
         child->left->type = new Node();
-        // std::cout << "type mid " << child->mid->T << std::endl;
-        // std::cout << "var mid " << child->mid->var << std::endl;
         copySubboom(child->mid, child->left->type);
-        // std::cout << "child left type t na copy slash" << child->left->type->T << std::endl;
         typeCheck(child, false);
         setTypes(child);
     }
     else if (child->T == APP){
-        // std::cout << "application" << std::endl;
         typeCheck(child, true);
         typeCheck(child, false);
         std::cout << child->left->T << std::endl;
@@ -172,17 +164,14 @@ void tree::typeCheck(Node* child, bool left){
                 copySubboom(child->left->right, temp);
                 helpDestructor(child);
                 if (left){
-                    // parent->left = new Node();
                     parent->left = temp;
                 }
                 else{
-                    // parent->right = new Node();
                     parent->right = temp;
                 }
             }
             else{
                 std::cout << "types do not match" << std::endl;
-                //destructor(begin);
                 exit(1);
             }
         }
@@ -207,24 +196,18 @@ void tree::typeCheck(Node* child, bool left){
         //     }
         // }
         else{
-            std::cout << "Unkown type?" << std::endl;
-            //destructor(begin);
+            std::cout << "Application rule cannot be applied?" << std::endl;
             exit(1);
         }
     }
     else if (child->T == VARIABLE){
         std::string var = child->var;
         child->var += "!";
-        // std::cout << "setype met var " << var << std::endl;
         if (!setType(child, begin->left, var)){
-            // std::cout << "var" << child->var << std::endl;
-            // std::cout << "mid" << parent->mid->var << std::endl;
             std::cout << "Unkown type for variable " << var << std::endl;
-            //destructor
             exit(1);
         }
         copySubboom(child->type, child);
-        // std::cout << "type kind na copy van variable " << child->T << std::endl;
     }
 }
 
@@ -302,42 +285,13 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
 }
 
 // Print function which will call another function that will configure the output string.
-void tree::printTree() const{
-    std::string output;
+void tree::printTree(std::string &output) const{
     printInfix(begin, output);
-    std::cout << output << std::endl;
 }
 
 // Will recursively walk through the tree to determine the output. 
 // Will check for certain situations to decide to add parentheses or not. 
 void tree::printInfix(Node* child, std::string &output) const{
-    // if (child->T == SLASH){
-    //     output += "\\";
-    //     output += child->left->var;
-    //     output += " ";
-    // }
-    // else if (child->T != APP){
-    //     output += child->var;
-    //     output += " ";
-    // }
-
-    // if (child->T != SLASH && child->left != nullptr){
-    //     printInfix(child->left, output);
-    // }
-
-    // if (child->right != nullptr){
-    //     if (child->right->T == APP){
-    //         output += "(";
-    //         printInfix(child->right, output);
-    //         if (output.back() == ' '){
-    //             output.pop_back();
-    //         }
-    //         output += ")";
-    //     }
-    //     else {
-    //         printInfix(child->right, output);
-    //     }
-    // }
     bool bracket = false;
     if (child->T == COLON || child->T == SLASH || child->T == APP ||
         child->T == ARROW){

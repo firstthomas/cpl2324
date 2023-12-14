@@ -15,12 +15,14 @@ class Node {
     // Standaard constructor for a Node.
     Node(){
         this->var = "-1";
-        this->left = NULL;
-        this->right = NULL;
+        this->left = nullptr;
+        this->right = nullptr;
+        this->mid = nullptr;
+        this->type = nullptr;
     };
     
-    // Constructor with input for a Node.
-    Node(std::string str){
+    // "Constructor" with input for a Node.
+    void setNodeValues(std::string str){
             // std::cout << str << std::endl;
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
@@ -29,9 +31,11 @@ class Node {
             else if (str == "^"){this->T = EXP;}
             else if (str == ":"){this->T = COLON;}
             else{this->T = VARIABLE;}
-            this->left = NULL;
-            this->right = NULL;
+            this->left = nullptr;
+            this->right = nullptr;
     };
+    
+    ~Node(){};
 };
 
 #endif
