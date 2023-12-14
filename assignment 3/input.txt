@@ -1,4 +1,4 @@
-(\x^A (\y^(A->B) (y ((\x^A x) x)))):(A -> ((A -> B) -> B))
+\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->(A->A))
 0
 (\x^A x):(A -> A)
 (\x^B (\x^A x)):(B -> (A -> A))
@@ -7,4 +7,6 @@
 (\x x) wij geven andere error
 \x^A -> A (x y) : A
 (x y): A -> B -> J
-\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A)
+\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A) types do not match
+\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->(A->A)) deze wel
+\x^A x:B->B

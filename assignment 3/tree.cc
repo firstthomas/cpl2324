@@ -20,7 +20,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
     delete child;
-    std::cout << "string in creatree" << str << std::endl;
+    // std::cout << "string in creatree" << str << std::endl;
     child = new Node(str);
     if (str == "-"){
         iss >> str;
@@ -70,10 +70,22 @@ void tree::copySubboom(Node* child, Node* temp) const{
     }
 }
 
+void tree::checkTypes(){
+    typeCheck(begin, true);
+    if (!equal(begin->left, begin->right)){
+        std::cout << "types do not match" << std::endl;
+        exit(1);
+    }
+}
+
+
+
+
+
 void tree::setTypes(Node* child){
     copySubboom(child->left->type, child->left);
     child->T = ARROW;
-    child->var = "-";
+    child->var = "->";
 }
 
 void tree::typeCheck(Node* child, bool left){
@@ -87,12 +99,15 @@ void tree::typeCheck(Node* child, bool left){
     }
     if (child->T == SLASH){
         child->left->type = new Node();
-        std::cout << "type mid " << child->mid->T << std::endl;
+        // std::cout << "type mid " << child->mid->T << std::endl;
+        // std::cout << "var mid " << child->mid->var << std::endl;
         copySubboom(child->mid, child->left->type);
+        // std::cout << "child left type t na copy slash" << child->left->type->T << std::endl;
         typeCheck(child, false);
         setTypes(child);
     }
     else if (child->T == APP){
+        // std::cout << "application" << std::endl;
         typeCheck(child, true);
         typeCheck(child, false);
         std::cout << child->left->T << std::endl;
@@ -136,24 +151,25 @@ void tree::typeCheck(Node* child, bool left){
                 exit(1);
             }
         }
-        // else{
-        //     std::cout << "Unkown type?" << std::endl;
-        //     //destructor(begin);
-        //     exit(1);
-        // }
+        else{
+            std::cout << "Unkown type?" << std::endl;
+            //destructor(begin);
+            exit(1);
+        }
     }
     else if (child->T == VARIABLE){
         std::string var = child->var;
         child->var += "!";
+        // std::cout << "setype met var " << var << std::endl;
         if (!setType(child, begin->left, var)){
             // std::cout << "var" << child->var << std::endl;
             // std::cout << "mid" << parent->mid->var << std::endl;
-            // std::cout << "Unkown type" << std::endl;
+            std::cout << "Unkown type for variable " << var << std::endl;
             //destructor
             exit(1);
         }
         copySubboom(child->type, child);
-        std::cout << "type kind na copy van variable " << child->T << std::endl;
+        // std::cout << "type kind na copy van variable " << child->T << std::endl;
     }
 }
 
@@ -181,7 +197,7 @@ bool tree::setType(Node* child, Node* finder, std::string var){
     if (finder->T == SLASH && (finder->left->var == var)){
         if (findVar(child->var, finder->right)){
             child->type = new Node();
-            std::cout << finder->left->T << std::endl;
+            // std::cout << finder->left->type->T << std::endl;
             copySubboom(finder->left->type, child->type);
             temp = true;
         }

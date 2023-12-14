@@ -23,6 +23,8 @@ class tree{
     // Sets childs left vars type and childs Tokentype as arrow, child is a slash.
     void setTypes(Node* child);
 
+    void checkTypes();
+
     // checks if the judgement in the tree is derivable in the type system
     void typeCheck(Node* child, bool left);
 

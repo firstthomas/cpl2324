@@ -25,7 +25,7 @@ class Node {
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
             else if (str == "@"){this->T = APP;}
-            else if (str == "-"){this->T = ARROW;}
+            else if (str[0] == '-'){this->T = ARROW;}
             else if (str == "^"){this->T = EXP;}
             else if (str == ":"){this->T = COLON;}
             else{this->T = VARIABLE;}

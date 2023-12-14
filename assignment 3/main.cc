@@ -142,7 +142,8 @@ int main(int argc, char** argv){
     
     //print na typecheck moet zonder de mid
     std::cout << std::endl;
-    Tree->typeCheck(Tree->begin, true);
+    Tree->checkTypes();
+    // Tree->typeCheck(Tree->begin, true);
     std::string temp2;
     printTree(Tree->begin, temp2, false);
     std::cout << temp2;
@@ -220,3 +221,4 @@ int main(int argc, char** argv){
 // }
 
 //Assignment 3: missing types error, kan wss als er niks is na ^ ofzo
+// typecheck functies enzo betere namen
