@@ -4,9 +4,12 @@
 (\x^B (\x^A x)):(B -> (A -> A))
 (\y^A (\x^(A -> (C -> A)) (x y))):(A -> (A -> C -> A) -> C -> A)
 (\x^A (\y^(A->B) (y ((\x^A x) x)))):(A -> ((A -> B) -> B))
-(\x x) wij geven andere error
-\x^A -> A (x y) : A
 (x y): A -> B -> J
-\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A) types do not match
 \z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->(A->A)) deze wel
 \x^A x:B->B
+
+negatives:
+\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A) types do not match
+(\x^A x) missing types
+(\x x) missing ^ after lambda abstraction
+\x^A -> A (x y) : A Unknown type for variable y

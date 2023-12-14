@@ -70,6 +70,8 @@ void tree::copySubboom(Node* child, Node* temp) const{
     }
 }
 
+// Calls typeCheck and checks if the left and right subtree are equal after
+// typeCheck.
 void tree::checkTypes(){
     typeCheck(begin, true);
     if (!equal(begin->left, begin->right)){
@@ -78,16 +80,22 @@ void tree::checkTypes(){
     }
 }
 
-
-
-
-
+// This function gets called with child->T == SLASH. It copies the left
+// childs types to the left child and sets the SLASH as an arrow.
 void tree::setTypes(Node* child){
     copySubboom(child->left->type, child->left);
     child->T = ARROW;
     child->var = "->";
 }
 
+// Applies typeChecking to the left side of the tree by using recursion.
+// Replaces every var for its type starting at the bottom. Replaces slashes
+// for arrows by appling rule 3 of the type system. Applies rule 2 on
+// applications. If any of the rules cannot be applied or a variable does
+// not have a type this functions reports an error and exits the program.
+// Because we sometimes need the parent to change the tree we give the parent
+// node as argument and a bool to determine if we should check the left or
+// right child.
 void tree::typeCheck(Node* child, bool left){
     Node* parent;
     parent = child;
@@ -173,6 +181,7 @@ void tree::typeCheck(Node* child, bool left){
     }
 }
 
+// Checks if var is in the subtree with root child.
 bool tree::findVar(std::string var, Node* child) const{
     // std::cout << "findvar met var: " << var << "en child var" << child->var << std::endl;
     bool temp = false;
@@ -191,6 +200,8 @@ bool tree::findVar(std::string var, Node* child) const{
     return temp;
 }
 
+// Sets the type of a variable. Child is the variable, finder the root of
+// the tree we are searching in and var is the var we want to find the type of
 bool tree::setType(Node* child, Node* finder, std::string var){
     bool temp = false;
     bool temp2 = false;
@@ -243,16 +254,6 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
     return equalTrees;
 }
 
-
-
-
-
-
-
-
-
-
-
 // Print function which will call another function that will configure the output string.
 void tree::printTree() const{
     std::string output;
@@ -263,31 +264,60 @@ void tree::printTree() const{
 // Will recursively walk through the tree to determine the output. 
 // Will check for certain situations to decide to add parentheses or not. 
 void tree::printInfix(Node* child, std::string &output) const{
+    // if (child->T == SLASH){
+    //     output += "\\";
+    //     output += child->left->var;
+    //     output += " ";
+    // }
+    // else if (child->T != APP){
+    //     output += child->var;
+    //     output += " ";
+    // }
+
+    // if (child->T != SLASH && child->left != nullptr){
+    //     printInfix(child->left, output);
+    // }
+
+    // if (child->right != nullptr){
+    //     if (child->right->T == APP){
+    //         output += "(";
+    //         printInfix(child->right, output);
+    //         if (output.back() == ' '){
+    //             output.pop_back();
+    //         }
+    //         output += ")";
+    //     }
+    //     else {
+    //         printInfix(child->right, output);
+    //     }
+    // }
+    bool bracket = false;
+    if (child->T == COLON || child->T == SLASH || child->T == APP ||
+        child->T == ARROW){
+        bracket = true;
+        output += "(";
+    }
     if (child->T == SLASH){
         output += "\\";
         output += child->left->var;
         output += " ";
     }
-    else if (child->T != APP){
-        output += child->var;
+    else if (child->T == APP){
         output += " ";
+        if (child->left != nullptr){
+            printInfix(child->left, output);
+        }
     }
-
-    if (child->T != SLASH && child->left != nullptr){
-        printInfix(child->left, output);
+    else{
+        if (child->left != nullptr){
+            printInfix(child->left, output);
+        }
+        output += child->var;
     }
-
     if (child->right != nullptr){
-        if (child->right->T == APP){
-            output += "(";
-            printInfix(child->right, output);
-            if (output.back() == ' '){
-                output.pop_back();
-            }
-            output += ")";
-        }
-        else {
-            printInfix(child->right, output);
-        }
+        printInfix(child->right, output);
+    }
+    if (bracket){
+        output += ")";
     }
 }

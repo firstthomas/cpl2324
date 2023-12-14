@@ -83,7 +83,6 @@ void Tokenizer::add_application(){
         i++;
     }
     while(tokenarray[i].x != END && tokenarray[i].x != BRACKET_OPEN){
-        std::cout << i << std::endl;
         while (tokenarray[i].x == BRACKET_OPEN){
             i++;
         }

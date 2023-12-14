@@ -133,3 +133,5 @@ int main(int argc, char** argv){
 //     }
 //     delete temp; // delete node
 // }
+
+// met valgrind segfault? maar zonder niet

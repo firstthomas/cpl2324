@@ -58,7 +58,7 @@ int main(int argc, char** argv){
     // }
     std::getline(std::cin, input);
     // while (input != ""){
-    std::cout << input << std::endl;
+    // std::cout << input << std::endl;
     // Read the expression into a token array and add applications.
     Tokenizer token(input, true);
     // arraycheck(token.tokenarray, token.arraySize);

@@ -40,34 +40,6 @@ void arraycheck(Token tokenArray[], int array_size){
     std::cout << std::endl;
 }
 
-
-
-// void printTree(Node* child){
-//     if (child->T == SLASH){
-//         std::cout << "\\" << std::endl;
-//     }
-//     else if (child->T == COLON){
-//         std::cout << ":" << std::endl;
-//     }
-//     else if (child->T == APP){
-//         std::cout << "@" << std::endl;
-//     }
-//     else if (child->T == ARROW){
-//         std::cout << "->" << std::endl;
-//     }
-//     else if (child->T == EXP){
-//         std::cout << "^" << std::endl;
-//     }
-//     else if (child->T == VARIABLE){
-//         std::cout << child << std::endl;
-//     }
-//     if (child->left != nullptr){
-//         printTree(child->left);
-//     }
-//     if (child->right != nullptr){
-//         printTree(child->right);
-//     }
-// }
 void printTree(Node* child, std::string &finalTree, bool mid){
     finalTree += child->var;
     if (child->left != nullptr){
@@ -136,20 +108,26 @@ int main(int argc, char** argv){
 
     // Print the tree
     // std::cout << "tree" << std::endl;
-    std::string temp;
-    printTree(Tree->begin, temp, true);
-    std::cout << "tree: "<< temp;
+    // std::string temp;
+    // printTree(Tree->begin, temp, true);
+    // std::cout << "tree: "<< temp;
     
     //print na typecheck moet zonder de mid
     std::cout << std::endl;
-    Tree->checkTypes();
-    // Tree->typeCheck(Tree->begin, true);
     std::string temp2;
     printTree(Tree->begin, temp2, false);
+    Tree->printTree();
+
+    Tree->checkTypes();
+    // Tree->typeCheck(Tree->begin, true);
     std::cout << temp2;
     
     myFile.close();
     exit(0);
+// sla de output van de tree op en dan checktypes aan roepen daarna string printen
+// If the program exists with exit status 0 then the program should
+// output the judgement printed to standard output in an unambiguous and standardized output format (where each complex expression and type is surrounded
+// by parentheses).
 }
 
 
@@ -222,3 +200,19 @@ int main(int argc, char** argv){
 
 //Assignment 3: missing types error, kan wss als er niks is na ^ ofzo
 // typecheck functies enzo betere namen
+// print functies
+// ll grammar in readme
+// type = ptype type'
+// type' = -> type | empty
+// ptype = uvar | (type)
+
+// assignment 1 en 2 checken voor lege input en parser functies const?
+// destructor
+// comments eruit
+
+//geen print tree?
+//print tree in tree.cc denk dat die in main al goed is omdat we nu
+// string var hebben voor elke node, alleen dan zonder mid
+
+// strings mee in functie kunnen vaak constant ook ass1 en 2
+// practical assignment files testen
