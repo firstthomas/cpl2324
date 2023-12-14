@@ -113,16 +113,18 @@ int main(int argc, char** argv){
     // std::cout << "tree: "<< temp;
     
     //print na typecheck moet zonder de mid
+    Tree->checkTypes();
     std::cout << std::endl;
     std::string temp2;
     printTree(Tree->begin, temp2, false);
     Tree->printTree();
 
-    Tree->checkTypes();
+    // Tree->checkTypes();
     // Tree->typeCheck(Tree->begin, true);
     std::cout << temp2;
     
     myFile.close();
+    delete Tree;
     exit(0);
 // sla de output van de tree op en dan checktypes aan roepen daarna string printen
 // If the program exists with exit status 0 then the program should
@@ -216,3 +218,5 @@ int main(int argc, char** argv){
 
 // strings mee in functie kunnen vaak constant ook ass1 en 2
 // practical assignment files testen
+
+//privates in node.h

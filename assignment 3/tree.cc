@@ -1,6 +1,54 @@
 #include "tree.h"
 #include <sstream>
 
+// Deletes the Node temp and its childeren
+void tree::helpDestructor(Node* temp) const{
+    std::cout << "hulp" << std::endl;
+    if (temp->left != nullptr){ 
+        Node* left = temp->left;
+        helpDestructor(left);
+    }
+    if (temp->type != nullptr){
+        Node* type = temp->type;
+        helpDestructor(type);
+    }
+    if (temp->mid != nullptr){
+        Node* mid = temp->mid;
+        helpDestructor(mid);
+    }
+    if (temp->right != nullptr){
+        Node* right = temp->right;
+        helpDestructor(right);
+    }
+    std::cout << "hulp2" << std::endl;
+    delete temp; // delete node
+}
+
+// Destructor
+tree::~tree(){
+    std::cout << "destructor" << std::endl;
+    if (begin->left != nullptr){
+        Node* left = begin->left;
+        helpDestructor(left);
+    }
+    if (begin->type != nullptr){
+        Node* type = begin->type;
+        helpDestructor(type);
+    }
+    if (begin->mid != nullptr){
+        Node* mid = begin->mid;
+        helpDestructor(mid);
+    }
+    if (begin->right != nullptr){
+        Node* right = begin->right;
+        helpDestructor(right);
+    }
+    std::cout << "destructor2" << std::endl;
+    delete begin;
+}
+
+
+
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
 void tree::readIn(std::string input){
@@ -11,7 +59,6 @@ void tree::readIn(std::string input){
     begin->right = new Node();
     iss >> str;
     createTree(begin->left, iss);
-    // iss >> str;
     createTree(begin->right, iss);
 }
 
@@ -123,7 +170,7 @@ void tree::typeCheck(Node* child, bool left){
             if (equal(child->left->left, child->right)){
                 Node* temp = new Node();
                 copySubboom(child->left->right, temp);
-                //hulpdestructor(child);
+                helpDestructor(child);
                 if (left){
                     // parent->left = new Node();
                     parent->left = temp;
@@ -139,26 +186,26 @@ void tree::typeCheck(Node* child, bool left){
                 exit(1);
             }
         }
-        else if (child->right->T == ARROW){
-            if (equal(child->right->left, child->left)){
-                Node* temp = new Node();
-                copySubboom(child->right->right, temp);
-                //hulpdestructor(child);
-                if (left){
-                    // parent->left = new Node();
-                    parent->left = temp;
-                }
-                else{
-                    // parent->right = new Node();
-                    parent->right = temp;
-                }
-            }
-            else{
-                std::cout << "types do not match" << std::endl;
-                //destructor(begin);
-                exit(1);
-            }
-        }
+        // else if (child->right->T == ARROW){
+        //     if (equal(child->right->left, child->left)){
+        //         Node* temp = new Node();
+        //         copySubboom(child->right->right, temp);
+        //         //hulpdestructor(child);
+        //         if (left){
+        //             // parent->left = new Node();
+        //             parent->left = temp;
+        //         }
+        //         else{
+        //             // parent->right = new Node();
+        //             parent->right = temp;
+        //         }
+        //     }
+        //     else{
+        //         std::cout << "types do not match" << std::endl;
+        //         //destructor(begin);
+        //         exit(1);
+        //     }
+        // }
         else{
             std::cout << "Unkown type?" << std::endl;
             //destructor(begin);

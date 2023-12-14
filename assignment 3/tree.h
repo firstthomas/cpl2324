@@ -8,7 +8,10 @@ class tree{
 
     tree(){}
 
-    ~tree(){delete begin;};
+    ~tree();
+
+    // Help function for the destructor.
+    void helpDestructor(Node* temp) const;
 
     // Gets the expression as input in prefix notation. Assumes the expression
     // is valid.

@@ -32,7 +32,6 @@ class Node {
             this->left = NULL;
             this->right = NULL;
     };
-
 };
 
 #endif

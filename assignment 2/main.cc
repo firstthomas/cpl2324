@@ -135,3 +135,5 @@ int main(int argc, char** argv){
 // }
 
 // met valgrind segfault? maar zonder niet
+
+//readme!!!
