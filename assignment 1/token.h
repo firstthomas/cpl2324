@@ -20,8 +20,11 @@ struct Token{
 class Tokenizer{
 
     public:
+
+    Tokenizer(){};
+
     // Read the input string and stores it into the tokenarray as tokens
-    Tokenizer(std::string input, bool file);
+    void createTokenizer(std::string input, bool file);
     
     // Peeks the next token
     token_type peek();

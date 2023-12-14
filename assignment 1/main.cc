@@ -56,61 +56,68 @@ int main(int argc, char** argv){
     // if (input == ""){
     //     exit(1);
     // }
-    std::getline(std::cin, input);
-    // while (input != ""){
-    // std::cout << input << std::endl;
-    // Read the expression into a token array and add applications.
-    Tokenizer token(input, true);
-    // arraycheck(token.tokenarray, token.arraySize);
-    token.add_application();
-    // arraycheck(token.tokenarray, token.arraySize);
+    // std::getline(std::cin, input);
+    while (std::getline(std::cin, input)){
+        Tokenizer token = Tokenizer();
+        // Read the expression into a token array and add applications.
+        if (input[input.size()-1]== '\n' || input[input.size()-1] == '\r'){
+            token.createTokenizer(input, true);
+        }
+        else {
+            token.createTokenizer(input, false);
+        }
+        // arraycheck(token.tokenarray, token.arraySize);
+        token.add_application();
+        // arraycheck(token.tokenarray, token.arraySize);
 
-    // Pars the expression
-    Parser pars;
-    pars.expr(token);
+        // Pars the expression
+        Parser pars;
+        pars.expr(token);
 
-    tree* Tree;
-    Tree = new tree();
+        tree* Tree;
+        Tree = new tree();
 
-    // Create the postfix array from the tokenarray.
-    token.swapSlashVar();
-    token.reverseArray(token.tokenarray, token.arraySize-1);
-    token.infixToPostfix();
-    token.reverseArray(token.postfix, token.postfixSize);
-    // Builds the tree from the postfix array converted to a string
-    Tree->readIn(token.arrToStringForTree());
+        // Create the postfix array from the tokenarray.
+        token.swapSlashVar();
+        token.reverseArray(token.tokenarray, token.arraySize-1);
+        token.infixToPostfix();
+        token.reverseArray(token.postfix, token.postfixSize);
+        // Builds the tree from the postfix array converted to a string
+        Tree->readIn(token.arrToStringForTree());
 
-    // Print the tree
-    std::string outputPrint1;
-    Tree->printTree(outputPrint1);
-    // Parsers own ouput and produce the result again
-    Tokenizer token2(outputPrint1, false);
-    token2.add_application();
-    
-    // Pars the expression
-    Parser pars2;
-    pars2.expr(token2);
+        // Print the tree
+        // std::string outputPrint1;
+        Tree->printTree();
+        
+        // eigen output parsen hoeft niet moet alleen zijn eigen output kunnen parsen maar hoef je niet te testen
+        // Parsers own ouput and produce the result again
+        // Tokenizer token2(outputPrint1, false);
+        // token2.add_application();
+        
+        // // Pars the expression
+        // Parser pars2;
+        // pars2.expr(token2);
 
-    tree* Tree2;
-    Tree2 = new tree();
+        // tree* Tree2;
+        // Tree2 = new tree();
 
-    // Create the postfix array from the tokenarray.
-    token2.swapSlashVar();
-    token2.reverseArray(token2.tokenarray, token2.arraySize-1);
-    token2.infixToPostfix();
-    token2.reverseArray(token2.postfix, token2.postfixSize);
+        // // Create the postfix array from the tokenarray.
+        // token2.swapSlashVar();
+        // token2.reverseArray(token2.tokenarray, token2.arraySize-1);
+        // token2.infixToPostfix();
+        // token2.reverseArray(token2.postfix, token2.postfixSize);
 
-    // Builds the tree from the postfix array converted to a string
-    Tree2->readIn(token2.arrToStringForTree());
+        // // Builds the tree from the postfix array converted to a string
+        // Tree2->readIn(token2.arrToStringForTree());
 
-    // Print the tree
-    std::string outputPrint2;
-    Tree2->printTree(outputPrint2);
+        // // Print the tree
+        // std::string outputPrint2;
+        // Tree2->printTree(outputPrint2);
 
-    delete Tree;
-    delete Tree2;
-    std::getline(std::cin, input);
-    // }
+        delete Tree;
+        // delete Tree2;
+        // std::getline(std::cin, input);
+    }
     // myFile.close();
     exit(0);
 }
@@ -120,6 +127,9 @@ int main(int argc, char** argv){
 // all de onnodig commentaar weghalen
 // MEERDERE EXPRESSIE SEGFAULT SOMS Bij < POSITIVES.TXT moet hier voor werken
 // input abc werkt niet wordt ab ofzo
+
+
+//readme assignment 1
 
 // 1.3.1 Positive examples
 // The following examples are acceptable (the program must work if the program
@@ -143,3 +153,4 @@ int main(int argc, char** argv){
 
 
 //private functions in parser!!!!! elke assignment
+//make clean voor elke assignment

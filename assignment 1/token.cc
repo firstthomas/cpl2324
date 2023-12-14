@@ -4,7 +4,7 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-Tokenizer::Tokenizer(std::string input, bool file){
+void Tokenizer::createTokenizer(std::string input, bool file){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.

@@ -22,3 +22,4 @@ a (\x d \x a (b c))
 (\x \y x)(\z y)
 \x \y (x z) y
 (\x x)(\y y)
+a

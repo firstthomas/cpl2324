@@ -25,11 +25,13 @@ void tree::createTree(Node* child, std::istringstream &iss){
 }
 
 // Print function which will call another function that will configure the output string.
-void tree::printTree(std::string &output) const{
-    // std::string output;
+void tree::printTree() const{
+    std::string output;
     printInfix(begin, output);
-    output.pop_back();
-    output.erase(0, 1);
+    if (output.size() > 1 && begin->T != VARIABLE){
+        output.pop_back();
+        output.erase(0, 1);
+    }
     std::cout << output << std::endl;
 }
 

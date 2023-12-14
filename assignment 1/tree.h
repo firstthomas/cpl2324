@@ -18,7 +18,7 @@ class tree{
     void createTree(Node* child, std::istringstream &iss);
 
     // Print function which will call another function that will configure the output string.
-    void printTree(std::string &output) const;
+    void printTree() const;
 
     Node* begin;// Root of the tree
     

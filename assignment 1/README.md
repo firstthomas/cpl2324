@@ -14,9 +14,7 @@ Operating system:
     Ubuntu 20.04.2
 
 About the program:
-    The program should fully work as intended and can be stopped
-    A deviation from the assignment is that when replacing variables we add an exclamation mark after the variable so it will always be different. We thought that replacing them with standard letters such as 'w' or 'y' could create problems where these letters were already being used in the input. So instead we just do the exclamation mark.
-    We also convert the expression to the prefix format and then build the tree instead of building the tree while parsing the expression.
+    The program should fully work as intended. To run the program with a file use "./main < filename". To run with input use ./main and give the input, to end the program press enter, an error will still be given but this can be ignored.
 
 Reduction strategies:
     Our reduction strategy is as follows:
