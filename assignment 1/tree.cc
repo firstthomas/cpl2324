@@ -1,11 +1,37 @@
 #include "tree.h"
 #include <sstream>
 
+// Deletes the Node temp and its childeren
+void tree::helpDestructor(Node* temp) const{
+    if (temp->left != nullptr){ 
+        helpDestructor(temp->left);
+    }
+    if (temp->right != nullptr){
+        helpDestructor(temp->right);
+    }
+    delete temp; // delete node
+}
+
+// Destructor
+tree::~tree(){
+    if (begin->left != nullptr){
+        helpDestructor(begin->left);
+    }
+    if (begin->right != nullptr){
+        helpDestructor(begin->right);
+    }
+    delete begin; // delete begin
+}
+
+// Constructor
+tree::tree(){
+    begin = new Node();
+}
+
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
 void tree::readIn(std::string input){
     std::istringstream iss(input);
-    begin = new Node();
     createTree(begin, iss);
 }
 
@@ -13,8 +39,7 @@ void tree::readIn(std::string input){
 void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
-    delete child;
-    child = new Node(str);
+    child->setNodeValues(str);
     if ((str[0] > 64 && str[0] < 91) || (str[0] > 96 && str[0] < 123)){
         return;
     }

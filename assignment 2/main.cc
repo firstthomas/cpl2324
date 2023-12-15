@@ -3,17 +3,6 @@
 #include "parser.h"
 #include "tree.h"
 
-// void printTree(Node* child, std::string &finalTree){
-//     finalTree += child->var;
-//     if (child->left != nullptr){
-//         printTree(child->left, finalTree);
-//     }
-//     if (child->right != nullptr){
-//         printTree(child->right, finalTree);
-//     }
-// }
-
-
 // Asks the user for 1 or more input expressions and reads it into a
 // a string of tokens. Then parses the token string and returns output to 
 // the standard output. It then repeats these steps on its own output.
@@ -42,12 +31,12 @@ int main(int argc, char** argv){
     Tokenizer token(input, true);
     token.add_application();
 
+    // Pars the expression
+    Parser *pars = new Parser();
+    pars->expr(token);
+
     tree* Tree;
     Tree = new tree();
-
-    // Pars the expression
-    Parser pars;
-    pars.expr(token);
 
     // Create the postfix array from the tokenarray.
     token.swapSlashVar();
@@ -63,6 +52,8 @@ int main(int argc, char** argv){
     Tree->printTree();
     
     myFile.close();
+    delete pars;
+    delete Tree;
     exit(0);
 }
 
@@ -137,3 +128,7 @@ int main(int argc, char** argv){
 // met valgrind segfault? maar zonder niet
 
 //readme!!!
+
+// copy tree en copy subboom doen volgens mij hetzelfde
+
+// mail over \x (\x (x x)) \x (\x (x x)) en hier memory leaks

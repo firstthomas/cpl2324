@@ -6,16 +6,18 @@
 class tree{
     public:
 
-    tree(){}
+    // Constructor
+    tree();
 
-    ~tree(){delete begin;};
+    // Destructor
+    ~tree();
+
+    // Help function for the destructor.
+    void helpDestructor(Node* temp) const;
 
     // Gets the expression as input in prefix notation. Assumes the expression
     // is valid.
     void readIn(std::string input);
-
-    // Builds the tree using recursion.
-    void createTree(Node* child, std::istringstream &iss);
 
     // Reduces the abstract syntax tree with beta reduction(s) if possible.
     // Uses alpha conversions if necessary
@@ -23,10 +25,13 @@ class tree{
 
     // Print function which will call another function that will configure the output string.
     void printTree() const;
-
-    Node* begin;// Root of the tree
     
     private:
+
+    Node* begin;// Root of the tree
+
+    // Builds the tree using recursion.
+    void createTree(Node* child, std::istringstream &iss);
 
     // Looks for an Application with Lambda as its left child in the subtree walker
     Node* findAppLambda(Node* walker, bool &found) const;

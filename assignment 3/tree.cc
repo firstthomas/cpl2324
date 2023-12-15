@@ -18,11 +18,6 @@ void tree::helpDestructor(Node* temp) const{
     delete temp; // delete node
 }
 
-
-tree::tree(){
-    begin = new Node();
-}
-
 // Destructor
 tree::~tree(){
     if (begin->left != nullptr){
@@ -38,6 +33,11 @@ tree::~tree(){
         helpDestructor(begin->right);
     }
     delete begin; // delete begin
+}
+
+// Constructor
+tree::tree(){
+    begin = new Node();
 }
 
 // Gets the expression as input in prefix notation. Assumes the expression

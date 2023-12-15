@@ -4,12 +4,12 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-void Tokenizer::createTokenizer(std::string input, bool file){
+void Tokenizer::createTokenizer(std::string input, bool lastLine){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.
     int hulp;
-    if (file){
+    if (lastLine){
         hulp = input.size() -1;
     }
     else {
@@ -41,28 +41,28 @@ void Tokenizer::createTokenizer(std::string input, bool file){
                     tokenarray[k].y += input[i];
                 }
                 else { // False input.
-                    std::cout << "Incorrect character input" << std::endl;
+                    std::cerr << "Incorrect character input" << std::endl;
                     exit(1);
                 }
             }
         }
         else if(input[i] != '\n' && input[i] != '\r'){ // False input.
-            std::cout << "Incorrect character input" << std::endl;
+            std::cerr << "Incorrect character input" << std::endl;
             exit(1);
         }
         k++;
     }
     if (open_count != close_count){ // Bracket_open not equal to Bracket_close.
-        std::cout << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
+        std::cerr << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
         exit(1);
     }
-    //Mark the end of the array
+    //Mark the end of the array and set the arraySize
     tokenarray[k].x = END;
     k++;
     arraySize = k;
 }
 
-// Inserts application at the position pos.
+// Inserts application at the position pos if pos is not the end.
 void Tokenizer::insert_application(int pos){
     if (tokenarray[pos].x != END){
         for (int i = arraySize; i > pos; i--){
@@ -74,7 +74,7 @@ void Tokenizer::insert_application(int pos){
     }
 }
 
-// Adds application to the array.
+// Calls insert_application for the postitions where an application is needed.
 void Tokenizer::add_application(){
     int varCounter = 0;
     bool slash = false;

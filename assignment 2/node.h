@@ -13,18 +13,18 @@ class Node {
     // Standaard constructor for a Node.
     Node(){
         this->var = "-1";
-        this->left = NULL;
-        this->right = NULL;
+        this->left = nullptr;
+        this->right = nullptr;
     };
     
     // Constructor with input for a Node.
-    Node(std::string str){
+    void setNodeValues(std::string str){
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
             else if (str == "@"){this->T = APP;}
             else{this->T = VARIABLE;}
-            this->left = NULL;
-            this->right = NULL;
+            this->left = nullptr;
+            this->right = nullptr;
     };
 
 };

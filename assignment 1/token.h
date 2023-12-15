@@ -21,10 +21,11 @@ class Tokenizer{
 
     public:
 
+    // Constructor
     Tokenizer(){};
 
     // Read the input string and stores it into the tokenarray as tokens
-    void createTokenizer(std::string input, bool file);
+    void createTokenizer(std::string input, bool lastLine);
     
     // Peeks the next token
     token_type peek();
@@ -48,9 +49,10 @@ class Tokenizer{
     // Converts the array back to a string.
     std::string arrToStringForTree() const;
 
-    // Array in which character are stored as tokens
+    // Array in which characters are stored as tokens
     Token tokenarray[maxSize];
 
+    // Array to store the postfix expression as tokens
     Token postfix[maxSize];
 
     int arraySize;// Stores the size of the token array

@@ -9,6 +9,7 @@ class Parser{
     // Function that simulates the expr part of the LL grammar
     void expr(Tokenizer &token);
     
+    private:
     // Function that simulates the lexpr part of the LL grammar
     void lexpr(Tokenizer &token);
 
