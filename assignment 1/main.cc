@@ -25,8 +25,7 @@ int main(int argc, char** argv){
         Parser *pars = new Parser();
         pars->expr(token);
 
-        tree* Tree;
-        Tree = new tree();
+        tree* Tree = new tree();
 
         // Create the postfix array from the tokenarray.
         token.createPostfixArray();
@@ -47,9 +46,10 @@ int main(int argc, char** argv){
 // practical assignment files testen zie brightspace
 // nog wat code lenght en style controleren
 // const correctness?
-//make clean voor elke assignment
 // outputs a character string in a standard format to standard output
 // this format may be explained in the README ook in assignment 2 en 3
+//make clean voor elke assignment
+// voor negatives voorbeelden uit assignment gebruiken
 
 // Assingment 1
 // output klopt niet altijd
@@ -75,7 +75,7 @@ int main(int argc, char** argv){
 
 // assignment 3
 // alleen vanuit file niet vanaf input inlezen
-// typecheck functies enzo betere namen
+// typecheck functies enzo betere namen, setType en setTypes
 
 // An archive (positive.tar.gz) of the positive examples used for testing.
 // • An archive (negative.tar.gz) of the negative examples used for testing.

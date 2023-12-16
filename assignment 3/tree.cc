@@ -103,6 +103,7 @@ void tree::checkTypes(){
     typeCheck(begin, true);
     if (!equal(begin->left, begin->right)){
         std::cerr << "types do not match" << std::endl;
+        helpDestructor(begin);
         exit(1);
     }
 }
@@ -155,6 +156,7 @@ void tree::typeCheck(Node* child, bool left){
             }
             else{
                 std::cerr << "types do not match" << std::endl;
+                helpDestructor(begin);
                 exit(1);
             }
         }
@@ -179,8 +181,10 @@ void tree::typeCheck(Node* child, bool left){
         //     }
         // }
         else{
-            std::cerr << "Application rule cannot be applied?" << std::endl;
-            exit(1);
+            std::cerr << "No more rule to be applied" << std::endl;
+            helpDestructor(begin);
+            std::cout << output << std::endl;
+            exit(0);
         }
     }
     else if (child->T == VARIABLE){
@@ -188,6 +192,7 @@ void tree::typeCheck(Node* child, bool left){
         child->var += "!";
         if (!setType(child, begin->left, var)){
             std::cerr << "Unkown type for variable " << var << std::endl;
+            helpDestructor(begin);
             exit(1);
         }
         copySubboom(child->type, child);
@@ -219,6 +224,9 @@ bool tree::setType(Node* child, Node* finder, const std::string var){
     bool temp2 = false;
     if (finder->T == SLASH && (finder->left->var == var)){
         if (findVar(child->var, finder->right)){
+            if (child->type != nullptr){
+                helpDestructor(child->type);
+            }
             child->type = new Node();
             copySubboom(finder->left->type, child->type);
             temp = true;
@@ -264,13 +272,13 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
 }
 
 // Print function which will call another function that will configure the output string.
-void tree::printTree(std::string &output) const{
-    printInfix(begin, output);
+void tree::printTree() {
+    printInfix(begin);
 }
 
 // Will recursively walk through the tree to determine the output. 
 // Will check for certain situations to decide to add parentheses or not. 
-void tree::printInfix(Node* child, std::string &output) const{
+void tree::printInfix(Node* child) {
     bool bracket = false;
     if (child->T == COLON || child->T == SLASH || child->T == APP ||
         child->T == ARROW){
@@ -280,22 +288,24 @@ void tree::printInfix(Node* child, std::string &output) const{
     if (child->T == SLASH){
         output += "\\";
         output += child->left->var;
+        output += "^";
+        printInfix(child->mid);
         output += " ";
     }
     else if (child->T == APP){
         output += " ";
         if (child->left != nullptr){
-            printInfix(child->left, output);
+            printInfix(child->left);
         }
     }
     else{
         if (child->left != nullptr){
-            printInfix(child->left, output);
+            printInfix(child->left);
         }
         output += child->var;
     }
     if (child->right != nullptr){
-        printInfix(child->right, output);
+        printInfix(child->right);
     }
     if (bracket){
         output += ")";

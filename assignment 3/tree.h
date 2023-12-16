@@ -5,8 +5,10 @@
 class tree{
     public:
 
+    // Constructor
     tree();
 
+    // Destructor, calls helpDestructor
     ~tree();
 
     // Help function for the destructor.
@@ -30,9 +32,11 @@ class tree{
     void checkTypes();
 
     // Print function which will call another function that will configure the output string.
-    void printTree(std::string &output) const;
+    void printTree();
 
     Node* begin;// Root of the tree
+
+    std::string output; // Output string of the tree
     
     private:
 
@@ -50,7 +54,7 @@ class tree{
 
     // Will recursively walk through the tree to determine the output. 
     // Will check for certain situations to decide to add parentheses or not. 
-    void printInfix(Node* child, std::string &output) const;
+    void printInfix(Node* child);
 };
 
 

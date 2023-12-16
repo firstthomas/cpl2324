@@ -44,5 +44,8 @@ How the program works:
     
     After creating the output we first typeCheck the tree. Our 
     typeCheck() function is based on the three rules from the lectures. We apply these rules to the left child of our root and then check if the left and right side are equal.
+    
+    For \y^B(y \x^B y) : B -> B as input type checking cannot be fully apllied and we give an error but still print the output.
+    According to the teacher this expression could still have correct types but because we cannot apply the rules any further we cannot check if the types are correct.
 
     After this we call the destructor for the tree to avoid memory leaks.

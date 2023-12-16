@@ -1,4 +1,4 @@
-(\x^A x):(A -> A)
+\y^B(y \x^B y) : B -> B
 0
 (\x^A x):(A -> A)
 (\x^B (\x^A x)):(B -> (A -> A))
@@ -13,4 +13,6 @@ negatives:
 \z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A) types do not match
 (\x^A x) missing types
 (\x x) missing ^ after lambda abstraction
-\x^A -> A (x y) : A Unknown type for variable y
+\x^A -> A (x y) : A     Unknown type for variable y
+(x y): A -> B -> J A    Unknown type for variable x
+\x^A x:B->B             types do not match memory leaks waarom?

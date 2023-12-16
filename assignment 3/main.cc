@@ -26,8 +26,7 @@ int main(int argc, char** argv){
         Parser *pars = new Parser();
         pars->judge(token);
 
-        tree* Tree;
-        Tree = new tree();
+        tree* Tree = new tree();
 
         // Create the postfix array from the tokenarray.
         token.createPostfixArray();
@@ -36,13 +35,12 @@ int main(int argc, char** argv){
         Tree->readIn(token.arrToStringForTree());
 
         // call printTree() before changing the tree with checkTypes()
-        std::string temp2;
-        Tree->printTree(temp2);
+        Tree->printTree();
 
         // Check if types are correct
         Tree->checkTypes();
         // Print the tree
-        std::cout << temp2 << std::endl;
+        std::cout << Tree->output << std::endl;
 
         delete pars;
         delete Tree;
@@ -56,3 +54,4 @@ int main(int argc, char** argv){
 //meer testen
 // readme
 // voorbeeld met application die niet weg kan
+// output niet goed moet hetzelfde als input meer haakjes mag
