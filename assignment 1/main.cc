@@ -49,14 +49,15 @@ int main(int argc, char** argv){
 // outputs a character string in a standard format to standard output
 // this format may be explained in the README ook in assignment 2 en 3
 //make clean voor elke assignment
-// voor negatives voorbeelden uit assignment gebruiken
+// voor negatives voorbeelden uit assignment gebruiken en meer
 
 // Assingment 1
 // output klopt niet altijd
 // \x (\x (x x)) \x (\x (x x) voor deze denk ik ook assignment 2
 // negatives.txt
+// alle onnodige files verwijderen
 
-// te veel haakjes in output denk ik
+// te veel haakjes in output
 //a ((((\x a)((b c))(\x d))
 // a ((h (((\x a)((b c)))
 // a ((((\x d)(\x a))((b c))
@@ -79,3 +80,7 @@ int main(int argc, char** argv){
 
 // An archive (positive.tar.gz) of the positive examples used for testing.
 // • An archive (negative.tar.gz) of the negative examples used for testing.
+
+// output niet goed moet hetzelfde als input meer haakjes mag
+
+//meer testen

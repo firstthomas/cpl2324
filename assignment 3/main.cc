@@ -47,11 +47,3 @@ int main(int argc, char** argv){
     }
     exit(0);
 }
-
-
-//Assignment 3:
-// comments eruit
-//meer testen
-// readme
-// voorbeeld met application die niet weg kan
-// output niet goed moet hetzelfde als input meer haakjes mag

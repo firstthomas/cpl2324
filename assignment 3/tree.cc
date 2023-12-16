@@ -160,26 +160,6 @@ void tree::typeCheck(Node* child, bool left){
                 exit(1);
             }
         }
-        // else if (child->right->T == ARROW){
-        //     if (equal(child->right->left, child->left)){
-        //         Node* temp = new Node();
-        //         copySubboom(child->right->right, temp);
-        //         //hulpdestructor(child);
-        //         if (left){
-        //             // parent->left = new Node();
-        //             parent->left = temp;
-        //         }
-        //         else{
-        //             // parent->right = new Node();
-        //             parent->right = temp;
-        //         }
-        //     }
-        //     else{
-        //         std::cerr << "types do not match" << std::endl;
-        //         //destructor(begin);
-        //         exit(1);
-        //     }
-        // }
         else{
             std::cerr << "No more rule to be applied" << std::endl;
             helpDestructor(begin);

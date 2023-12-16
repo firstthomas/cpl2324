@@ -36,7 +36,7 @@ How the program works:
     Where uvar is variable that starts with a uppercase letter and lvar with a lowercase letter. The parser reports an error and exits the program with status 1 if the expression does not satisfy the LL grammar.
 
     After parsing the expression we want to typeCheck the expression.
-     output the expression unambiguous with the least amount of whitespace and parentheses.
+    output the expression unambiguous with the least amount of whitespace and parentheses.
     To do this we build a tree. To build this tree we first create a postifx token array by using a algorithm to convert infix to prefix that uses a stack.
     Because our typeChecking changes the tree we first create the output by walking through the tree inorder.
     
@@ -45,7 +45,7 @@ How the program works:
     After creating the output we first typeCheck the tree. Our 
     typeCheck() function is based on the three rules from the lectures. We apply these rules to the left child of our root and then check if the left and right side are equal.
     
-    For \y^B(y \x^B y) : B -> B as input type checking cannot be fully apllied and we give an error but still print the output.
+    For \y^B(y \x^B y) : B -> B as input, type checking cannot be fully apllied and we give an error but still print the output.
     According to the teacher this expression could still have correct types but because we cannot apply the rules any further we cannot check if the types are correct.
 
     After this we call the destructor for the tree to avoid memory leaks.
