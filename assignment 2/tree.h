@@ -45,16 +45,16 @@ class tree{
 
     // Replaces every variable equal to var in the subtree with root walker by 
     // the subtree with root replaceWithTree.
-    void replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree) const;
+    void replaceVarWithTree(Node* walker, const std::string var, Node* replaceWithTree) const;
 
     // Returns true if replaceVar is somewhere in the subtree with root walker.
     void findFreeVar(Node* walker, std::vector<std::string> &alleVar) const;
 
     // Returns true if replaceVar is somewhere in the subtree with root walker.
-    bool findReplaceVar(Node* walker, std::string replaceVar) const;
+    bool findReplaceVar(Node* walker, const std::string replaceVar) const;
 
     // Applies alpha conversion if necessary
-    void replaceFreeVar(Node* walker, std::vector<std::string> &alleVar, std::string replaceVar) const;
+    void replaceFreeVar(Node* walker, std::vector<std::string> &alleVar, const std::string replaceVar) const;
 
     // Stores all variables in the subtree with root walker into the vector freeVar.
     void findVar(Node* walker, std::vector<std::string> &freeVar) const;

@@ -10,7 +10,9 @@ class Node {
         token_type T; // Token Type
         Node* left = nullptr; // Pointer to left child in the tree.
         Node* right = nullptr; // Pointer to right child in the tree.
-        Node* mid = nullptr;
+        // A node with type SLASH has a middle child that contains the type
+        // of its variable (left child).
+        Node* mid = nullptr; 
 
     // Standaard constructor for a Node.
     Node(){
@@ -23,7 +25,6 @@ class Node {
     
     // "Constructor" with input for a Node.
     void setNodeValues(std::string str){
-            // std::cout << str << std::endl;
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
             else if (str == "@"){this->T = APP;}

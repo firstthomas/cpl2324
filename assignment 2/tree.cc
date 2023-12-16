@@ -109,7 +109,7 @@ void tree::copySubboom(Node* child, Node* temp) const{
 
 // Replaces every variable equal to var in the subtree with root walker by 
 // the subtree with root replaceWithTree.
-void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTree) const{
+void tree::replaceVarWithTree(Node* walker, const std::string var, Node* replaceWithTree) const{
     // Booleans that are set to true if the left or right child were variables
     // before they were replaced.
     bool left = false;
@@ -290,7 +290,7 @@ void tree::reduce(){
 } 
 
 // Returns true if replaceVar is somewhere in the subtree with root walker.
-bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
+bool tree::findReplaceVar(Node* walker, const std::string replaceVar) const{
     if (walker->T == SLASH && walker->left->var == replaceVar){
         return false;
     }
@@ -310,7 +310,7 @@ bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
 // beta reduction)
 // The first function call is with walker as a pointer to the right child of an
 // lambda for which beta reduction is performed. 
-void tree::replaceFreeVar(Node* walker, std::vector<std::string> &allVar, std::string replaceVar) const{
+void tree::replaceFreeVar(Node* walker, std::vector<std::string> &allVar, const std::string replaceVar) const{
     if (walker->T == SLASH && findReplaceVar(walker->right, replaceVar)){
         for (long long unsigned int i = 0; i < allVar.size(); i++){
             if (walker->left->var == allVar[i]){

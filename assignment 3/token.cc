@@ -4,7 +4,7 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-Tokenizer::Tokenizer(std::string input, bool file){
+void Tokenizer::createTokenizer(std::string input, const bool file){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.
@@ -36,7 +36,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
                 tokenarray[k].x = ARROW;
             }
             else { // False input.
-                std::cout << "Incorrect character input" << std::endl;
+                std::cerr << "Incorrect character input" << std::endl;
                 exit(1);
             }
         }
@@ -62,19 +62,19 @@ Tokenizer::Tokenizer(std::string input, bool file){
                     break;
                 }
                 else { // False input.
-                    std::cout << "Incorrect character input" << std::endl;
+                    std::cerr << "Incorrect character input" << std::endl;
                     exit(1);
                 }
             }
         }
         else if(input[i] != '\n' && input[i] != '\r'){ // False input.
-            std::cout << "Incorrect character input" << std::endl;
+            std::cerr << "Incorrect character input" << std::endl;
             exit(1);
         }
         k++;
     }
     if (open_count != close_count){ // Bracket_open not equal to Bracket_close.
-        std::cout << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
+        std::cerr << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
         exit(1);
     }
     //Mark the end of the array
@@ -84,7 +84,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
 }
 
 // Inserts application at the position pos.
-void Tokenizer::insert_application(int pos){
+void Tokenizer::insert_application(const int pos){
     if (tokenarray[pos].x != END && tokenarray[pos].x != COLON && tokenarray[pos].x != ARROW){
         for (int i = arraySize; i > pos; i--){
             tokenarray[i] = tokenarray[i - 1];
@@ -126,9 +126,6 @@ void Tokenizer::add_application(){
             slash = true;
         }
         else if(tokenarray[i].x == VARIABLE){
-            // if (tokenarray[i+1].x != EXP && tokenarray[i+1].x != ARROW){
-            //     varCounter++;
-            // }
             if (tokenarray[i+1].x != EXP && tokenarray[i+1].x != ARROW){
                 while (tokenarray[i+1].x == BRACKET_CLOSE){
                     i++;
@@ -156,8 +153,20 @@ void Tokenizer::consume(){
     j++;
 }
 
+// Returns if variable at position j starts with a lowercase letter
+bool Tokenizer::lowercase(){
+    return (tokenarray[j].y[0] > 96 &&  tokenarray[j].y[0] < 123);
+}
+
+void Tokenizer::createPostfixArray(){
+    swapSlashVar();
+    reverseArray(tokenarray, arraySize-1);
+    infixToPostfix();
+    reverseArray(postfix, postfixSize);    
+}
+
 // Reverses the array tokenArr with size Size.
-void Tokenizer::reverseArray(Token tokenArr[], int Size){
+void Tokenizer::reverseArray(Token tokenArr[], const int Size){
     int start = 0;
     int end = Size-1;
     while (start < end){
@@ -178,7 +187,7 @@ void Tokenizer::reverseArray(Token tokenArr[], int Size){
 }
 
 
-int prec(token_type c)
+int Tokenizer::prec(const token_type c)
 {
     if (c == EXP)
         return 4;
@@ -200,7 +209,7 @@ void Tokenizer::infixToPostfix(){
     std::string element;
     int k = 0;
     for(int i = 0; i < arraySize; i++){
-        if(tokenarray[i].x == VARIABLE){ //|| tokenarray[i].x == EXP){
+        if(tokenarray[i].x == VARIABLE){
             postfix[k] = tokenarray[i];
             k++;
         }
@@ -218,16 +227,6 @@ void Tokenizer::infixToPostfix(){
         else if(tokenarray[i].x == END){
             continue;
         }
-        // else{
-        //     while(!st.empty() && st.top().x != BRACKET_OPEN && (
-        //     (st.top().x == SLASH && tokenarray[i].x == SLASH)
-        //     || (st.top().x == SLASH && tokenarray[i].x == APP))){
-        //         postfix[k] = st.top();
-        //         k++;
-        //         st.pop();
-        //     }
-        //     st.push(tokenarray[i]);
-        // }
         else{
             while(!st.empty() && st.top().x != BRACKET_OPEN &&
                   prec(tokenarray[i].x) <= prec(st.top().x)){
@@ -274,9 +273,6 @@ std::string Tokenizer::arrToStringForTree() const{
         }
         else if (postfix[i].x == ARROW){
             str += "->";
-            // if (postfix[i+1].x == EXP){
-            //     i++;
-            // }
         }
         else if (postfix[i].x == EXP){
             str += "^";
@@ -286,11 +282,5 @@ std::string Tokenizer::arrToStringForTree() const{
         }
         str += " ";
     }
-    std::cout << "arrtostring string " << str << std::endl;
     return str;
-}
-
-// Returns if variable at position j starts with a lowercase letter
-bool Tokenizer::lowercase(){
-    return (tokenarray[j].y[0] > 96 &&  tokenarray[j].y[0] < 123);
 }

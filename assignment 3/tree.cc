@@ -45,8 +45,6 @@ tree::tree(){
 void tree::readIn(std::string input){
     std::istringstream iss(input);
     std::string str;
-    // delete begin;
-    // begin = new Node(":");
     begin->setNodeValues(":");
     begin->left = new Node();
     begin->right = new Node();
@@ -59,11 +57,7 @@ void tree::readIn(std::string input){
 void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
-    // delete child;
-    // Node* temp = new Node(str);
-    // child = new Node(str);
     child->setNodeValues(str);
-    // child = temp;
     if (str == "-"){
         iss >> str;
     }
@@ -75,17 +69,8 @@ void tree::createTree(Node* child, std::istringstream &iss){
     if (str == "\\"){
         iss >> str;
         if (str == "^"){
-            std::cout << "dakje" << std::endl;
             child->mid = new Node();
             createTree(child->mid, iss);
-        }
-        else if (str == "->"){
-            std::cout << "dakje2 als het goed is nooit hier" << std::endl;
-            // child->mid = new Node("->");
-            child->mid->left = new Node();
-            child->mid->right = new Node();
-            createTree(child->mid->left, iss);
-            createTree(child->mid->right, iss);
         }
     }
     child->right = new Node();
@@ -94,7 +79,6 @@ void tree::createTree(Node* child, std::istringstream &iss){
 
 // Copies the subtree with root child to the subtree with root temp.
 void tree::copySubboom(Node* child, Node* temp) const{
-    // temp->setNodeValues(child->var);
     temp->T = child->T;
     temp->var = child->var;
     if (child->left != nullptr){
@@ -118,7 +102,7 @@ void tree::copySubboom(Node* child, Node* temp) const{
 void tree::checkTypes(){
     typeCheck(begin, true);
     if (!equal(begin->left, begin->right)){
-        std::cout << "types do not match" << std::endl;
+        std::cerr << "types do not match" << std::endl;
         exit(1);
     }
 }
@@ -157,7 +141,6 @@ void tree::typeCheck(Node* child, bool left){
     else if (child->T == APP){
         typeCheck(child, true);
         typeCheck(child, false);
-        std::cout << child->left->T << std::endl;
         if (child->left->T == ARROW){
             if (equal(child->left->left, child->right)){
                 Node* temp = new Node();
@@ -171,7 +154,7 @@ void tree::typeCheck(Node* child, bool left){
                 }
             }
             else{
-                std::cout << "types do not match" << std::endl;
+                std::cerr << "types do not match" << std::endl;
                 exit(1);
             }
         }
@@ -190,13 +173,13 @@ void tree::typeCheck(Node* child, bool left){
         //         }
         //     }
         //     else{
-        //         std::cout << "types do not match" << std::endl;
+        //         std::cerr << "types do not match" << std::endl;
         //         //destructor(begin);
         //         exit(1);
         //     }
         // }
         else{
-            std::cout << "Application rule cannot be applied?" << std::endl;
+            std::cerr << "Application rule cannot be applied?" << std::endl;
             exit(1);
         }
     }
@@ -204,7 +187,7 @@ void tree::typeCheck(Node* child, bool left){
         std::string var = child->var;
         child->var += "!";
         if (!setType(child, begin->left, var)){
-            std::cout << "Unkown type for variable " << var << std::endl;
+            std::cerr << "Unkown type for variable " << var << std::endl;
             exit(1);
         }
         copySubboom(child->type, child);
@@ -212,8 +195,7 @@ void tree::typeCheck(Node* child, bool left){
 }
 
 // Checks if var is in the subtree with root child.
-bool tree::findVar(std::string var, Node* child) const{
-    // std::cout << "findvar met var: " << var << "en child var" << child->var << std::endl;
+bool tree::findVar(const std::string var, Node* child) const{
     bool temp = false;
     if (child->T == VARIABLE){
         if (child->var == var){
@@ -231,25 +213,22 @@ bool tree::findVar(std::string var, Node* child) const{
 }
 
 // Sets the type of a variable. Child is the variable, finder the root of
-// the tree we are searching in and var is the var we want to find the type of
-bool tree::setType(Node* child, Node* finder, std::string var){
+// the tree we are searching in and var is the var we want to find the type of.
+bool tree::setType(Node* child, Node* finder, const std::string var){
     bool temp = false;
     bool temp2 = false;
     if (finder->T == SLASH && (finder->left->var == var)){
         if (findVar(child->var, finder->right)){
             child->type = new Node();
-            // std::cout << finder->left->type->T << std::endl;
             copySubboom(finder->left->type, child->type);
             temp = true;
         }
         else{
-            // std::cout << "false" << std::endl;
             return false;
         }
     }
     if (finder->left != nullptr){
         temp2 = setType(child, finder->left, var);
-        // std::cout << "temp2 false?" << temp2 << std::endl;
         if (!temp2){
             temp2 = setType(child, finder->right, var);
         }

@@ -43,11 +43,10 @@ class tree{
     bool equal(Node* oldTree, Node* newTree) const;
 
     // Returns if var is in child
-    bool findVar(std::string var, Node* child) const;
+    bool findVar(const std::string var, Node* child) const;
 
     // Finds and sets the type of node child which is a variable.
-    bool setType(Node* child, Node* finder, std::string var);
-
+    bool setType(Node* child, Node* finder, const std::string var);
 
     // Will recursively walk through the tree to determine the output. 
     // Will check for certain situations to decide to add parentheses or not. 

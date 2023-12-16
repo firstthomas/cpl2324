@@ -39,7 +39,7 @@ How the program works:
     After this we pars the token array using a peek and consume function and a class counter j to remember the position in the token array. The array is parsed using the following LL grammar:
         <expr> = <lexpr><expr'>
         <expr'> = <lexpr><expr'> | empty
-        <lexpr'> = <pexpr> | λ <var> <lexpr'>
+        <lexpr> = <pexpr> | λ <var> <lexpr>
         <pexpr> = <var> | (<expr>)
     The parser reports an error and exits the program with status 1 if the expression does not satisfy the LL grammar.
 

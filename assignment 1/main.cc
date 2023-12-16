@@ -45,28 +45,21 @@ int main(int argc, char** argv){
 
 // alle:
 // practical assignment files testen zie brightspace
-
-// Assingment 1
+// nog wat code lenght en style controleren
+// const correctness?
+//make clean voor elke assignment
 // outputs a character string in a standard format to standard output
 // this format may be explained in the README ook in assignment 2 en 3
-// output 3 is anders
 
+// Assingment 1
+// output klopt niet altijd
+// \x (\x (x x)) \x (\x (x x) voor deze denk ik ook assignment 2
+// negatives.txt
 
-// Veel haakjes?
+// te veel haakjes in output denk ik
 //a ((((\x a)((b c))(\x d))
 // a ((h (((\x a)((b c)))
 // a ((((\x d)(\x a))((b c))
-
-// assignment 3
-
-// An archive (positive.tar.gz) of the positive examples used for testing.
-// • An archive (negative.tar.gz) of the negative examples used for testing.
-
-// The program may accept multiple expressions, one per line.
-
-//make clean voor elke assignment
-
-//cerr ipv cout
 
 //Assignment 2:
 
@@ -79,3 +72,10 @@ int main(int argc, char** argv){
 //the program chooses an arbitrary place where reduction is performed.
 // dit zouden we nog kunnen doen
 // waarschijnlijk met nog een findAppLambda en dan random kiezen welke van de twee het wordt.
+
+// assignment 3
+// alleen vanuit file niet vanaf input inlezen
+// typecheck functies enzo betere namen
+
+// An archive (positive.tar.gz) of the positive examples used for testing.
+// • An archive (negative.tar.gz) of the negative examples used for testing.
