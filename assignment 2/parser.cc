@@ -16,13 +16,13 @@ void Parser::lexpr(Tokenizer &token){
         if (token.peek() == VARIABLE){        
             token.consume();
             if (token.peek() == END){
-                std::cout << "missing expression after lambda abstraction" << std::endl;
+                std::cerr << "missing expression after lambda abstraction" << std::endl;
                 exit(1);
             }
             lexpr(token);
         }
         else{
-            std::cout << "missing variable after slash" << std::endl;
+            std::cerr << "missing variable after slash" << std::endl;
             exit(1);
         }
     }
@@ -43,7 +43,7 @@ void Parser::pexpr(Tokenizer &token){
         expr(token);
     }
     else{
-        std::cout << "missing expression after opening parenthesis" << std::endl;
+        std::cerr << "missing expression after opening parenthesis" << std::endl;
         exit(1);
     }
 }

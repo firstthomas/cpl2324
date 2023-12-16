@@ -4,7 +4,7 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-Tokenizer::Tokenizer(std::string input, bool file){
+Tokenizer::Tokenizer(std::string input, const bool file){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.
@@ -41,19 +41,19 @@ Tokenizer::Tokenizer(std::string input, bool file){
                     tokenarray[k].y += input[i];
                 }
                 else { // False input.
-                    std::cout << "Incorrect character input" << std::endl;
+                    std::cerr << "Incorrect character input" << std::endl;
                     exit(1);
                 }
             }
         }
         else if(input[i] != '\n' && input[i] != '\r'){ // False input.
-            std::cout << "Incorrect character input" << std::endl;
+            std::cerr << "Incorrect character input" << std::endl;
             exit(1);
         }
         k++;
     }
     if (open_count != close_count){ // Bracket_open not equal to Bracket_close.
-        std::cout << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
+        std::cerr << "Amount of open brackets not equal to amount of closed brackets " << std::endl;
         exit(1);
     }
     //Mark the end of the array
@@ -63,7 +63,7 @@ Tokenizer::Tokenizer(std::string input, bool file){
 }
 
 // Inserts application at the position pos.
-void Tokenizer::insert_application(int pos){
+void Tokenizer::insert_application(const int pos){
     if (tokenarray[pos].x != END){
         for (int i = arraySize; i > pos; i--){
             tokenarray[i] = tokenarray[i - 1];
@@ -124,8 +124,15 @@ void Tokenizer::consume(){
     j++;
 }
 
+void Tokenizer::createPostfixArray(){
+    swapSlashVar();
+    reverseArray(tokenarray, arraySize-1);
+    infixToPostfix();
+    reverseArray(postfix, postfixSize);    
+}
+
 // Reverses the array tokenArr with size Size.
-void Tokenizer::reverseArray(Token tokenArr[], int Size){
+void Tokenizer::reverseArray(Token tokenArr[], const int Size){
     int start = 0;
     int end = Size-1;
     while (start < end){

@@ -15,18 +15,16 @@ int main(int argc, char** argv){
         filenaam = std::string(argv[1]);
     }
     else { // No argument.
-        // std::cout << "Enter file name." << std::endl;
-        // std::cin >> filenaam;
+        std::cerr << "No file name given" << std::endl;
         exit(1);
     }
    
     std::ifstream myFile (filenaam);
     std::getline(myFile, input);
-
     if (input == ""){
+        std::cerr << "empty input" << std::endl;
         exit(1);
     }
-    
     // Read the expression into a token array and add applications.
     Tokenizer token(input, true);
     token.add_application();
@@ -39,96 +37,19 @@ int main(int argc, char** argv){
     Tree = new tree();
 
     // Create the postfix array from the tokenarray.
-    token.swapSlashVar();
-    token.reverseArray(token.tokenarray, token.arraySize-1);
-    token.infixToPostfix();
-    token.reverseArray(token.postfix, token.postfixSize);
+    token.createPostfixArray();
 
     // Builds the tree from the postfix array converted to a string
     Tree->readIn(token.arrToStringForTree());
 
+    // Reduce the tree if possible
     Tree->reduce();
+
     // Print the tree
     Tree->printTree();
-    
+
     myFile.close();
     delete pars;
     delete Tree;
     exit(0);
 }
-
-
-
-//README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
-//may include explanation of how the programs work
-
-//may include positive.zip and negative.zip file
-
-//tijd over:
-
-//eigen output parsen werkt alleen de output moet nog () teoevoegen als nodig
-//zoals hieronder staat uitgelegd
-//If parsing is succesful, the output of the program must be again acceptable
-// by the program to parse: the program then succesfully parses its own output and
-// should produce the exact same result. The output should be an UNAMBIGUOUS
-// expression, i.e. with sufficiently many parentheses inserted so the parser never
-// applies any of the precedence rules. The output may use the least amount of
-// whitespace and parentheses in its output.
-// Geeft nu output alleen nog niet UNAMBIGUOUS
-// outputs a character string in a standard format to standard output
-// this format may be explained in the README
-// dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
-
-// void arraycheck(Token tokenArray[], int array_size){
-//     for (int i = 0; i < array_size; i++){
-//         if(tokenArray[i].x == SLASH){
-//             cout << "/";
-//         }
-//         else if(tokenArray[i].x == BRACKET_OPEN){
-//             cout << "(";
-//         }
-//         else if(tokenArray[i].x == BRACKET_CLOSE){
-//             cout << ")";
-//         }
-//         else if(tokenArray[i].x == VARIABLE){
-//             cout << tokenArray[i].y;
-//         }
-//         else if(tokenArray[i].x == APP){
-//             cout << "@";
-//         }
-//         else if(tokenArray[i].x == END){
-//             cout << "END";
-//         }
-//     }
-//     std::cout << std::endl;
-// }
-
-//Assignment 2:
-
-// makefile uit assignment 1
-// An archive (positive.tar.gz) of the positive examples used for testing.
-// • An archive (negative.tar.gz) of the negative examples used for testing.
-
-// vragen:
-// destructor als ze memory leaks niet mogen zie tree.h
-
-// // Deletes the Node temp and its childeren
-// void Parser::helpDestructor(Node* temp) const{
-//     if (temp->left != nullptr){ 
-//         Node* left = temp->left;
-//         helpDestructor(left);
-//     }
-//     if (temp->right != nullptr){
-//         Node* right = temp->right;
-//         helpDestructor(right);
-//     }
-//     delete temp; // delete node
-// }
-
-// met valgrind segfault? maar zonder niet
-
-//readme!!!
-
-// copy tree en copy subboom doen volgens mij hetzelfde
-
-// mail over \x (\x (x x)) \x (\x (x x)) en hier memory leaks

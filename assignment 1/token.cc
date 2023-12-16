@@ -4,7 +4,7 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-void Tokenizer::createTokenizer(std::string input, bool lastLine){
+void Tokenizer::createTokenizer(std::string input, const bool lastLine){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.
@@ -63,7 +63,7 @@ void Tokenizer::createTokenizer(std::string input, bool lastLine){
 }
 
 // Inserts application at the position pos if pos is not the end.
-void Tokenizer::insert_application(int pos){
+void Tokenizer::insert_application(const int pos){
     if (tokenarray[pos].x != END){
         for (int i = arraySize; i > pos; i--){
             tokenarray[i] = tokenarray[i - 1];
@@ -130,8 +130,15 @@ void Tokenizer::consume(){
     j++;
 }
 
+void Tokenizer::createPostfixArray(){
+    swapSlashVar();
+    reverseArray(tokenarray, arraySize-1);
+    infixToPostfix();
+    reverseArray(postfix, postfixSize);    
+}
+
 // Reverses the array tokenArr with size Size.
-void Tokenizer::reverseArray(Token tokenArr[], int Size){
+void Tokenizer::reverseArray(Token tokenArr[], const int Size){
     int start = 0;
     int end = Size-1;
     while (start < end){

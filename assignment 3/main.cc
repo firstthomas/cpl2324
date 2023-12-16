@@ -120,18 +120,12 @@ int main(int argc, char** argv){
 
     Tree->checkTypes();
     // Tree->typeCheck(Tree->begin, true);
-    std::cout << temp2;
+    std::cout << temp2 << std::endl;
     myFile.close();
     delete token;
     delete pars;
     delete Tree;
-    //als we met exit(0) dan still reachable memory leaks denk niet erg
     exit(0);
-    // return 0;
-// sla de output van de tree op en dan checktypes aan roepen daarna string printen
-// If the program exists with exit status 0 then the program should
-// output the judgement printed to standard output in an unambiguous and standardized output format (where each complex expression and type is surrounded
-// by parentheses).
 }
 
 
@@ -139,68 +133,13 @@ int main(int argc, char** argv){
 //README: student numbers, know defects or works correctly (defect is misschien dat er maximale grootte is ofzo)
 //may include explanation of how the programs work
 
-//may include positive.zip and negative.zip file
-
 //tijd over:
-
-//eigen output parsen werkt alleen de output moet nog () teoevoegen als nodig
-//zoals hieronder staat uitgelegd
-//If parsing is succesful, the output of the program must be again acceptable
-// by the program to parse: the program then succesfully parses its own output and
-// should produce the exact same result. The output should be an UNAMBIGUOUS
-// expression, i.e. with sufficiently many parentheses inserted so the parser never
-// applies any of the precedence rules. The output may use the least amount of
-// whitespace and parentheses in its output.
-// Geeft nu output alleen nog niet UNAMBIGUOUS
-// outputs a character string in a standard format to standard output
-// this format may be explained in the README
-// dus x y z moet (x y) z als output en \x x y moet (\x x) y als output
-
-// void arraycheck(Token tokenArray[], int array_size){
-//     for (int i = 0; i < array_size; i++){
-//         if(tokenArray[i].x == SLASH){
-//             cout << "/";
-//         }
-//         else if(tokenArray[i].x == BRACKET_OPEN){
-//             cout << "(";
-//         }
-//         else if(tokenArray[i].x == BRACKET_CLOSE){
-//             cout << ")";
-//         }
-//         else if(tokenArray[i].x == VARIABLE){
-//             cout << tokenArray[i].y;
-//         }
-//         else if(tokenArray[i].x == APP){
-//             cout << "@";
-//         }
-//         else if(tokenArray[i].x == END){
-//             cout << "END";
-//         }
-//     }
-//     std::cout << std::endl;
-// }
 
 //Assignment 2:
 
 // makefile uit assignment 1
 // An archive (positive.tar.gz) of the positive examples used for testing.
 // • An archive (negative.tar.gz) of the negative examples used for testing.
-
-// vragen:
-// destructor als ze memory leaks niet mogen zie tree.h
-
-// // Deletes the Node temp and its childeren
-// void Parser::helpDestructor(Node* temp) const{
-//     if (temp->left != nullptr){ 
-//         Node* left = temp->left;
-//         helpDestructor(left);
-//     }
-//     if (temp->right != nullptr){
-//         Node* right = temp->right;
-//         helpDestructor(right);
-//     }
-//     delete temp; // delete node
-// }
 
 //Assignment 3: missing types error, kan wss als er niks is na ^ ofzo
 // typecheck functies enzo betere namen
@@ -210,15 +149,4 @@ int main(int argc, char** argv){
 // type' = -> type | empty
 // ptype = uvar | (type)
 
-// assignment 1 en 2 checken voor lege input en parser functies const?
-// destructor
 // comments eruit
-
-//geen print tree?
-//print tree in tree.cc denk dat die in main al goed is omdat we nu
-// string var hebben voor elke node, alleen dan zonder mid
-
-// strings mee in functie kunnen vaak constant ook ass1 en 2
-// practical assignment files testen
-
-//privates in node.h

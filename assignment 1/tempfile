@@ -22,8 +22,13 @@ a (\x d \x a (b c))
 (\x \y x)(\z y)
 \x \y (x z) y
 (\x x)(\y y)
+(\x y)((\x (x x))(\x (x x)))
+(\x x x)(\x x x)
+(\x \x x)(\x y)
+\x (\x (x x)) \x (\x (x x))
 0
 \x (\x (x x)) \x (\x (x x)) bij inleveren deze boven de nul zetten
+(\x \x x)(\x y)
 Antwoorden na reductie:
 \x y (x)                --> y
 \x a \x b               --> a
@@ -49,4 +54,3 @@ a (\x d \x a (b c))     --> a (d (b c))
 (\x \y x)(\z y)         --> \w \z y
 \x \y (x z) y           --> \w (y z)
 
-\x (\x (x x)) \x (\x (x x)) --> \ \ x \ x @ x x @ \ x \x @ x x \ x \ x @ x x infinte

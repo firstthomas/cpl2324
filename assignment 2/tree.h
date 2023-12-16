@@ -58,10 +58,7 @@ class tree{
 
     // Stores all variables in the subtree with root walker into the vector freeVar.
     void findVar(Node* walker, std::vector<std::string> &freeVar) const;
-
-    // Copies the Node oldTree and all its children to the Node newTree.
-    void copyTree(Node* oldTree, Node* newTree) const;
-
+    
     // Checks if both trees are equal.
     bool equal(Node* oldTree, Node* newTree) const;
 

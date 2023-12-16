@@ -115,6 +115,9 @@ void tree::replaceVarWithTree(Node* walker, std::string var, Node* replaceWithTr
     bool left = false;
     bool right = false;
 
+    if (walker->T == SLASH && walker->left->var == var){
+        return;
+    }
     if (walker->left->var == var){
         // Performs the subtitution on walker->left
         copySubboom(replaceWithTree, walker->left);
@@ -141,7 +144,6 @@ bool tree::betaReduce(Node* walker){
     // to avoid memory leaks we create a temporary tree
     tree* temp = new tree(); 
     if (walker == begin && begin->T == APP && begin->left->T == SLASH){
-        std::cout << "beta1" << std::endl;
         Node* walker2 = walker->left;
         std::string replaceVar = walker2->left->var;
         Node* replaceWithTree = walker->right;
@@ -157,18 +159,14 @@ bool tree::betaReduce(Node* walker){
         }
         if (walker2->right != nullptr){
             copySubboom(walker2->right, temp->begin);
-            helpDestructor(begin);
-            begin = new Node();
-            copyTree(temp->begin, begin);
-            delete temp;
         }
         else{
             copySubboom(walker2, temp->begin);
-            helpDestructor(begin);
-            begin = new Node();
-            copyTree(temp->begin, begin);
-            delete temp;
         }
+        helpDestructor(begin);
+        begin = new Node();
+        copySubboom(temp->begin, begin);
+        delete temp;
     }
     // Because the app lambda combination is not the begin we need to 
     // apply betaReduction in the middle of the tree and thus either the
@@ -205,35 +203,26 @@ bool tree::betaReduce(Node* walker){
         if (left){
             if (walker2->right != nullptr){
                 copySubboom(walker2->right, temp->begin);
-                helpDestructor(begin2->left);
-                begin2->left = new Node();
-                copyTree(temp->begin, begin2->left);
-                delete temp;
             }
             else{
                 copySubboom(walker2, temp->begin);
-                helpDestructor(begin2->left);
-                begin2->left = new Node();
-                copyTree(temp->begin, begin2->left);
-                delete temp;
             }
+            helpDestructor(begin2->left);
+            begin2->left = new Node();
+            copySubboom(temp->begin, begin2->left);
+            delete temp;
         }
         else{
             if (walker2->right != nullptr){
                 copySubboom(walker2->right, temp->begin);
-                helpDestructor(begin2->right);
-                begin2->right = new Node();
-                copyTree(temp->begin, begin2->right);
-                delete temp;
-                begin2->right = walker2->right;
             }
             else{
                 copySubboom(walker2, temp->begin);
-                helpDestructor(begin2->right);
-                begin2->right = new Node();
-                copyTree(temp->begin, begin2->right);
-                delete temp;
             }
+            helpDestructor(begin2->right);
+            begin2->right = new Node();
+            copySubboom(temp->begin, begin2->right);
+            delete temp;
         }
     }
     return true;
@@ -248,15 +237,15 @@ void tree::reduce(){
     bool possibleB = false;
     bool betaReduced = true;
     int i = 0;
-
+    
     walker = findAppLambda(walker, possibleB);
 
-    while(possibleB && betaReduced && i < 1000){
+    while(possibleB && betaReduced && i < 1001){
         begin2 = walker;
         std::vector<std::string> allVar; // Reset the vector by redeclaring
         tree* temp;
         temp = new tree(); // tree used to check if the tree changed later on
-        copyTree(begin, temp->begin);
+        copySubboom(begin, temp->begin);
 
         // Set walker on the application of the beta reduction
         if (walker != begin && walker->left->T == APP && walker->left->left->T == SLASH){
@@ -266,7 +255,12 @@ void tree::reduce(){
             walker = walker->right;
         }
         if (walker == begin && walker->left->T != SLASH){
-            walker = walker->right;
+            if (walker->left->left != nullptr && walker->left->left->T == SLASH){
+                walker = walker->left;
+            }
+            else{
+                walker = walker->right;
+            }
         }
         // Find all free variables and replace them if necessary (alpha conversion).
         findVar(walker->right, allVar);
@@ -276,7 +270,6 @@ void tree::reduce(){
         betaReduced = betaReduce(begin2);
 
         if (equal(begin, temp->begin)){
-            printTree();
             helpDestructor(begin);
             delete temp;
             exit(2);
@@ -289,7 +282,7 @@ void tree::reduce(){
         delete temp;// Delete the copy of the tree
     }
 
-    if (possibleB && i >= 1000){
+    if (possibleB && i > 1000){
         std::cerr << "Over 1000 reduction steps" << std::endl;
         helpDestructor(begin);
         exit(2);
@@ -298,6 +291,9 @@ void tree::reduce(){
 
 // Returns true if replaceVar is somewhere in the subtree with root walker.
 bool tree::findReplaceVar(Node* walker, std::string replaceVar) const{
+    if (walker->T == SLASH && walker->left->var == replaceVar){
+        return false;
+    }
     if (walker->T == VARIABLE){
         if (walker->var == replaceVar){
             return true;
@@ -318,16 +314,17 @@ void tree::replaceFreeVar(Node* walker, std::vector<std::string> &allVar, std::s
     if (walker->T == SLASH && findReplaceVar(walker->right, replaceVar)){
         for (long long unsigned int i = 0; i < allVar.size(); i++){
             if (walker->left->var == allVar[i]){
-                // walker->left->var = "w";
                 walker->left->var = walker->left->var + "!";
                 break;
             }
         }
     }
-    if (walker->left != nullptr && walker->left->T != VARIABLE){
+    if (walker->left != nullptr && walker->left->T != VARIABLE &&
+        !(walker->left->T == SLASH && walker->left->var == replaceVar)){
         replaceFreeVar(walker->left, allVar, replaceVar);
     }
-    if (walker->right != nullptr && walker->right->T != VARIABLE){
+    if (walker->right != nullptr && walker->right->T != VARIABLE &&
+        !(walker->right->T == SLASH && walker->left->var == replaceVar)){
         replaceFreeVar(walker->right, allVar, replaceVar);
     }
 }
@@ -377,20 +374,6 @@ void tree::findVar(Node* walker, std::vector<std::string> &freeVar) const{
     }
 }
 
-// Copies the Node oldTree and all its children to the Node newTree.
-void tree::copyTree(Node* oldTree, Node* newTree) const{
-    newTree->T = oldTree->T;
-    newTree->var = oldTree->var;
-    if (oldTree->left != nullptr){
-        newTree->left = new Node();
-        copyTree(oldTree->left, newTree->left);
-    }
-    if (oldTree->right != nullptr){
-        newTree->right = new Node();
-        copyTree(oldTree->right, newTree->right);
-    }
-}
-
 // Checks if both trees are equal.
 // Uses recursion to walk through both trees.
 bool tree::equal(Node* oldTree, Node* newTree) const{
@@ -434,8 +417,15 @@ void tree::printInfix(Node* child, std::string &output) const{
     if (child->T == SLASH){
         output += "(";
         output += "\\";
-        output += child->left->var;
-        output += " ";
+        if (child->left->T == SLASH){
+            // output += "(";
+            // output += "\\";
+            printInfix(child->left, output);
+        }
+        else{
+            output += child->left->var;
+            output += " ";
+        }
     }
     else if (child->T != APP){
         output += child->var;
