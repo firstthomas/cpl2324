@@ -4,7 +4,7 @@
 // Reads the string input and checks for each character's type to store the type in tokenarray.
 // Also checks whether or not false input is given and if the amount of brackets-open are
 // equal to the amount of brackets-close.
-void Tokenizer::createTokenizer(std::string input, const bool file){
+void Tokenizer::createTokenizer(const std::string input, const bool file){
     int k = 0;
     int open_count = 0; //To keep count of bracket_open.
     int close_count = 0; // To keep count of bracket_close.
@@ -45,17 +45,20 @@ void Tokenizer::createTokenizer(std::string input, const bool file){
         } // The following if statement checks if the characters is equal
           // to a-z or A-Z using ascii code. 
           // Here the variables of unknown length are tokenized.
-        else if ((input[i] > 64 && input[i] < 91) || (input[i] > 96 && input[i] < 123)){
+        else if ((input[i] >= 'A' && input[i] <= 'Z') || 
+                (input[i] >= 'a' && input[i] <= 'z')){
             tokenarray[k].x = VARIABLE;
             tokenarray[k].y = input[i];
             while (input[i+1] != '(' && input[i+1] != ')' && input[i+1] != '\\'
                    && input[i+1] != ' ' && input[i+1] != '\n' && input[i+1] != '\r'
                    && int(input[i+1] != 0) && input[i+1] != ':' && input[i+1] != '-'){
-                if ((input[i+1] > 64 && input[i+1] < 91) || (input[i+1] > 47 && input[i+1] < 58) || (input[i+1] > 96 && input[i+1] < 123)){
+                if ((input[i+1] >= 'A' && input[i+1] <= 'Z') || 
+                    (input[i+1] >= '0' && input[i+1] <= '9') || 
+                    (input[i+1] >= 'a' && input[i+1] <= 'z')){
                     i++;
                     tokenarray[k].y += input[i];
                 }
-                else if(input[i+1] == '^'){
+                else if (input[i+1] == '^'){
                     k++;
                     i++;
                     tokenarray[k].x = EXP;
@@ -67,7 +70,7 @@ void Tokenizer::createTokenizer(std::string input, const bool file){
                 }
             }
         }
-        else if(input[i] != '\n' && input[i] != '\r'){ // False input.
+        else if (input[i] != '\n' && input[i] != '\r'){ // False input.
             std::cerr << "Incorrect character input" << std::endl;
             exit(1);
         }
@@ -85,7 +88,8 @@ void Tokenizer::createTokenizer(std::string input, const bool file){
 
 // Inserts application at the position pos.
 void Tokenizer::insert_application(const int pos){
-    if (tokenarray[pos].x != END && tokenarray[pos].x != COLON && tokenarray[pos].x != ARROW){
+    if (tokenarray[pos].x != END && tokenarray[pos].x != COLON 
+        && tokenarray[pos].x != ARROW){
         for (int i = arraySize; i > pos; i--){
             tokenarray[i] = tokenarray[i - 1];
         }
@@ -100,20 +104,23 @@ void Tokenizer::add_application(){
     int varCounter = 0;
     bool slash = false;
     int i = 0;
-    while(tokenarray[i].x != END){
-        while (tokenarray[i].x == BRACKET_OPEN || tokenarray[i].x == EXP || tokenarray[i].x == ARROW){
+    while (tokenarray[i].x != END){
+        while (tokenarray[i].x == BRACKET_OPEN || tokenarray[i].x == EXP 
+                || tokenarray[i].x == ARROW){
             i++;
         }
         if (tokenarray[i].x == COLON){
             break;
         }
-        else if(!slash && tokenarray[i].x == VARIABLE && tokenarray[i+1].x != END){
+        else if (!slash && tokenarray[i].x == VARIABLE 
+                && tokenarray[i+1].x != END){
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;
             }
             insert_application(i+1);
         }
-        else if(varCounter == 1 && slash && tokenarray[i].x != SLASH && tokenarray[i+1].x != END){
+        else if (varCounter == 1 && slash && tokenarray[i].x != SLASH 
+                && tokenarray[i+1].x != END){
             varCounter = 0;
             while (tokenarray[i+1].x == BRACKET_CLOSE){
                 i++;
@@ -121,11 +128,11 @@ void Tokenizer::add_application(){
             insert_application(i+1);
             slash = false;
         }
-        else if(tokenarray[i].x == SLASH){
+        else if (tokenarray[i].x == SLASH){
             varCounter = 0;
             slash = true;
         }
-        else if(tokenarray[i].x == VARIABLE){
+        else if (tokenarray[i].x == VARIABLE){
             if (tokenarray[i+1].x != EXP && tokenarray[i+1].x != ARROW){
                 while (tokenarray[i+1].x == BRACKET_CLOSE){
                     i++;
@@ -208,15 +215,15 @@ void Tokenizer::infixToPostfix(){
     std::stack<Token> st;
     std::string element;
     int k = 0;
-    for(int i = 0; i < arraySize; i++){
-        if(tokenarray[i].x == VARIABLE){
+    for (int i = 0; i < arraySize; i++){
+        if (tokenarray[i].x == VARIABLE){
             postfix[k] = tokenarray[i];
             k++;
         }
-        else if(tokenarray[i].x == BRACKET_OPEN){
+        else if (tokenarray[i].x == BRACKET_OPEN){
             st.push(tokenarray[i]);
         }
-        else if(tokenarray[i].x == BRACKET_CLOSE){
+        else if (tokenarray[i].x == BRACKET_CLOSE){
             while (st.top().x != BRACKET_OPEN){
                 postfix[k] = st.top();
                 k++;
@@ -224,11 +231,11 @@ void Tokenizer::infixToPostfix(){
             }
             st.pop();
         }
-        else if(tokenarray[i].x == END){
+        else if (tokenarray[i].x == END){
             continue;
         }
-        else{
-            while(!st.empty() && st.top().x != BRACKET_OPEN &&
+        else {
+            while (!st.empty() && st.top().x != BRACKET_OPEN &&
                   prec(tokenarray[i].x) <= prec(st.top().x)){
                 postfix[k] = st.top();
                 k++;
@@ -238,7 +245,7 @@ void Tokenizer::infixToPostfix(){
         }
     }
     
-    while(!st.empty()){
+    while (!st.empty()){
         postfix[k] = st.top();
         k++;
         st.pop();

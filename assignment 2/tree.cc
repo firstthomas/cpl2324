@@ -30,7 +30,7 @@ tree::tree(){
 
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
-void tree::readIn(std::string input){
+void tree::readIn(const std::string input){
     std::istringstream iss(input);
     createTree(begin, iss);
 }
@@ -71,7 +71,7 @@ Node* tree::findAppLambda(Node* walker, bool &found) const{
         found = true;
         return walker;
     }
-    if(walker->left != nullptr && walker->left->T != VARIABLE){
+    if (walker->left != nullptr && walker->left->T != VARIABLE){
         walker = walker->left;
         walker = findAppLambda(walker, found);
         if (found){
@@ -79,7 +79,7 @@ Node* tree::findAppLambda(Node* walker, bool &found) const{
         }
     }
     walker = walker2;
-    if(walker->right != nullptr && walker->right->T != VARIABLE){
+    if (walker->right != nullptr && walker->right->T != VARIABLE){
         walker = walker->right;
         return findAppLambda(walker, found);
     }
@@ -95,14 +95,14 @@ void tree::copySubboom(Node* child, Node* temp) const{
         temp->left = new Node();
         copySubboom(child->left, temp->left);
     }
-    else{
+    else {
         temp->left = nullptr;
     }
     if (child->right != nullptr){
         temp->right = new Node();
         copySubboom(child->right, temp->right);
     }
-    else{
+    else {
         temp->right = nullptr;
     }
 }
@@ -183,7 +183,7 @@ bool tree::betaReduce(Node* walker){
             walker = walker->left;
             left = true;
         }
-        else{
+        else {
             walker = walker->right;
         }
 
@@ -216,7 +216,7 @@ bool tree::betaReduce(Node* walker){
             if (walker2->right != nullptr){
                 copySubboom(walker2->right, temp->begin);
             }
-            else{
+            else {
                 copySubboom(walker2, temp->begin);
             }
             helpDestructor(begin2->right);
@@ -240,7 +240,7 @@ void tree::reduce(){
     
     walker = findAppLambda(walker, possibleB);
 
-    while(possibleB && betaReduced && i < 1001){
+    while (possibleB && betaReduced && i < 1001){
         begin2 = walker;
         std::vector<std::string> allVar; // Reset the vector by redeclaring
         tree* temp;
@@ -258,7 +258,7 @@ void tree::reduce(){
             if (walker->left->left != nullptr && walker->left->left->T == SLASH){
                 walker = walker->left;
             }
-            else{
+            else {
                 walker = walker->right;
             }
         }
@@ -393,7 +393,7 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
         if (newTree->right != nullptr){
             equalTrees = equal(oldTree->right, newTree->right);
         }
-        else{
+        else {
             return false;
         }
     }
@@ -435,6 +435,10 @@ void tree::printInfix(Node* child, std::string &output) const{
     if (child->T != SLASH && child->left != nullptr){
         output += "(";
         printInfix(child->left, output);
+        if (child->left->T == SLASH && child->left->right != nullptr &&
+        child->left->right->T == APP){
+            output+= ")";
+        }
     }
 
     if (child->right != nullptr){
@@ -444,6 +448,11 @@ void tree::printInfix(Node* child, std::string &output) const{
         }
         else {
             printInfix(child->right, output);
+            if (child->right->T == SLASH && child->right->right != nullptr
+            && child->right->right->T == APP || child != begin && 
+            child->right->T == SLASH){
+                output += ")";
+            }
         }
         if (output.back() == ' '){
             output.pop_back();

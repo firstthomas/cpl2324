@@ -27,8 +27,8 @@ class tree{
     // Sets childs left vars type and childs Tokentype as arrow, child is a slash.
     void setTypes(Node* child);
 
-    // Calls typeCheck and checks if the left and right subtree are equal after
-    // typeCheck.
+    // Calls typeDerivCheck and checks if the left and right subtree are equal after
+    // typeDerivCheck.
     void checkTypes();
 
     // Print function which will call another function that will configure the output string.
@@ -41,7 +41,7 @@ class tree{
     private:
 
     // checks if the judgement in the tree is derivable in the type system
-    void typeCheck(Node* child, bool left);
+    void typeDerivCheck(Node* child, bool left);
 
     // Checks if both trees are equal.
     bool equal(Node* oldTree, Node* newTree) const;
@@ -50,7 +50,7 @@ class tree{
     bool findVar(const std::string var, Node* child) const;
 
     // Finds and sets the type of node child which is a variable.
-    bool setType(Node* child, Node* finder, const std::string var);
+    bool setTypeVar(Node* child, Node* finder, const std::string var);
 
     // Will recursively walk through the tree to determine the output. 
     // Will check for certain situations to decide to add parentheses or not. 

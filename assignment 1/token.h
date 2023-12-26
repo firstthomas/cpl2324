@@ -25,7 +25,7 @@ class Tokenizer{
     Tokenizer(){};
 
     // Read the input string and stores it into the tokenarray as tokens
-    void createTokenizer(std::string input, const bool lastLine);
+    void createTokenizer(const std::string input, const bool lastLine);
     
     // Peeks the next token
     token_type peek();

@@ -17,7 +17,7 @@ class tree{
 
     // Gets the expression as input in prefix notation. Assumes the expression
     // is valid.
-    void readIn(std::string input);
+    void readIn(const std::string input);
 
     // Print function which will call another function that will configure the output string.
     void printTree() const;

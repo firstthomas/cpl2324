@@ -14,7 +14,7 @@ void Parser::judge(Tokenizer &token){
         token.consume();
         type(token);
     }
-    else{
+    else {
         std::cerr << "missing types" << std::endl;
         exit(1);
     }
@@ -39,7 +39,7 @@ void Parser::lexpr(Tokenizer &token) const{
                 token.consume();
                 type(token);
             }
-            else{
+            else {
                 std::cerr << "missing ^ after lambda abstraction" << std::endl;
                 exit(1);
             }
@@ -49,12 +49,12 @@ void Parser::lexpr(Tokenizer &token) const{
             }
             lexpr(token);
         }
-        else{
+        else {
             std::cerr << "missing variable after slash" << std::endl;
             exit(1);
         }
     }
-    else{   
+    else {   
         pexpr(token);
     }
 }
@@ -67,7 +67,7 @@ void Parser::pexpr(Tokenizer &token) const{
         if (token.lowercase()){
             token.consume();
         }
-        else{
+        else {
             std::cerr << "lvar does not start with a lowercase letter" << std::endl;
             exit(1);
         }
@@ -80,7 +80,7 @@ void Parser::pexpr(Tokenizer &token) const{
         std::cerr << "invalid expression" << std::endl;
         exit(1);
     }
-    else{
+    else {
         std::cerr << "missing expression after opening parenthesis" << std::endl;
         exit(1);
     }
@@ -109,7 +109,7 @@ void Parser::ptype(Tokenizer &token) const{
         if (!token.lowercase()){
             token.consume();
         }
-        else{
+        else {
             std::cerr << "uvar does not start with a uppercase letter" << std::endl;
             exit(1);
         }
@@ -118,7 +118,7 @@ void Parser::ptype(Tokenizer &token) const{
         token.consume();
         type(token);
     }
-    else{
+    else {
         std::cerr << "Incorrect charachter after variable" << std::endl;
         exit(1);
     }

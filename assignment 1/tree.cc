@@ -30,7 +30,7 @@ tree::tree(){
 
 // Gets the expression as input in prefix notation. Assumes the expression
 // is valid.
-void tree::readIn(std::string input){
+void tree::readIn(const std::string input){
     std::istringstream iss(input);
     createTree(begin, iss);
 }
@@ -40,7 +40,7 @@ void tree::createTree(Node* child, std::istringstream &iss){
     std::string str;
     iss >> str;
     child->setNodeValues(str);
-    if ((str[0] > 64 && str[0] < 91) || (str[0] > 96 && str[0] < 123)){
+    if ((str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')){
         return;
     }
     child->left = new Node();
@@ -77,6 +77,10 @@ void tree::printInfix(Node* child, std::string &output) const{
     if (child->T != SLASH && child->left != nullptr){
         output += "(";
         printInfix(child->left, output);
+        if (child->left->T == SLASH && child->left->right != nullptr &&
+        child->left->right->T == APP){
+            output+= ")";
+        }
     }
 
     if (child->right != nullptr){
@@ -86,6 +90,11 @@ void tree::printInfix(Node* child, std::string &output) const{
         }
         else {
             printInfix(child->right, output);
+            if (child->right->T == SLASH && child->right->right != nullptr
+            && child->right->right->T == APP || child != begin && 
+            child->right->T == SLASH){
+                output += ")";
+            }
         }
         if (output.back() == ' '){
             output.pop_back();

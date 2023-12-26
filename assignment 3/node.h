@@ -24,14 +24,14 @@ class Node {
     };
     
     // "Constructor" with input for a Node.
-    void setNodeValues(std::string str){
+    void setNodeValues(const std::string str){
             this->var = str;
             if (str == "\\"){this->T = SLASH;}
             else if (str == "@"){this->T = APP;}
             else if (str[0] == '-'){this->T = ARROW;}
             else if (str == "^"){this->T = EXP;}
             else if (str == ":"){this->T = COLON;}
-            else{this->T = VARIABLE;}
+            else {this->T = VARIABLE;}
             this->left = nullptr;
             this->right = nullptr;
     };

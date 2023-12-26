@@ -48,6 +48,18 @@
         "sstream": "cpp",
         "stack": "cpp",
         "string": "cpp",
-        "climits": "cpp"
+        "climits": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "cstdarg": "cpp",
+        "cwctype": "cpp",
+        "unordered_map": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "string_view": "cpp"
     }
 }

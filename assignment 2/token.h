@@ -22,7 +22,7 @@ class Tokenizer{
     public:
 
     // Read the input string and stores it into the tokenarray as tokens
-    Tokenizer(std::string input, const bool file);
+    Tokenizer(const std::string input, const bool file);
     
     // Peeks the next token
     token_type peek();

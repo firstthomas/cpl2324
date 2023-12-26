@@ -85,22 +85,22 @@ void tree::copySubboom(Node* child, Node* temp) const{
         temp->left = new Node();
         copySubboom(child->left, temp->left);
     }
-    else{
+    else {
         temp->left = nullptr;
     }
     if (child->right != nullptr){
         temp->right = new Node();
         copySubboom(child->right, temp->right);
     }
-    else{
+    else {
         temp->right = nullptr;
     }
 }
 
-// Calls typeCheck and checks if the left and right subtree are equal after
-// typeCheck.
+// Calls typeDerivCheck and checks if the left and right subtree are equal after
+// typeDerivCheck.
 void tree::checkTypes(){
-    typeCheck(begin, true);
+    typeDerivCheck(begin, true);
     if (!equal(begin->left, begin->right)){
         std::cerr << "types do not match" << std::endl;
         helpDestructor(begin);
@@ -124,24 +124,24 @@ void tree::setTypes(Node* child){
 // Because we sometimes need the parent to change the tree we give the parent
 // node as argument and a bool to determine if we should check the left or
 // right child.
-void tree::typeCheck(Node* child, bool left){
+void tree::typeDerivCheck(Node* child, bool left){
     Node* parent;
     parent = child;
     if (left){
         child = child->left;
     }
-    else{
+    else {
         child = child->right;
     }
     if (child->T == SLASH){
         child->left->type = new Node();
         copySubboom(child->mid, child->left->type);
-        typeCheck(child, false);
+        typeDerivCheck(child, false);
         setTypes(child);
     }
     else if (child->T == APP){
-        typeCheck(child, true);
-        typeCheck(child, false);
+        typeDerivCheck(child, true);
+        typeDerivCheck(child, false);
         if (child->left->T == ARROW){
             if (equal(child->left->left, child->right)){
                 Node* temp = new Node();
@@ -150,17 +150,17 @@ void tree::typeCheck(Node* child, bool left){
                 if (left){
                     parent->left = temp;
                 }
-                else{
+                else {
                     parent->right = temp;
                 }
             }
-            else{
+            else {
                 std::cerr << "types do not match" << std::endl;
                 helpDestructor(begin);
                 exit(1);
             }
         }
-        else{
+        else {
             std::cerr << "No more rule to be applied" << std::endl;
             helpDestructor(begin);
             std::cout << output << std::endl;
@@ -170,7 +170,7 @@ void tree::typeCheck(Node* child, bool left){
     else if (child->T == VARIABLE){
         std::string var = child->var;
         child->var += "!";
-        if (!setType(child, begin->left, var)){
+        if (!setTypeVar(child, begin->left, var)){
             std::cerr << "Unkown type for variable " << var << std::endl;
             helpDestructor(begin);
             exit(1);
@@ -199,7 +199,7 @@ bool tree::findVar(const std::string var, Node* child) const{
 
 // Sets the type of a variable. Child is the variable, finder the root of
 // the tree we are searching in and var is the var we want to find the type of.
-bool tree::setType(Node* child, Node* finder, const std::string var){
+bool tree::setTypeVar(Node* child, Node* finder, const std::string var){
     bool temp = false;
     bool temp2 = false;
     if (finder->T == SLASH && (finder->left->var == var)){
@@ -211,14 +211,14 @@ bool tree::setType(Node* child, Node* finder, const std::string var){
             copySubboom(finder->left->type, child->type);
             temp = true;
         }
-        else{
+        else {
             return false;
         }
     }
     if (finder->left != nullptr){
-        temp2 = setType(child, finder->left, var);
+        temp2 = setTypeVar(child, finder->left, var);
         if (!temp2){
-            temp2 = setType(child, finder->right, var);
+            temp2 = setTypeVar(child, finder->right, var);
         }
     }
     return (temp || temp2);
@@ -236,7 +236,7 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
         if (newTree->left != nullptr){
             equalTrees = equal(oldTree->left, newTree->left);
         }
-        else{
+        else {
             return false;
         }
     }
@@ -244,7 +244,7 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
         if (newTree->right != nullptr){
             equalTrees = equal(oldTree->right, newTree->right);
         }
-        else{
+        else {
             return false;
         }
     }
@@ -254,6 +254,10 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
 // Print function which will call another function that will configure the output string.
 void tree::printTree() {
     printInfix(begin);
+    if (output.size() > 1 && begin->T != VARIABLE){
+        output.pop_back();
+        output.erase(0, 1);
+    }
 }
 
 // Will recursively walk through the tree to determine the output. 
@@ -278,7 +282,7 @@ void tree::printInfix(Node* child) {
             printInfix(child->left);
         }
     }
-    else{
+    else {
         if (child->left != nullptr){
             printInfix(child->left);
         }

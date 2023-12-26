@@ -17,7 +17,7 @@ class tree{
 
     // Gets the expression as input in prefix notation. Assumes the expression
     // is valid.
-    void readIn(std::string input);
+    void readIn(const std::string input);
 
     // Reduces the abstract syntax tree with beta reduction(s) if possible.
     // Uses alpha conversions if necessary
