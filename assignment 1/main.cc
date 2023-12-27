@@ -58,6 +58,8 @@ int main(int argc, char** argv){
 //a ((((\x a)((b c))(\x d))
 // a ((h (((\x a)((b c)))
 // a ((((\x d)(\x a))((b c))
+//(\x (\z (\y z))) y
+// \x ((x y)
 
 //Assignment 2:
 
