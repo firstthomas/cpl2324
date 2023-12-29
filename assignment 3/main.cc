@@ -9,8 +9,24 @@
 int main(int argc, char** argv){
     std::string input;
     std::string output;
+    std::string filenaam;
+
+    if (argc > 1){ // Checks if argument is given.
+        filenaam = std::string(argv[1]);
+    }
+    else { // No argument.
+        std::cerr << "No file name given" << std::endl;
+        exit(1);
+    }
    
-    while (std::getline(std::cin, input)){
+    std::ifstream myFile(filenaam);
+
+   
+    while (std::getline(myFile, input)){
+        if (input == ""){
+        std::cerr << "empty input" << std::endl;
+        exit(1);
+        }
         Tokenizer token = Tokenizer();
         // Read the expression into a token array and add applications.
         if (input[input.size()-1]== '\n' || input[input.size()-1] == '\r'){
@@ -45,5 +61,6 @@ int main(int argc, char** argv){
         delete pars;
         delete Tree;
     }
+    myFile.close();
     exit(0);
 }

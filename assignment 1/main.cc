@@ -31,7 +31,6 @@ int main(int argc, char** argv){
         token.createPostfixArray();
 
         // Builds the tree from the postfix array converted to a string
-        std::cout << token.arrToStringForTree() << std::endl;
         Tree->readIn(token.arrToStringForTree());
 
         // Print the tree
@@ -49,18 +48,6 @@ int main(int argc, char** argv){
 //make clean voor elke assignment
 // voor negatives voorbeelden uit assignment gebruiken en meer
 
-// Assignment 1
-// output klopt niet altijd
-// \x (\x (x x)) \x (\x (x x) voor deze denk ik ook assignment 2
-// negatives.txt
-
-// te veel haakjes in output
-//a ((((\x a)((b c))(\x d))
-// a ((h (((\x a)((b c)))
-// a ((((\x d)(\x a))((b c))
-//(\x (\z (\y z))) y
-// \x ((x y)
-
 //Assignment 2:
 
 // An archive (positive.tar.gz) of the positive examples used for testing.
@@ -71,7 +58,6 @@ int main(int argc, char** argv){
 // waarschijnlijk met nog een findAppLambda en dan random kiezen welke van de twee het wordt.
 
 // assignment 3
-// alleen vanuit file niet vanaf input inlezen
 
 // An archive (positive.tar.gz) of the positive examples used for testing.
 // • An archive (negative.tar.gz) of the negative examples used for testing.
