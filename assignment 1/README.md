@@ -36,6 +36,13 @@ How the program works:
     To create the output in an easy manner we build a tree. To build this tree we first create a postifx token array by using a algorithm to convert infix to prefix that uses a stack.
     We then create the output by walking through the tree inorder.
     
-    hier nog uitleg hoe printinfix werkt en onze ouput format.
+    Our output format is as follows:
+        - Lambda's are slashes.
+        - Print brackets around applications and lambda's.
+        - No brackets around the whole expression.
+        - No spaces after brackets.
+    A few examples of our output format:
+        - x \x y --> x (\x y).
+        - x \x y z --> (x (\x y))z.
     
     After this we call the destructor for the tree to avoid memory leaks.

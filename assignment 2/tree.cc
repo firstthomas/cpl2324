@@ -414,7 +414,6 @@ void tree::printTree() const{
 // Will recursively walk through the tree to determine the output. 
 // Will check for certain situations to decide to add parentheses or not. 
 void tree::printInfix(Node* child, std::string &output) const{
-
     if (child->T == SLASH){
         output += "(";
         output += "\\";
@@ -434,53 +433,5 @@ void tree::printInfix(Node* child, std::string &output) const{
     }
     else {
         output += child->var;
-        // output += " ";
     }
-
-
-    // if (child->T == SLASH){
-    //     output += "(";
-    //     output += "\\";
-    //     if (child->left->T == SLASH){
-    //         // output += "(";
-    //         // output += "\\";
-    //         printInfix(child->left, output);
-    //     }
-    //     else{
-    //         output += child->left->var;
-    //         output += " ";
-    //     }
-    // }
-    // else if (child->T != APP){
-    //     output += child->var;
-    //     output += " ";
-    // }
-
-    // if (child->T != SLASH && child->left != nullptr){
-    //     output += "(";
-    //     printInfix(child->left, output);
-    //     if (child->left->T == SLASH && child->left->right != nullptr &&
-    //     child->left->right->T == APP){
-    //         output+= ")";
-    //     }
-    // }
-
-    // if (child->right != nullptr){
-    //     if (child->right->T == APP){
-    //         output += "(";
-    //         printInfix(child->right, output);
-    //     }
-    //     else {
-    //         printInfix(child->right, output);
-    //         if (child->right->T == SLASH && child->right->right != nullptr
-    //         && child->right->right->T == APP || child != begin && 
-    //         child->right->T == SLASH){
-    //             output += ")";
-    //         }
-    //     }
-    //     if (output.back() == ' '){
-    //         output.pop_back();
-    //     }
-    //     output += ")";
-    // }
 }

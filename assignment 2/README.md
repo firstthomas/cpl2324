@@ -48,6 +48,13 @@ How the program works:
     We then  want to output the expression in an unambiguous matter with the least amount of whitespace and parentheses.
     We create the output by walking through the tree inorder.
     
-    hier nog uitleg hoe printinfix werkt en onze ouput format.
+    Our output format is as follows:
+        - Lambda's are slashes.
+        - Print brackets around applications and lambda's.
+        - No brackets around the whole expression.
+        - No spaces after brackets.
+    A few examples of our output format:
+        - x \x y --> x (\x y).
+        - x \x y z --> (x (\x y))z.
     
     After this we call the destructor for the tree to avoid memory leaks.

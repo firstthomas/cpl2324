@@ -40,7 +40,13 @@ How the program works:
     To do this we build a tree. To build this tree we first create a postifx token array by using a algorithm to convert infix to prefix that uses a stack.
     Because our typeChecking changes the tree we first create the output by walking through the tree inorder.
     
-    hier nog uitleg hoe printinfix werkt en onze ouput format. deze is anders voor assignment 3
+    Our output format is as follows:
+        - Lambda's are slashes.
+        - Print brackets around applications, lambda's and arrows.
+        - No brackets around the whole expression and no brackets around the two parts of the colon.
+        - No spaces after brackets.
+    A example of our output format:
+        - (\x^A x):(A -> A) -> \x^A x:A->A
     
     After creating the output we first typeDerivCheck the tree. Our 
     typeDerivCheck() function is based on the three rules from the lectures. We apply these rules to the left child of our root and then check if the left and right side are equal.

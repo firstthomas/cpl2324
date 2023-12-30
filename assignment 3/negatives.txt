@@ -1,6 +1,0 @@
-\z^A (\y^A->A((\x^A->A x)y)): A->((A->A)->A)
-(\x^A x)
-(\x x)
-\x^A -> A (x y) : A
-(x y): A -> B -> J A
-\x^A x:B->B

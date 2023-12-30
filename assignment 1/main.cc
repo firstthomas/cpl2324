@@ -41,15 +41,3 @@ int main(int argc, char** argv){
     }
     exit(0);
 }
-
-// alle:
-// outputs a character string in a standard format to standard output
-// this format may be explained in the README ook in assignment 2 en 3
-
-//Assignment 2:
-
-//the program chooses an arbitrary place where reduction is performed.
-// dit zouden we nog kunnen doen
-// waarschijnlijk met nog een findAppLambda en dan random kiezen welke van de twee het wordt.
-
-//meer testen

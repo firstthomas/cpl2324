@@ -24,8 +24,8 @@ int main(int argc, char** argv){
    
     while (std::getline(myFile, input)){
         if (input == ""){
-        std::cerr << "empty input" << std::endl;
-        exit(1);
+            std::cerr << "empty input" << std::endl;
+            exit(1);
         }
         Tokenizer token = Tokenizer();
         // Read the expression into a token array and add applications.

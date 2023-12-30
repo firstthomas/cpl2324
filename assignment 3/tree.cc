@@ -253,45 +253,53 @@ bool tree::equal(Node* oldTree, Node* newTree) const{
 
 // Print function which will call another function that will configure the output string.
 void tree::printTree() {
-    printInfix(begin);
+    printInfix(begin->left);
     if (output.size() > 1 && begin->T != VARIABLE){
         output.pop_back();
         output.erase(0, 1);
     }
+    output += ":";
+    std::string temp = output;
+    output.clear();
+    printInfix(begin->right);
+    if (output.size() > 1 && begin->T != VARIABLE){
+        output.pop_back();
+        output.erase(0, 1);
+    }
+    output = temp + output;
 }
 
 // Will recursively walk through the tree to determine the output. 
 // Will check for certain situations to decide to add parentheses or not. 
 void tree::printInfix(Node* child) {
     bool bracket = false;
-    if (child->T == COLON || child->T == SLASH || child->T == APP ||
-        child->T == ARROW){
-        bracket = true;
-        output += "(";
-    }
     if (child->T == SLASH){
+        output += "(";
         output += "\\";
         output += child->left->var;
         output += "^";
         printInfix(child->mid);
         output += " ";
+        printInfix(child->right);
+        output += ")";
     }
     else if (child->T == APP){
-        output += " ";
-        if (child->left != nullptr){
-            printInfix(child->left);
+        output += "(";
+        printInfix(child->left);
+        if (output.back() != ')'){
+            output += " ";
         }
+        printInfix(child->right);
+        output += ")";
+    }
+    else if(child->T == ARROW){
+        output += "(";
+        printInfix(child->left);
+        output += "->";
+        printInfix(child->right);
+        output += ")";
     }
     else {
-        if (child->left != nullptr){
-            printInfix(child->left);
-        }
         output += child->var;
-    }
-    if (child->right != nullptr){
-        printInfix(child->right);
-    }
-    if (bracket){
-        output += ")";
     }
 }
