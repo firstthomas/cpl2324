@@ -45,23 +45,11 @@ int main(int argc, char** argv){
 // alle:
 // outputs a character string in a standard format to standard output
 // this format may be explained in the README ook in assignment 2 en 3
-//make clean voor elke assignment
-// voor negatives voorbeelden uit assignment gebruiken en meer
 
 //Assignment 2:
-
-// An archive (positive.tar.gz) of the positive examples used for testing.
-// • An archive (negative.tar.gz) of the negative examples used for testing.
 
 //the program chooses an arbitrary place where reduction is performed.
 // dit zouden we nog kunnen doen
 // waarschijnlijk met nog een findAppLambda en dan random kiezen welke van de twee het wordt.
-
-// assignment 3
-
-// An archive (positive.tar.gz) of the positive examples used for testing.
-// • An archive (negative.tar.gz) of the negative examples used for testing.
-
-// output niet goed moet hetzelfde als input meer haakjes mag
 
 //meer testen
