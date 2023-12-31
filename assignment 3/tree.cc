@@ -171,7 +171,7 @@ void tree::typeDerivCheck(Node* child, bool left){
         std::string var = child->var;
         child->var += "!";
         if (!setTypeVar(child, begin->left, var)){
-            std::cerr << "Unkown type for variable " << var << std::endl;
+            std::cerr << "Unknown type for variable " << var << std::endl;
             helpDestructor(begin);
             exit(1);
         }

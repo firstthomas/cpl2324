@@ -119,7 +119,7 @@ void Parser::ptype(Tokenizer &token) const{
         type(token);
     }
     else {
-        std::cerr << "Incorrect charachter after variable" << std::endl;
+        std::cerr << "Incorrect character after variable" << std::endl;
         exit(1);
     }
 }
@@ -135,7 +135,7 @@ void Parser::typeprime(Tokenizer &token) const{
         type(token);
     }
     else if (colon){
-        std::cerr << "Incorrect charachter after variable" << std::endl;
+        std::cerr << "Incorrect character after variable" << std::endl;
         exit(1);
     }
 }
